@@ -22,8 +22,12 @@ export function GluestackUIProvider({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mode]);
 
+  // Apply the variables as a className to ensure they're available to all children
+  const variableClass = colorScheme === 'dark' ? 'dark' : 'light';
+
   return (
     <View
+      className={variableClass}
       style={[
         config[colorScheme!],
         { flex: 1, height: '100%', width: '100%' },
