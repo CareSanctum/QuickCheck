@@ -2,15 +2,16 @@ import { StatusBar } from 'expo-status-bar';
 import "@/global.css";
 import { GluestackUIProvider } from "@/components/ui/gluestack-ui-provider";
 import { StyleSheet, Text, View } from 'react-native';
-import Login from './src/Login';
+import Login from './src/Screens/Login';
+import ResetPassword from './src/Screens/ResetPassword';
+import NewPassword from './src/Screens/NewPassword';
+import PasswordResetOTP from './src/Screens/PasswordResetOTP';
+import SignUp from './src/Screens/SignUp/SignUp';
 
 export default function App() {
   return (
     <GluestackUIProvider mode="dark">
-        {/* <View className="flex-1 bg-chart4">
-            <Text className="text-primary-foreground">Login2</Text>
-        </View> */}
-      <Login />
+     <PasswordResetOTP />
     </GluestackUIProvider>
   );
 }

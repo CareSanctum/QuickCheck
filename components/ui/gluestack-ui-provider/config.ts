@@ -1,101 +1,111 @@
 'use client';
 import { rem, vars } from 'nativewind';
 
+const lightColors = {
+  '--background': 'rgb(249, 244, 255)',
+  '--foreground': 'rgb(10, 10, 10)',
+  '--card': 'rgb(255, 255, 255)',
+  '--card-foreground': 'rgb(10, 10, 10)',
+  '--popover': 'rgb(255, 255, 255)',
+  '--popover-foreground': 'rgb(10, 10, 10)',
+  '--primary': 'rgb(61, 0, 125)',
+  '--primary-foreground': 'rgb(250, 250, 250)',
+  '--secondary': 'rgb(254, 110, 208)',
+  '--secondary-foreground': 'rgb(23, 23, 23)',
+  '--muted': 'rgb(245, 245, 245)',
+  '--muted-foreground': 'rgb(115, 115, 115)',
+  '--accent': 'rgb(245, 245, 245)',
+  '--accent-foreground': 'rgb(23, 23, 23)',
+  '--destructive': 'rgb(231, 0, 11)',
+  '--destructive-foreground': 'rgb(255, 255, 255)',
+  '--border': 'rgb(229, 229, 229)',
+  '--input': 'rgb(229, 229, 229)',
+  '--ring': 'rgb(161, 161, 161)',
+  '--chart-1': 'rgb(145, 197, 255)',
+  '--chart-2': 'rgb(58, 129, 246)',
+  '--chart-3': 'rgb(37, 99, 239)',
+  '--chart-4': 'rgb(26, 78, 218)',
+  '--chart-5': 'rgb(31, 63, 173)',
+  '--sidebar': 'rgb(250, 250, 250)',
+  '--sidebar-foreground': 'rgb(10, 10, 10)',
+  '--sidebar-primary': 'rgb(23, 23, 23)',
+  '--sidebar-primary-foreground': 'rgb(250, 250, 250)',
+  '--sidebar-accent': 'rgb(245, 245, 245)',
+  '--sidebar-accent-foreground': 'rgb(23, 23, 23)',
+  '--sidebar-border': 'rgb(229, 229, 229)',
+  '--sidebar-ring': 'rgb(161, 161, 161)',
+  '--font-sans': 'Open Sans, sans-serif',
+  '--font-serif': 'ui-serif, Georgia, Cambria, "Times New Roman", Times, serif',
+  '--font-mono': 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
+  '--radius': '0.625rem',
+  // --shadow-2xs: 0 1px 3px 0px hsl(0 0% 0% / 0.05);
+  // --shadow-xs: 0 1px 3px 0px hsl(0 0% 0% / 0.05);
+  // --shadow-sm: 0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 1px 2px -1px hsl(0 0% 0% / 0.10);
+  // --shadow: 0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 1px 2px -1px hsl(0 0% 0% / 0.10);
+  // --shadow-md: 0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 2px 4px -1px hsl(0 0% 0% / 0.10);
+  // --shadow-lg: 0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 4px 6px -1px hsl(0 0% 0% / 0.10);
+  // --shadow-xl: 0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 8px 10px -1px hsl(0 0% 0% / 0.10);
+  // --shadow-2xl: 0 1px 3px 0px hsl(0 0% 0% / 0.25);
+  // --tracking-normal: 0em;
+  // --spacing: 0.25rem;
+}
+
+
+
+const darkColors = {
+  '--background': 'rgb(18, 0, 35)',
+  '--foreground': 'rgb(250, 250, 250)',
+  '--card': 'rgb(23, 23, 23)',
+  '--card-foreground': 'rgb(250, 250, 250)',
+  '--popover': 'rgb(38, 38, 38)',
+  '--popover-foreground': 'rgb(250, 250, 250)',
+  '--primary': 'rgb(61, 0, 125)',
+  '--primary-foreground': 'rgb(255, 255, 255)',
+  '--secondary': 'rgb(254, 110, 208)',
+  '--secondary-foreground': 'rgb(250, 250, 250)',
+  '--muted': 'rgb(38, 38, 38)',
+  '--muted-foreground': 'rgb(161, 161, 161)',
+  '--accent': 'rgb(255, 255, 255)',
+  '--accent-foreground': 'rgb(11, 4, 4)',
+  '--destructive': 'rgb(255, 100, 103)',
+  '--destructive-foreground': 'rgb(250, 250, 250)',
+  '--border': 'rgb(40, 40, 40)',
+  '--input': 'rgb(52, 52, 52)',
+  '--ring': 'rgb(115, 115, 115)',
+  '--chart-1': 'rgb(145, 197, 255)',
+  '--chart-2': 'rgb(58, 129, 246)',
+  '--chart-3': 'rgb(37, 99, 239)',
+  '--chart-4': 'rgb(26, 78, 218)',
+  '--chart-5': 'rgb(31, 63, 173)',
+  '--sidebar': 'rgb(23, 23, 23)',
+  '--sidebar-foreground': 'rgb(250, 250, 250)',
+  '--sidebar-primary': 'rgb(20, 71, 230)',
+  '--sidebar-primary-foreground': 'rgb(250, 250, 250)',
+  '--sidebar-accent': 'rgb(38, 38, 38)',
+  '--sidebar-accent-foreground': 'rgb(250, 250, 250)',
+  '--sidebar-border': 'rgb(40, 40, 40)',
+  '--sidebar-ring': 'rgb(82, 82, 82)',
+  '--font-sans': 'Open Sans, sans-serif',
+  '--font-serif': 'ui-serif, Georgia, Cambria, "Times New Roman", Times, serif',
+  '--font-mono': 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
+  '--radius': '0.625rem',
+  // --shadow-2xs: 0 1px 3px 0px hsl(0 0% 0% / 0.05);
+  // --shadow-xs: 0 1px 3px 0px hsl(0 0% 0% / 0.05);
+  // --shadow-sm: 0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 1px 2px -1px hsl(0 0% 0% / 0.10);
+  // --shadow: 0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 1px 2px -1px hsl(0 0% 0% / 0.10);
+  // --shadow-md: 0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 2px 4px -1px hsl(0 0% 0% / 0.10);
+  // --shadow-lg: 0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 4px 6px -1px hsl(0 0% 0% / 0.10);
+  // --shadow-xl: 0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 8px 10px -1px hsl(0 0% 0% / 0.10);
+  // --shadow-2xl: 0 1px 3px 0px hsl(0 0% 0% / 0.25);
+}
 export const config = {
-  light: vars({
-    '--background': '255, 255, 255',
-    '--foreground': '10, 10, 10',
-    '--card': '255, 255, 255',
-    '--card-foreground': '10, 10, 10',
-    '--popover': '255, 255, 255',
-    '--popover-foreground': '10, 10, 10',
-    '--primary': '61, 0, 125',
-    '--primary-foreground': '250, 250, 250',
-    '--secondary': '245, 245, 245',
-    '--secondary-foreground': '23, 23, 23',
-    '--muted': '245, 245, 245',
-    '--muted-foreground': '115, 115, 115',
-    '--accent': '245, 245, 245',
-    '--accent-foreground': '23, 23, 23',
-    '--destructive': '231, 0, 11',
-    '--destructive-foreground': '255, 255, 255',
-    '--border': '229, 229, 229',
-    '--input': '229, 229, 229',
-    '--ring': '161, 161, 161',
-    '--chart-1': '145, 197, 255',
-    '--chart-2': '58, 129, 246',
-    '--chart-3': '37, 99, 239',
-    '--chart-4': '26, 78, 218',
-    '--chart-5': '31, 63, 173',
-    '--sidebar': '250, 250, 250',
-    '--sidebar-foreground': '10, 10, 10',
-    '--sidebar-primary': '23, 23, 23',
-    '--sidebar-primary-foreground': '250, 250, 250',
-    '--sidebar-accent': '245, 245, 245',
-    '--sidebar-accent-foreground': '23, 23, 23',
-    '--sidebar-border': '229, 229, 229',
-    '--sidebar-ring': '161, 161, 161',
-
-    '--font-sans': 'Open Sans, sans-serif',
-    '--font-serif': 'ui-serif, Georgia, Cambria, "Times New Roman", Times, serif',
-    '--font-mono': 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
-    '--radius': '0.625rem',
-    // --shadow-2xs: 0 1px 3px 0px hsl(0 0% 0% / 0.05);
-    // --shadow-xs: 0 1px 3px 0px hsl(0 0% 0% / 0.05);
-    // --shadow-sm: 0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 1px 2px -1px hsl(0 0% 0% / 0.10);
-    // --shadow: 0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 1px 2px -1px hsl(0 0% 0% / 0.10);
-    // --shadow-md: 0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 2px 4px -1px hsl(0 0% 0% / 0.10);
-    // --shadow-lg: 0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 4px 6px -1px hsl(0 0% 0% / 0.10);
-    // --shadow-xl: 0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 8px 10px -1px hsl(0 0% 0% / 0.10);
-    // --shadow-2xl: 0 1px 3px 0px hsl(0 0% 0% / 0.25);
-    // --tracking-normal: 0em;
-    // --spacing: 0.25rem;
-  }),
-  dark: vars({
-    '--background': '0, 0, 0',
-    '--foreground': '250, 250, 250',
-    '--card': '23, 23, 23',
-    '--card-foreground': '250, 250, 250',
-    '--popover': '38, 38, 38',
-    '--popover-foreground': '250, 250, 250',
-    '--primary': '61, 0, 125',
-    '--primary-foreground': '255, 255, 255',
-    '--secondary': '254, 110, 208',
-    '--secondary-foreground': '250, 250, 250',
-    '--muted': '38, 38, 38',
-    '--muted-foreground': '161, 161, 161',
-    '--accent': '255, 255, 255',
-    '--accent-foreground': '11, 4, 4',
-    '--destructive': '255, 100, 103',
-    '--destructive-foreground': '250, 250, 250',
-    '--border': '40, 40, 40',
-    '--input': '52, 52, 52',
-    '--ring': '115, 115, 115',
-    '--chart-1': '145, 197, 255',
-    '--chart-2': '58, 129, 246',
-    '--chart-3': '37, 99, 239',
-    '--chart-4': '26, 78, 218',
-    '--chart-5': '31, 63, 173',
-    '--sidebar': '23, 23, 23',
-    '--sidebar-foreground': '250, 250, 250',
-    '--sidebar-primary': '20, 71, 230',
-    '--sidebar-primary-foreground': '250, 250, 250',
-    '--sidebar-accent': '38, 38, 38',
-    '--sidebar-accent-foreground': '250, 250, 250',
-    '--sidebar-border': '40, 40, 40',
-    '--sidebar-ring': '82, 82, 82',
-
-    '--font-sans': 'Open Sans, sans-serif',
-    '--font-serif': 'ui-serif, Georgia, Cambria, "Times New Roman", Times, serif',
-    '--font-mono': 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
-    '--radius': '0.625rem'
-    // --shadow-2xs: 0 1px 3px 0px hsl(0 0% 0% / 0.05);
-    // --shadow-xs: 0 1px 3px 0px hsl(0 0% 0% / 0.05);
-    // --shadow-sm: 0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 1px 2px -1px hsl(0 0% 0% / 0.10);
-    // --shadow: 0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 1px 2px -1px hsl(0 0% 0% / 0.10);
-    // --shadow-md: 0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 2px 4px -1px hsl(0 0% 0% / 0.10);
-    // --shadow-lg: 0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 4px 6px -1px hsl(0 0% 0% / 0.10);
-    // --shadow-xl: 0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 8px 10px -1px hsl(0 0% 0% / 0.10);
-    // --shadow-2xl: 0 1px 3px 0px hsl(0 0% 0% / 0.25);
-  }),
+  light: vars(lightColors),
+  dark: vars(darkColors),
 };
+
+export const rawColors = {
+  light: lightColors,
+  dark: darkColors,
+}
+
+
