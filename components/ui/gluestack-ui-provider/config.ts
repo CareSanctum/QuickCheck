@@ -67,7 +67,7 @@ const darkColors = {
   '--muted-foreground': 'rgb(161, 161, 161)',
   '--accent': 'rgb(255, 255, 255)',
   '--accent-foreground': 'rgb(11, 4, 4)',
-  '--destructive': 'rgb(255, 100, 103)',
+  '--destructive': 'rgb(207, 2, 2)',
   '--destructive-foreground': 'rgb(250, 250, 250)',
   '--border': 'rgb(40, 40, 40)',
   '--input': 'rgb(52, 52, 52)',

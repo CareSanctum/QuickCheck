@@ -2,23 +2,21 @@ import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Input, InputSlot, InputField, InputIcon } from '@/components/ui/input';
 import { OtpInput } from "react-native-otp-entry";
-import { useThemeVariables } from "../components/ThemeVariables";
+import { useThemeVariables } from "../../Components/ThemeVariables";
 import { ArrowLeft } from "lucide-react-native";
 import { useState, useRef } from "react";
-
+import { useNavigation } from '@react-navigation/native';
+import { NavigationProp } from "../../App.Navigation";
 const PasswordResetOTP = () => {
-    const mutedForeground = useThemeVariables('--muted-foreground');
     const foreground = useThemeVariables('--foreground');
-    const primaryForeground = useThemeVariables('--primary-foreground');
     const styles = useOTPStyles();
-
     const [code, setCode] = useState('');
-
+    const navigation = useNavigation<NavigationProp>();
     return (
         <SafeAreaView className="flex-1 p-5 bg-background">
             <View style={{gap: 15}}>
                 <View className="flex-row items-center">
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={() => navigation.goBack()}>
                         <ArrowLeft color={foreground} size={26} />
                     </TouchableOpacity>
                 </View>

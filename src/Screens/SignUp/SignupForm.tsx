@@ -1,7 +1,7 @@
 import { Input, InputSlot, InputField, InputIcon } from "@/components/ui/input";
 import { Mail, Phone, Eye, EyeOff, Lock } from "lucide-react-native";
 import { useState } from "react";
-import { useThemeVariables } from "../../components/ThemeVariables";
+import { useThemeVariables } from "../../Components/ThemeVariables";
 import { StyleSheet } from "react-native";
 
 

@@ -1,7 +1,7 @@
 import { View, Text, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ArrowLeft, Eye, EyeOff, Lock, Mail, Phone } from "lucide-react-native";
-import { useThemeVariables } from "../../components/ThemeVariables";
+import { useThemeVariables } from "../../Components/ThemeVariables";
 import { Input, InputSlot, InputField, InputIcon } from "@/components/ui/input";
 import { useState } from "react";
 import SignupForm from "./SignupForm";

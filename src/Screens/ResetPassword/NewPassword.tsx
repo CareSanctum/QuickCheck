@@ -2,7 +2,7 @@ import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ArrowLeft, ArrowRight, Eye, EyeOff, Lock } from "lucide-react-native";
 import { Input, InputSlot, InputField, InputIcon } from '@/components/ui/input';
-import { useThemeVariables } from "../components/ThemeVariables";
+import { useThemeVariables } from "../../Components/ThemeVariables";
 import { useState } from "react";
 
 const NewPassword = () => {
