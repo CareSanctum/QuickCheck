@@ -6,10 +6,13 @@ const axiosInstance = axios.create({
 });
 
 axiosInstance.interceptors.request.use(
-    async (config) => {
-        const sessionToken = await getItem(KEYS.SESSION_TOKEN);
-        if (sessionToken) {
-            config.headers['X-Session-Token'] = sessionToken;
+    (config) => {
+        if (config.headers['X-Session-Token']) {
+            return config;
+        }
+        const token = getItem(KEYS.SESSION_TOKEN);
+        if (token) {
+            config.headers['X-Session-Token'] = token;
         }
         return config;
     },
@@ -18,18 +21,21 @@ axiosInstance.interceptors.request.use(
     }
 );
 
+
 axiosInstance.interceptors.response.use(
-    async (response) => {
+    (response) => {
         const sessionToken = response?.data?.meta?.session_token;
         if (sessionToken) {
-            await setItem(KEYS.SESSION_TOKEN, sessionToken);
+            console.log('Session token found in response:', sessionToken);
+            setItem(KEYS.SESSION_TOKEN, sessionToken);
         }
         return response;
     },
-    async (error) => {
+    (error) => {
         const sessionToken = error?.response?.data?.meta?.session_token;
         if (sessionToken) {
-            await setItem(KEYS.SESSION_TOKEN, sessionToken);
+            console.log('Session token found in error response:', sessionToken);
+            setItem(KEYS.SESSION_TOKEN, sessionToken);
         }
         return Promise.reject(error);
     }

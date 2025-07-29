@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "QuickCheck",
-    "slug": "QuickCheck",
+    "name": "CareSanctum",
+    "slug": "CareSanctum ",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -17,7 +17,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/icons/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
       "edgeToEdgeEnabled": true,

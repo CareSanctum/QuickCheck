@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { View, Text, TouchableOpacity, StyleSheet, KeyboardAvoidingView, ScrollView, Platform } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Input, InputSlot, InputField, InputIcon } from '@/components/ui/input';
 import { OtpInput } from "react-native-otp-entry";
@@ -7,61 +7,61 @@ import { ArrowLeft } from "lucide-react-native";
 import { useState, useRef } from "react";
 import { useNavigation } from '@react-navigation/native';
 import { NavigationProp } from "../../App.Navigation";
+import { useVerifyCode } from "../../Hooks/PasswordReset.hook";
+import { Button, ButtonSpinner, ButtonText } from "@/components/ui/button";
+import * as SecureStore from 'expo-secure-store';
+import { setItem, KEYS } from "@/src/Storage";
+import { ErrorBox } from "@/src/Components/ErrorBox";
+import { OTP } from "@/src/Components/OTP";
+
 const PasswordResetOTP = () => {
     const foreground = useThemeVariables('--foreground');
     const styles = useOTPStyles();
     const [code, setCode] = useState('');
     const navigation = useNavigation<NavigationProp>();
+    const { mutate: verifyCode, status: verifyCodeStatus, error: verifyCodeError } = useVerifyCode();
+    const [apiErrorMsg, setApiErrorMsg] = useState<string>("");
+    const [disableReset, setDisableReset] = useState< boolean>(false);
+
+    async function onSubmit(code: string){
+        verifyCode(code, {
+            onSuccess: async () => {
+                setItem(KEYS.PASSWORD_RESET_KEY, code);
+                setCode("");
+                console.log('Verification code successful');
+                navigation.navigate('NewPassword');
+            },
+            onError: (error: any) => {
+                console.log(error);
+                setCode("");
+                switch (error?.response?.status) {
+                    case 409:
+                        setDisableReset(true);
+                        setApiErrorMsg("The code is expired now. Please try again later.");
+                        break;
+                    case 400:
+                        setApiErrorMsg("The code is invalid now. Please try again later.");
+                        break;
+                    case 500:
+                        setApiErrorMsg("Something went wrong. Please try again later.");
+                        break;
+                    default:
+                        setApiErrorMsg("Something went wrong. Please try again later.");
+                        break;
+                }
+            }
+        });
+    }
     return (
         <SafeAreaView className="flex-1 p-5 bg-background">
-            <View style={{gap: 15}}>
-                <View className="flex-row items-center">
-                    <TouchableOpacity onPress={() => navigation.goBack()}>
-                        <ArrowLeft color={foreground} size={26} />
-                    </TouchableOpacity>
-                </View>
-
-                <View className="my-10 justify-center">
-                    <Text className="font-semibold text-foreground text-[30px]">Verification Code</Text>
-                    <Text className="font-medium text-mutedForeground text-[16px] ">Enter the 5 digit code sent to your email</Text>
-                </View>
-                <View style={{alignItems: "center"}}>
-                    <OtpInput 
-                        numberOfDigits={5}
-                        type="alphanumeric"
-                        onTextChange={(text) => setCode(text.toUpperCase())}
-                        textInputProps={{
-                            autoCapitalize: "characters",
-                        }}
-                        theme={{
-                            containerStyle: styles.OTPContainer,
-                            pinCodeContainerStyle: styles.pinCodeContainerStyle,
-                            pinCodeTextStyle: styles.pinCodeTextStyle,
-                            focusedPinCodeContainerStyle: styles.focusedPinCodeContainerStyle,
-                            focusStickStyle: styles.focusStickStyle,
-                            filledPinCodeContainerStyle: styles.filledPinCodeContainerStyle,
-                        }}
-                    />
-                </View>
-
-                <View className="flex-row justify-center"> 
-                    <TouchableOpacity 
-                        className="px-6 py-3 bg-primary w-[75%] h-[50px] items-center justify-center" 
-                        style= {{borderRadius: 10}}  
-                    >
-                        <Text className="text-primaryForeground font-medium">
-                            Verify Code
-                        </Text>
-                    </TouchableOpacity>
-                </View>
-            </View>
-
-            <View className="flex-row justify-center mt-4">
-                <Text className="font-medium text-mutedForeground text-[16px] ">Didn't receive the code?</Text>
-            </View>
-            <TouchableOpacity className="flex-row justify-center">
-                <Text className="font-medium text-secondary text-[16px] ">Try again</Text>
-            </TouchableOpacity>
+            <KeyboardAvoidingView
+                behavior={Platform.OS === "ios" ? "padding" : "height"}
+                style={{ flex: 1 }}
+            >
+                <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ flexGrow: 1 }}>
+            <OTP onSubmit={onSubmit} code={code} setCode={setCode} disableReset={disableReset} verifyCodeStatus={verifyCodeStatus} apiErrorMsg={apiErrorMsg} PageTitle="Verification Code" PageSubtitle="Enter the 5 digit code sent to your email" />
+            </ScrollView>
+            </KeyboardAvoidingView>
         </SafeAreaView>
     );
 };

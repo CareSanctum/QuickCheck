@@ -4,20 +4,49 @@ import { createStaticNavigation, StaticParamList } from '@react-navigation/nativ
 //Screens
 import ResetPassword from "./Screens/ResetPassword/ResetPassword";
 import PasswordResetOTP from "./Screens/ResetPassword/PasswordResetOTP";
+import NewPassword from "./Screens/ResetPassword/NewPassword";
+import PasswordResetSuccess from "./Screens/ResetPassword/PasswordResetSuccess";
+import Login from "./Screens/LogIn/Login";
+import SignUp from "./Screens/SignUp/SignUp";
+import SignupVerifyOTP from "./Screens/SignUp/SignupVerifyOTP";
+import Welcome from "./Screens/Welcome";
+import Home from "./Screens/Home";
+import { AuthContext, useAuth } from "./Context/AuthContext";
+import { ActivityIndicator } from "react-native";
+import { useContext } from "react";
+
+function useIsAuthenticated() {
+    const data = useContext(AuthContext);
+    return data?.isSignedIn ?? false;
+}
+
+function useIsNotAuthenticated() {
+    const data = useContext(AuthContext);
+    return data?.isSignedOut ?? true;
+}
 
 const RootStack = createNativeStackNavigator({
-    initialRouteName: 'ResetPassword',
-    screens: {
-        ResetPassword: {
-            screen: ResetPassword,
-            options: {
-                headerShown: false,
+    screenOptions: {
+        headerShown: false,
+    },
+    groups: {
+        SignedIn: {
+            if: useIsAuthenticated,
+            screens: {
+                Home: Home,
             }
         },
-        PasswordResetOTP: {
-            screen: PasswordResetOTP,
-            options: {
-                headerShown: false,
+        SignedOut: {
+            if: useIsNotAuthenticated,
+            screens: {
+                Welcome: Welcome,
+                Login: Login,
+                SignUp: SignUp,
+                SignupVerifyOTP: SignupVerifyOTP,
+                ResetPassword: ResetPassword,
+                PasswordResetOTP: PasswordResetOTP,
+                NewPassword: NewPassword, 
+                PasswordResetSuccess: PasswordResetSuccess,
             }
         }
     }

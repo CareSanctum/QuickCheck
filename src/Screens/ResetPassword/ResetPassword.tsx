@@ -2,11 +2,12 @@ import React, { useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { View, Text, TouchableOpacity, StyleSheet} from 'react-native';
 import Icon from '../../Components/Icon';
-import ResetPasswordForm from './ResetPasswordForm';
+import ResetPasswordForm from './ResetPassword.Form';
 import { useNavigation } from '@react-navigation/native';
 import { NavigationProp } from '../../App.Navigation';
-import { ArrowLeft } from 'lucide-react-native';
+import { AlertTriangle, ArrowLeft } from 'lucide-react-native';
 import { useThemeVariables } from '@/src/Components/ThemeVariables';
+import { ErrorBox } from '@/src/Components/ErrorBox';
 
 const API_ERROR_MESSAGES = {
     STATUS_429: "Too many requests. Please try again later.",
@@ -17,6 +18,7 @@ const API_ERROR_MESSAGES = {
 const ResetPassword = () => {
     const navigation = useNavigation<NavigationProp>();
     const foreground = useThemeVariables('--foreground');
+    const [apiErrorMsg, setApiErrorMsg] = useState<string>("");
         return (
         <SafeAreaView className="flex-1 p-5 bg-background">
             <View style={{gap: 15}}>
@@ -31,8 +33,10 @@ const ResetPassword = () => {
                     <Text className="font-medium text-mutedForeground text-[16px] ">We'll email you instructions on how to reset your password</Text>
                 </View>
 
-                <ResetPasswordForm />
+                <ResetPasswordForm setApiErrorMsg={setApiErrorMsg} />
             </View>
+
+            {apiErrorMsg && <ErrorBox errorMsg={apiErrorMsg} />}
         </SafeAreaView>
   );
 };
