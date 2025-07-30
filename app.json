@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "CareSanctum",
-    "slug": "CareSanctum ",
+    "name": "CareSanctum-QC",
+    "slug": "caresanctum-qc",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -28,6 +28,12 @@
     },
     "plugins": [
       "expo-secure-store"
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "0274c64e-2b60-45b7-aa63-593a4ea44826"
+      }
+    },
+    "owner": "caresanctum"
   }
 }
