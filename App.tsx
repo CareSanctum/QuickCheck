@@ -7,11 +7,12 @@ import ResetPassword from './src/Screens/ResetPassword';
 import NewPassword from './src/Screens/NewPassword';
 import PasswordResetOTP from './src/Screens/PasswordResetOTP';
 import SignUp from './src/Screens/SignUp/SignUp';
+import Payments from './src/Screens/Payments';
 
 export default function App() {
   return (
     <GluestackUIProvider mode="dark">
-     <PasswordResetOTP />
+     <Payments />
     </GluestackUIProvider>
   );
 }
