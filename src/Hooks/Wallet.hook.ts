@@ -107,7 +107,5 @@ export function useWalletBalance() {
     return useQuery({
         queryKey: ['wallet-balance'],
         queryFn: getWalletBalance,
-        staleTime: 30000, // 30 seconds
-        gcTime: 5 * 60 * 1000, // 5 minutes
     });
 } 

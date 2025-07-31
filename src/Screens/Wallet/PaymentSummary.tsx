@@ -2,10 +2,11 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Text, View, TouchableOpacity, ScrollView, Alert, ActivityIndicator } from "react-native";
 import { Button, ButtonText, ButtonSpinner } from "@/components/ui/button";
 import { useNavigation } from "@react-navigation/native";
-import { NavigationProp } from "../App.Navigation";
+import { NavigationProp } from "../../App.Navigation";
 import { useState } from "react";
-import { useCreateOrder, useVerifyPayment, useWalletBalance } from "../Hooks/Wallet.hook";
-import { initiateRazorpayPayment } from "../services/razorpayService";
+import { useCreateOrder, useVerifyPayment, useWalletBalance } from "../../Hooks/Wallet.hook";
+import { initiateRazorpayPayment } from "../../services/razorpayService";
+import Header from "@/src/Components/Header";
 
 interface PaymentSummaryProps {
     route: {
@@ -30,7 +31,7 @@ const PaymentSummary: React.FC<PaymentSummaryProps> = ({ route }) => {
     const totalCredits = currentCredits + credits;
 
     const handleBackToWallet = () => {
-        navigation.goBack();
+        navigation.navigate('Wallet');
     }
 
     const handleProceedToPayment = async () => {
@@ -75,7 +76,7 @@ const PaymentSummary: React.FC<PaymentSummaryProps> = ({ route }) => {
                     [
                         {
                             text: 'OK',
-                            onPress: () => navigation.navigate('Wallet')
+                            onPress: () => navigation.navigate('HomeTabNavigator', {screen: 'WalletTab'})
                         }
                     ]
                 );
@@ -93,14 +94,9 @@ const PaymentSummary: React.FC<PaymentSummaryProps> = ({ route }) => {
 
     return (
         <SafeAreaView className="flex-1 bg-background">
-            <View className="flex-1 p-5">
+            <View className="flex-1 px-5">
                 {/* Header */}
-                <View className="flex-row items-center mb-6">
-                    <TouchableOpacity onPress={handleBackToWallet} className="mr-4">
-                        <Text className="text-white text-lg">← Back</Text>
-                    </TouchableOpacity>
-                    <Text className="text-2xl font-bold text-white flex-1">Payment Summary</Text>
-                </View>
+                <Header className="my-4"/>
 
                 <ScrollView className="flex-1">
                     {/* Payment Summary Section */}

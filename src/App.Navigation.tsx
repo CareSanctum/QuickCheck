@@ -1,5 +1,7 @@
 import { createNativeStackNavigator, NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { createStaticNavigation, StaticParamList } from '@react-navigation/native';
+import { CompositeNavigationProp } from '@react-navigation/native';
+import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 
 //Screens
 import ResetPassword from "./Screens/ResetPassword/ResetPassword";
@@ -10,9 +12,8 @@ import Login from "./Screens/LogIn/Login";
 import SignUp from "./Screens/SignUp/SignUp";
 import SignupVerifyOTP from "./Screens/SignUp/SignupVerifyOTP";
 import Welcome from "./Screens/Welcome";
-import Home from "./Screens/Home";
-import Wallet from "./Screens/Wallet";
-import PaymentSummary from "./Screens/PaymentSummary";
+import HomeTabNavigator from "./Components/HomeTabNavigator";
+import PaymentSummary from "./Screens/Wallet/PaymentSummary";
 import { AuthContext, useAuth } from "./Context/AuthContext";
 import { ActivityIndicator } from "react-native";
 import { useContext } from "react";
@@ -35,8 +36,7 @@ const RootStack = createNativeStackNavigator({
         SignedIn: {
             if: useIsAuthenticated,
             screens: {
-                Home: Home,
-                Wallet: Wallet,
+                HomeTabNavigator: HomeTabNavigator,
                 PaymentSummary: PaymentSummary,
             }
         },
@@ -56,8 +56,15 @@ const RootStack = createNativeStackNavigator({
     }
 });
 
-export type RootStackParamList = StaticParamList<typeof RootStack>;
+export type RootStackParamList = StaticParamList<typeof RootStack> & {
+    HomeTabNavigator: {
+        screen: 'HomeTab' | 'WalletTab' | 'AccountsTab';
+    };
+};
 
-export type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
+export type NavigationProp = CompositeNavigationProp<
+    NativeStackNavigationProp<RootStackParamList>,
+    BottomTabNavigationProp<any>
+>;
 
 export const AppNavigation = createStaticNavigation(RootStack);
