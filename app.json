@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "QuickCheck",
-    "slug": "QuickCheck",
+    "name": "CareSanctum-QC",
+    "slug": "caresanctum-qc",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -18,7 +18,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/icons/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
       "edgeToEdgeEnabled": true,
@@ -26,6 +26,15 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "plugins": [
+      "expo-secure-store"
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "0274c64e-2b60-45b7-aa63-593a4ea44826"
+      }
+    },
+    "owner": "caresanctum"
   }
 }

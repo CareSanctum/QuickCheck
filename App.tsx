@@ -1,18 +1,43 @@
 import { StatusBar } from 'expo-status-bar';
 import "@/global.css";
 import { GluestackUIProvider } from "@/components/ui/gluestack-ui-provider";
-import { StyleSheet, Text, View } from 'react-native';
-import Login from './src/Screens/Login';
-import ResetPassword from './src/Screens/ResetPassword';
-import NewPassword from './src/Screens/NewPassword';
-import PasswordResetOTP from './src/Screens/PasswordResetOTP';
-import SignUp from './src/Screens/SignUp/SignUp';
-import Payments from './src/Screens/Payments';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { AppNavigation } from './src/App.Navigation';
+import { AuthProvider, useAuth } from './src/Context/AuthContext';
+import { ActivityIndicator, View } from 'react-native';
+import { getItem, KEYS } from './src/Storage';
+
+const queryClient = new QueryClient();
 
 export default function App() {
   return (
     <GluestackUIProvider mode="dark">
-     <Payments />
+      <QueryClientProvider client={queryClient}>
+        <AuthProvider>
+          <AppScreen />
+        </AuthProvider>
+      </QueryClientProvider>
     </GluestackUIProvider>
   );
+}
+
+const LoadingScreen = () => {
+  return (
+    <View className="flex-1 justify-center items-center">
+      <ActivityIndicator size="large" className="text-primary" />
+    </View>
+  )
+}
+
+const AppScreen = () => {
+  const { authStatus } = useAuth();
+  const token = getItem(KEYS.SESSION_TOKEN);
+  
+  // Show loading indicator only when status is pending and a token exists
+  if (authStatus === "pending" && token) {
+    return <ActivityIndicator size="large" color="#0000ff" />
+  }
+  
+  // For other states (error, success, or pending without a token), render the navigation
+  return <AppNavigation />
 }
