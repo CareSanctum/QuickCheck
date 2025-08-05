@@ -7,7 +7,6 @@ export interface CreateOrderRequest {
     amount: number;
     currency: string;
     purpose: string;
-    user_id: string;
 }
 
 export interface CreateOrderResponse {
@@ -107,5 +106,11 @@ export function useWalletBalance() {
     return useQuery({
         queryKey: ['wallet-balance'],
         queryFn: getWalletBalance,
+        retry: 1, // Only retry once instead of default 3 times
+        retryDelay: 1000, // Wait 1 second before retry
+        staleTime: 10 * 60 * 1000, // Consider data fresh for 10 minutes
+        refetchOnWindowFocus: false, // Don't refetch when app comes to focus
+        refetchOnMount: false, // Don't refetch when component mounts if data exists
+        refetchOnReconnect: false, // Don't refetch when network reconnects
     });
 } 

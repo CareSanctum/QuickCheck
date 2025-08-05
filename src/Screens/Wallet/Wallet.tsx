@@ -15,8 +15,7 @@ const Wallet = () => {
     }
 
     const handleHistoryPress = () => {
-        // TODO: Navigate to History component
-        console.log('Navigate to History');
+        navigation.navigate('History');
     }
 
     const handleRechargePress = (amount: number) => {
