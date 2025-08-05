@@ -42,8 +42,7 @@ const PaymentSummary: React.FC<PaymentSummaryProps> = ({ route }) => {
             const orderData = await createOrderMutation.mutateAsync({
                 amount: amount,
                 currency: 'INR',
-                purpose: 'credit_topup',
-                user_id: '2', // TODO: Get from auth context
+                purpose: 'credit_topup'
             });
 
             // Step 2: Initiate Razorpay payment

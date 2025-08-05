@@ -1,4 +1,4 @@
-import { CreateOrderResponse } from './walletApi';
+import { CreateOrderResponse } from '../Hooks/Wallet.hook';
 
 // Dynamic import for Razorpay to handle cases where it's not available
 let RazorpayCheckout: any = null;
@@ -40,14 +40,14 @@ export const initiateRazorpayPayment = async (
     userName: string = 'User'
 ): Promise<RazorpayResponse> => {
     const options: RazorpayOptions = {
-        description: 'Credits towards consultation',
+        description: 'Credits towards consultation', // TODO: Get from backend and add internalOrderId, or a stringified JSON?
         image: 'https://i.imgur.com/3g7nmJC.jpg',
         currency: orderData.currency,
         key: orderData.external_key_id,
         amount: orderData.amount * 100, // Razorpay expects amount in paise
         name: 'QuickCheck',
         order_id: orderData.external_order_id,
-        prefill: {
+        prefill: { // TODO: Get from backend
             email: userEmail,
             contact: userPhone,
             name: userName,
