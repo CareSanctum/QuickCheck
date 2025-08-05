@@ -64,11 +64,11 @@ const LoginForm = ({setApiErrorMsg}: {setApiErrorMsg: (msg: string) => void}) =>
     return (
       <>
         <View className="gap-[10px]">
-          <Input className='bg-muted data-[focus=true]:border-foreground data-[focus=true]:border-[1px]'
+          <Input className='bg-card border border-border data-[focus=true]:border-foreground'
             style={{borderRadius: 10, height: 55}}
           >
             <InputSlot className="pl-3">
-              <InputIcon as={Mail}  color={mutedForeground} />
+              <InputIcon as={Mail}  color={foreground} />
             </InputSlot>
             <Controller
               control={control}
@@ -80,11 +80,11 @@ const LoginForm = ({setApiErrorMsg}: {setApiErrorMsg: (msg: string) => void}) =>
           </Input>
           {errors.username && <Text className="text-destructive text-[14px] font-medium">{errors.username.message}</Text>}
 
-          <Input className='bg-muted data-[focus=true]:border-foreground data-[focus=true]:border-[1px]' 
+          <Input className='bg-card border border-border data-[focus=true]:border-foreground' 
             style={{borderRadius: 10, height: 55}}
           >
             <InputSlot className="pl-3">
-              <InputIcon as={Lock}  color={mutedForeground} />
+              <InputIcon as={Lock}  color={foreground} />
             </InputSlot>
             <Controller
               control={control}
@@ -94,7 +94,7 @@ const LoginForm = ({setApiErrorMsg}: {setApiErrorMsg: (msg: string) => void}) =>
               )}
             />
             <InputSlot className="pr-3" onPress={() => setShowPassword(!showPassword)}>
-              <InputIcon as={showPassword ? EyeOff : Eye}  color={mutedForeground} />
+              <InputIcon as={showPassword ? EyeOff : Eye}  color={foreground} />
             </InputSlot>
           </Input>
           {errors.password && <Text className="text-destructive text-[14px] font-medium">{errors.password.message}</Text>}

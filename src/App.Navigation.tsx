@@ -14,7 +14,9 @@ import SignupVerifyOTP from "./Screens/SignUp/SignupVerifyOTP";
 import Welcome from "./Screens/Welcome";
 import HomeTabNavigator from "./Components/HomeTabNavigator";
 import PaymentSummary from "./Screens/Wallet/PaymentSummary";
+
 import History from "./Screens/Wallet/History";
+
 import { AuthContext, useAuth } from "./Context/AuthContext";
 import { ActivityIndicator } from "react-native";
 import { useContext } from "react";

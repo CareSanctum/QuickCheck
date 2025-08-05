@@ -1,11 +1,11 @@
 import { useMutation} from "@tanstack/react-query";
-import axiosInstance from "../Network/Axios.config";
+import axios from "axios";
 import { generateUrl } from "../Network/Urls";
-import { getItem, KEYS} from "../Storage";
+import { getItem, KEYS, setItem} from "../Storage";
 
 async function requestPasswordReset(email: string) {
     try{
-        const response = await axiosInstance.post(generateUrl('REQUEST_PASSWORD_RESET'), {
+        const response = await axios.post(generateUrl('REQUEST_PASSWORD_RESET'), {
             email
         },{
             validateStatus: function(status: number){ return status >= 200 && status < 300 || status === 401},
@@ -17,12 +17,15 @@ async function requestPasswordReset(email: string) {
 }
 
 async function verifyCode(code: string){    
-    const sessionToken = getItem(KEYS.SESSION_TOKEN);
+    const passwordResetToken = getItem(KEYS.PASSWORD_RESET_TOKEN);
+    if(!passwordResetToken){
+        throw new Error('Password reset token not found');
+    }
     try{
-        const response = await axiosInstance.get(generateUrl('VERIFY_CODE'), {
+        const response = await axios.get(generateUrl('VERIFY_CODE'), {
             headers: {
                 'X-Password-Reset-Key': code,
-                'X-Session-Token': sessionToken,
+                'X-Session-Token': passwordResetToken,
             }
         });
         return response.data;
@@ -31,15 +34,19 @@ async function verifyCode(code: string){
     }
 }
 
-async function resetPassword({key, password}: {key: string, password: string}) {
+async function resetPassword({password}: {password: string}) {
     try{
-        const sessionToken = await getItem(KEYS.SESSION_TOKEN);
-        const response = await axiosInstance.post(generateUrl('RESET_PASSWORD'), {
-            key,
+        const passwordResetKey = getItem(KEYS.PASSWORD_RESET_KEY);
+        const passwordResetToken = getItem(KEYS.PASSWORD_RESET_TOKEN);
+        if(!passwordResetKey || !passwordResetToken){
+            throw new Error('Password reset key or token not found');
+        }
+        const response = await axios.post(generateUrl('RESET_PASSWORD'), {
+            key: passwordResetKey,
             password,
         }, {
             headers: {
-                'X-Session-Token': sessionToken,
+                'X-Session-Token': passwordResetToken,
             },
             validateStatus: function(status: number){ return status >= 200 && status < 300 || status === 401},
         });
