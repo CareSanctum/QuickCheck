@@ -53,7 +53,7 @@ const lightColors = {
 
 
 const darkColors = {
-  '--background': 'rgb(18, 0, 35)',
+  '--background': 'rgb(11 0 21)',
   '--foreground': 'rgb(250, 250, 250)',
   '--card': 'rgb(23, 23, 23)',
   '--card-foreground': 'rgb(250, 250, 250)',

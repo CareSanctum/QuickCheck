@@ -26,17 +26,17 @@ axiosInstance.interceptors.response.use(
     (response) => {
         const sessionToken = response?.data?.meta?.session_token;
         if (sessionToken) {
-            console.log('Session token found in response:', sessionToken);
-            setItem(KEYS.SESSION_TOKEN, sessionToken);
-        }
+                console.log('Session token found in response:', sessionToken);
+                setItem(KEYS.SESSION_TOKEN, sessionToken);
+            }
         return response;
     },
     (error) => {
         const sessionToken = error?.response?.data?.meta?.session_token;
         if (sessionToken) {
-            console.log('Session token found in error response:', sessionToken);
-            setItem(KEYS.SESSION_TOKEN, sessionToken);
-        }
+                console.log('Session token found in error response:', sessionToken);
+                setItem(KEYS.SESSION_TOKEN, sessionToken);
+            }
         return Promise.reject(error);
     }
 )

@@ -1,21 +1,24 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import Home from '../Screens/Home';
+import Home from '../Screens/Home/Home';
 import Wallet from '../Screens/Wallet/Wallet';
-import Account from '../Screens/Account';
-import { Home as HomeIcon, Wallet as WalletIcon, User as UserIcon } from 'lucide-react-native';
+import Account from '../Screens/UserAccount/Account';
+import LovedOnes from '../Screens/LovedOnes';
+import { Home as HomeIcon, Wallet as WalletIcon, User as UserIcon, HeartIcon } from 'lucide-react-native';
 import { useThemeVariables } from './ThemeVariables';
 
 export type HomeTabParamList = {
     HomeTab: undefined;
     WalletTab: undefined;
     AccountsTab: undefined;
+    LovedOnesTab: undefined;
 };
 
 const Tab = createBottomTabNavigator<HomeTabParamList>();
 
 const HomeTabNavigator = () => {
-    const primaryForeground = useThemeVariables('--primary-foreground');
+    const foreground = useThemeVariables('--foreground');
     const primary = useThemeVariables('--primary');
+    const secondary = useThemeVariables('--secondary');
     const background = useThemeVariables('--background');
     return (
         <Tab.Navigator
@@ -24,14 +27,13 @@ const HomeTabNavigator = () => {
                 tabBarShowLabel: false,
                 tabBarStyle: {
                     backgroundColor: background, // dark background
-                    borderTopColor: '#374151',
-                    borderTopWidth: 0.2,
+                    borderTopWidth: 0,
                 },
                 tabBarItemStyle: {
                     paddingTop: 10,
                 },
-                tabBarActiveTintColor: primary, // blue color
-                tabBarInactiveTintColor: primaryForeground, // gray color
+                tabBarActiveTintColor: secondary, // blue color
+                tabBarInactiveTintColor: foreground, // gray color
                 tabBarLabelStyle: {
                     fontSize: 12,
                     fontWeight: '600',
@@ -66,6 +68,15 @@ const HomeTabNavigator = () => {
                     ),
                 }}
             />
+            {/* <Tab.Screen
+                name="LovedOnesTab"
+                component={LovedOnes}
+                options={{
+                    tabBarIcon: ({ color, size }) => (
+                        <HeartIcon size={size} color={color} />
+                    ),
+                }}
+            /> */}
         </Tab.Navigator>
     );
 };

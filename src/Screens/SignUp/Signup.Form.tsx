@@ -53,7 +53,7 @@ const SignupForm = () => {
 
     return (
         <>
-            <Input className="bg-muted data-[focus=true]:border-foreground data-[focus=true]:border-[1px]"
+            <Input className="bg-card border border-border data-[focus=true]:border-foreground"
                 style={{borderRadius: 10, height: 55}}
             >
                 <InputSlot className="pl-3">
@@ -69,7 +69,7 @@ const SignupForm = () => {
             </Input>
             {errors.email && <Text className="text-destructive text-[14px] font-medium">{errors.email.message}</Text>}
 
-            <Input className="bg-muted data-[focus=true]:border-foreground data-[focus=true]:border-[1px]"
+            <Input className="bg-card border border-border data-[focus=true]:border-foreground"
                 style={{borderRadius: 10, height: 55}}
             >
                 <InputSlot className="pl-3">
@@ -85,7 +85,7 @@ const SignupForm = () => {
             </Input>
             {errors.phone && <Text className="text-destructive text-[14px] font-medium">{errors.phone.message}</Text>}
 
-            <Input className='bg-muted data-[focus=true]:border-foreground data-[focus=true]:border-[1px]' 
+            <Input className='bg-card border border-border data-[focus=true]:border-foreground'  
                 style={{borderRadius: 10, height: 55}}
             >
                 <InputSlot className="pl-3">
@@ -99,12 +99,12 @@ const SignupForm = () => {
                     )}
                 />
                 <InputSlot className="pr-3" onPress={() => setShowPassword(!showPassword)}>
-                    <InputIcon as={showPassword ? EyeOff : Eye}  color={mutedForeground} />
+                    <InputIcon as={showPassword ? EyeOff : Eye}  color={foreground} />
                 </InputSlot>
             </Input>
             {errors.password && <Text className="text-destructive text-[14px] font-medium">{errors.password.message}</Text>}
 
-            <Input className="bg-muted data-[focus=true]:border-foreground data-[focus=true]:border-[1px]"
+            <Input className="bg-card border border-border data-[focus=true]:border-foreground"  
                 style={{borderRadius: 10, height: 55}}
             >
                 <InputSlot className="pl-3">
@@ -118,7 +118,7 @@ const SignupForm = () => {
                     )}
                 />
                 <InputSlot className="pr-3" onPress={() => setShowPassword(!showPassword)}>
-                    <InputIcon as={showPassword ? EyeOff : Eye}  color={mutedForeground} />
+                    <InputIcon as={showPassword ? EyeOff : Eye}  color={foreground} />
                 </InputSlot>
             </Input>
             {errors.confirmPassword && <Text className="text-destructive text-[14px] font-medium">{errors.confirmPassword.message}</Text>}

@@ -1,18 +1,19 @@
 import { View, Text, TouchableOpacity } from "react-native";
 import { Check } from "lucide-react-native";
 import { useNavigation } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { RootStackParamList } from '../../App.Navigation';
+import { NavigationProp, RootStackParamList } from '../../App.Navigation';
 import { useThemeVariables } from "../../Components/ThemeVariables";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { getItem, KEYS } from "@/src/Storage";
 
 export const PasswordResetSuccess = () => {
-    const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+    const navigation = useNavigation<NavigationProp>();
     const foreground = useThemeVariables('--foreground');
     const primary = useThemeVariables('--primary');
     const primaryForeground = useThemeVariables('--primary-foreground');
     const secondary = useThemeVariables('--secondary');
-
+    console.log('Password Reset key', getItem(KEYS.PASSWORD_RESET_KEY));
+    console.log('Password Reset token', getItem(KEYS.PASSWORD_RESET_TOKEN));
     const handleDonePress = () => {
         // Navigate back to reset password screen
         navigation.navigate('Login');

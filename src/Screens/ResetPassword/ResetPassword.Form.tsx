@@ -5,12 +5,12 @@ import { set, z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm, Controller } from 'react-hook-form';
 import { useNavigation } from '@react-navigation/native';
-import { RootStackParamList } from '../../App.Navigation';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { NavigationProp } from '../../App.Navigation';
 import { Mail } from 'lucide-react-native';
 import { useRequestPasswordReset } from "../../Hooks/PasswordReset.hook";
 import { useThemeVariables } from "../../Components/ThemeVariables";
 import { useState } from "react";
+import { KEYS, setItem } from "@/src/Storage";
 
 const schema = z.object({
     email: z.email({message: 'Invalid email address'}),
@@ -19,7 +19,7 @@ const schema = z.object({
 const ResetPasswordForm = ({setApiErrorMsg}: {setApiErrorMsg: (msg: string) => void}) => {
     const mutedForeground = useThemeVariables('--muted-foreground');
     const foreground = useThemeVariables('--foreground');
-    const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+    const navigation = useNavigation<NavigationProp>();
     const { mutate: requestPasswordReset, status: requestPasswordResetStatus, error: requestPasswordResetError } = useRequestPasswordReset();
     const styles = useResetPaswordFormStyles();
     const { control, handleSubmit, formState: { errors }, resetField, watch} = useForm({
@@ -27,8 +27,9 @@ const ResetPasswordForm = ({setApiErrorMsg}: {setApiErrorMsg: (msg: string) => v
     });
     const onSubmit = (data: z.infer<typeof schema>) => {
         requestPasswordReset(data.email, {
-            onSuccess: () => {
+            onSuccess: (data) => {
                 resetField('email');
+                setItem(KEYS.PASSWORD_RESET_TOKEN, data?.meta?.session_token);
                 navigation.navigate('PasswordResetOTP');
 
             },

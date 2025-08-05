@@ -8,7 +8,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm, Controller } from 'react-hook-form';
 import { Button, ButtonSpinner, ButtonText } from "@/components/ui/button"
 import { useResetPassword } from "../../Hooks/PasswordReset.hook"
-import { getItem, KEYS } from "@/src/Storage";
+import { getItem, KEYS, removeMany } from "@/src/Storage";
 import { useNavigation } from "@react-navigation/native";
 import { NavigationProp } from "../../App.Navigation";
 
@@ -56,14 +56,13 @@ export const NewPasswordForm = ({setApiErrorMsg}: {setApiErrorMsg: (msg: string)
     // console.log(errors.password);
 
     const onSubmit = async (data: z.infer<typeof schema>) => {
-        const passwordResetKey = getItem(KEYS.PASSWORD_RESET_KEY);
         resetPassword({
-            key: passwordResetKey || "",
             password: data.password,
         }, {
             onSuccess: () => {
                 console.log("Password reset successful");
                 reset();
+                removeMany([KEYS.PASSWORD_RESET_KEY, KEYS.PASSWORD_RESET_TOKEN]);
                 navigation.navigate('PasswordResetSuccess');
             },
             onError: (error: any) => {

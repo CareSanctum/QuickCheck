@@ -22,6 +22,8 @@ const urls = {
     CHANGE_PASSWORD: `/api/_allauth/${clientType}/v1/account/password/change`,
     INVALID_TIMEFRAME: '/api/mark-invalid-timeframe/',
     MARK_AS_INVALID: '/api/mark-as-invalid/',
+    PROFILE: '/api/user-profile/',
+    QUICK_CHECK_LIST: '/api/loved-one/chat-row/',
     // Wallet and Payment endpoints
     CREATE_ORDER: '/api/payments/create-order/',
     VERIFY_PAYMENT: '/api/payments/verify-payment/',
