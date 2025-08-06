@@ -6,7 +6,7 @@ import QuickCheckList from "./QuickCheckList";
 
 const Home = () => {
   return (
-    <SafeAreaView className="flex-1 bg-background pt">
+    <SafeAreaView className="flex-1 bg-background">
       <HomeHeader title="QuickCheck"/>
         <HomeSearch/>
         <QuickCheckList />

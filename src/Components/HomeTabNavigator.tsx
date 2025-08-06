@@ -2,6 +2,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Home from '../Screens/Home/Home';
 import Wallet from '../Screens/Wallet/Wallet';
 import Account from '../Screens/UserAccount/Account';
+import LovedOneHistory from '../Screens/Home/LovedOneHistory';
 import LovedOnes from '../Screens/LovedOnes';
 import { Home as HomeIcon, Wallet as WalletIcon, User as UserIcon, HeartIcon } from 'lucide-react-native';
 import { useThemeVariables } from './ThemeVariables';

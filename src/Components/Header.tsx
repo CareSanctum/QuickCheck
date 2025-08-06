@@ -1,12 +1,13 @@
-import { ArrowLeft } from "lucide-react-native";
+import { ChevronLeft } from "lucide-react-native";
 import { View, TouchableOpacity, Text, ActivityIndicator } from "react-native";
 import { useThemeVariables } from "./ThemeVariables";
 import { useNavigation } from "@react-navigation/native";
 import { NavigationProp } from "../App.Navigation";
 import { tva } from "@gluestack-ui/nativewind-utils/tva";
 import { LinearGradient } from "expo-linear-gradient";
-import { Wallet } from "lucide-react-native";
+import { Wallet, EllipsisVertical } from "lucide-react-native";
 import { useWalletBalance } from "@/src/Hooks/Wallet.hook";
+import { Avatar, AvatarFallbackText } from "@/components/ui/avatar";
 
 const headerStyle = tva({
     base: 'flex-row items-center gap-4',
@@ -24,7 +25,7 @@ const Header = ({ title, onBackPress, className }: HeaderProps) => {
     return (
         <View className={headerStyle({ class: className })}>
             <TouchableOpacity onPress={onBackPress ? onBackPress : () => navigation.goBack()}>
-                <ArrowLeft color={foreground} size={26} />
+                <ChevronLeft color={foreground} size={26} />
             </TouchableOpacity>
         </View>   
     );
@@ -66,4 +67,50 @@ export const HomeHeader = ({ className, showWallet = true, title = 'CareSanctum'
     )
 }
 
+const QuickCheckHeaderStyle = tva({
+    base: 'flex-row items-center justify-between px-4 py-4',
+});
+
+interface QuickCheckHeaderProps {
+    name?: string;
+    onBackPress?: () => void;
+    onMenuPress?: () => void;
+    className?: string;
+}
+
+const QuickCheckHeader = ({ name = "Dad", onBackPress, onMenuPress, className }: QuickCheckHeaderProps) => {
+    const foreground = useThemeVariables('--foreground');
+    const navigation = useNavigation<NavigationProp>();
+    
+    const handleBackPress = onBackPress || (() => navigation.goBack());
+    const handleMenuPress = onMenuPress || (() => console.log('Menu pressed'));
+    
+    return (
+        <View className={QuickCheckHeaderStyle({ class: className })}>
+            {/* Back Button */}
+            <TouchableOpacity onPress={handleBackPress}>
+                <ChevronLeft color={foreground} size={24} />
+            </TouchableOpacity>
+            
+            {/* Center Content - Avatar and Name */}
+            <View className="flex-row items-center flex-1 justify-center">
+                <Avatar size="sm" className="bg-primary mr-2">
+                    <AvatarFallbackText className="text-foreground text-sm">
+                        {name}
+                    </AvatarFallbackText>
+                </Avatar>
+                <Text className="text-foreground text-lg font-medium">
+                    {name}
+                </Text>
+            </View>
+            
+            {/* Kebab Menu */}
+            <TouchableOpacity onPress={handleMenuPress}>
+                <EllipsisVertical color={foreground} size={20} />
+            </TouchableOpacity>
+        </View>
+    );
+};
+
+export { QuickCheckHeader };
 export default Header;
