@@ -34,9 +34,10 @@ const ResetPassword = () => {
                 </View>
 
                 <ResetPasswordForm setApiErrorMsg={setApiErrorMsg} />
+                {apiErrorMsg && <ErrorBox errorMsg={apiErrorMsg} />}
             </View>
 
-            {apiErrorMsg && <ErrorBox errorMsg={apiErrorMsg} />}
+            
         </SafeAreaView>
   );
 };

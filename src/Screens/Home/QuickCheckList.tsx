@@ -1,6 +1,6 @@
 import { FlatList, Text } from "react-native";
 import { useQuickCheckList } from "@/src/Hooks/QuickCheck.hook";
-import LoadingScreen from "../LoadingScreen";
+import { LoadingScreen } from "../LoadingScreen";
 import LovedOneListItem from "./LovedOneListItem";
 const QuickCheckList = () => {
     const {data: quickCheckList, isLoading, status: quickCheckListStatus, error: quickCheckListError, refetch} = useQuickCheckList();
@@ -15,6 +15,7 @@ const QuickCheckList = () => {
             data={quickCheckList}
             refreshing={isLoading}
             onRefresh={refetch}
+            
             keyExtractor={(item) => item.id.toString()}
             className="flex-1"
             renderItem={({item}) => <LovedOneListItem item={item} />}            

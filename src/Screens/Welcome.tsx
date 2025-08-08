@@ -1,13 +1,12 @@
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Text, View } from "react-native";
 import { Button, ButtonText } from "@/components/ui/button";
-import { useNavigation } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { RootStackParamList } from '../App.Navigation';
+import {  useNavigation } from '@react-navigation/native';
 import { useThemeVariables } from "../Components/ThemeVariables";
+import { NavigationProp } from "../App.Navigation";
 
 const Welcome = () => {
-    const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+    const navigation = useNavigation<NavigationProp>();
     const foreground = useThemeVariables('--foreground');
     const primary = useThemeVariables('--primary');
     const primaryForeground = useThemeVariables('--primary-foreground');

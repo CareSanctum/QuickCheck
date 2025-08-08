@@ -1,104 +1,64 @@
 import { SafeAreaView } from "react-native-safe-area-context";
-import { View, Text, FlatList, TouchableOpacity } from "react-native";
+import { View, Text, FlatList, TouchableOpacity, ActivityIndicator } from "react-native";
 import { QuickCheckHeader } from "@/src/Components/Header";
 import { Card } from "@/components/ui/card";
 import { useThemeVariables } from "@/src/Components/ThemeVariables";
 import { Plus, Phone } from "lucide-react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { StatusBar } from "expo-status-bar";
+import { useState, useCallback, useEffect } from "react";
+import { useQuickCheckHistory, QuickCheckHistoryItem } from "@/src/Hooks/QuickCheck.hook";
+import { useRoute } from "@react-navigation/native";
+import { formatDate, getPriorityColor } from "./utils";
 
-// Mock data for chat bubbles
-const mockChatData = [
-    {
-        id: 1,
-        priority: "Medium",
-        status: "Completed",
-        message: "Feeling a bit tired today, but nothing serious. Taking it easy.",
-        initiated: "Jan 15, 10:15",
-        closed: "Jan 15, 10:20",
-        priorityColor: "bg-yellow-500/20",
-        priorityTextColor: "text-yellow-400",
-        statusColor: "bg-green-500/20",
-        statusTextColor: "text-green-400"
-    },
-    {
-        id: 2,
-        priority: "High",
-        status: "Completed",
-        message: "Had a small fall but I'm okay. Just a bruised knee.",
-        initiated: "Jan 14, 16:45",
-        closed: "Jan 14, 16:50",
-        priorityColor: "bg-orange-500/20",
-        priorityTextColor: "text-orange-400",
-        statusColor: "bg-green-500/20",
-        statusTextColor: "text-green-400"
-    },
-    {
-        id: 3,
-        priority: "Urgent",
-        status: "Completed",
-        message: "Need help immediately! Having chest pains.",
-        initiated: "Jan 14, 09:20",
-        closed: "Jan 14, 09:25",
-        priorityColor: "bg-pink-500/20",
-        priorityTextColor: "text-pink-400",
-        statusColor: "bg-green-500/20",
-        statusTextColor: "text-green-400"
-    },
-    {
-        id: 4,
-        priority: "Low",
-        status: "Pending",
-        message: "Everything is fine today. Just checking in as usual.",
-        initiated: "Jan 15, 16:00",
-        closed: null,
-        priorityColor: "bg-purple-500/20",
-        priorityTextColor: "text-purple-400",
-        statusColor: "bg-blue-500/20",
-        statusTextColor: "text-blue-400"
-    }
-];
 
-const ChatBubble = ({ item }: { item: typeof mockChatData[0] }) => {
+
+const ChatBubble = ({ item }: { item: QuickCheckHistoryItem }) => {
     const foreground = useThemeVariables('--foreground');
-    const cardBackground = useThemeVariables('--card');
+    
+    // Format dates
+
     
     return (
         <View className="flex-row justify-start mb-2 mx-2">
             <Card className="bg-card border-border" style={{borderRadius: 12, borderWidth: 1, width: '100%'}}>
                 <View className="p-2">
                     {/* Badges */}
-                    <View className="flex-row gap-2 mb-1">
-                        <View className={`px-2 py-1 rounded-full ${item.priorityColor}`}>
-                            <Text className={`text-xs font-medium ${item.priorityTextColor}`}>
+                    {item.priority ? (<View className="flex-row justify-end gap-2 mb-1">
+                        <View className={`px-2 py-1 rounded-full ${getPriorityColor(item.priority)}`}>
+                            <Text className="text-xs font-medium text-white">
                                 {item.priority}
                             </Text>
                         </View>
-                        <View className={`px-2 py-1 rounded-full ${item.statusColor}`}>
-                            <Text className={`text-xs font-medium ${item.statusTextColor}`}>
-                                {item.status}
-                            </Text>
+                    </View>) : (
+                        <View className="flex-row justify-end gap-2 mb-1">
+                            <View className="px-2 py-1 rounded-full bg-sky-300">
+                                <Text className="text-xs font-medium text-primaryForeground">
+                                    {item.status?.replaceAll("_", " ")}
+                                </Text>
+                            </View>
                         </View>
-                    </View>
+                    )}
                     
                     {/* Message */}
                     <Text className="text-foreground text-base mb-2 leading-5" numberOfLines={0}>
-                        {item.message}
+                        {item.message || 'No message available'}
                     </Text>
                     
                     {/* Timestamps */}
-                    <View className="flex-row justify-between items-start">
-                        <View className="flex-row gap-4">
-                            <View>
-                                <Text className="text-mutedForeground text-sm">Initiated</Text>
-                                <Text className="text-foreground text-sm font-medium">{item.initiated}</Text>
-                            </View>
-                            {item.closed && (
-                                <View>
-                                    <Text className="text-mutedForeground text-sm">Closed</Text>
-                                    <Text className="text-foreground text-sm font-medium">{item.closed}</Text>
-                                </View>
-                            )}
+                    <View className="flex">
+                        <View className="flex-row justify-between">
+                            <Text className="text-sm font-medium">Initiated</Text>
+                            <Text className="text-sm font-medium">Responded</Text>
                         </View>
-                        {/* Purple circle indicator */}
+                        <View className="flex-row justify-between">
+                            <Text className="text-foreground text-sm font-medium">
+                                {formatDate(item.initiated_at)}
+                            </Text>
+                            <Text className="text-foreground text-sm font-medium">
+                                {item.closed_at ? formatDate(item.closed_at) : '-'}
+                            </Text>
+                        </View>
                     </View>
                 </View>
             </Card>
@@ -106,12 +66,27 @@ const ChatBubble = ({ item }: { item: typeof mockChatData[0] }) => {
     );
 };
 
-const LovedOneHistory = () => {
+interface LovedOneHistoryProps {
+    route: {
+        params: {
+            loved_one_id: number;
+        };
+    };
+}
+
+const LovedOneHistory: React.FC<LovedOneHistoryProps> = ({ route }) => {
     const foreground = useThemeVariables('--foreground');
     const primary = useThemeVariables('--primary');
     const secondary = useThemeVariables('--secondary');
     const primaryForeground = useThemeVariables('--primary-foreground');
     const secondaryForeground = useThemeVariables('--secondary-foreground');
+    
+    const { loved_one_id } = route.params;
+    
+    const [currentUrl, setCurrentUrl] = useState<string | undefined>(undefined);
+    const [allData, setAllData] = useState<QuickCheckHistoryItem[]>([]);
+    
+    const { data: historyData, isLoading, error, refetch } = useQuickCheckHistory(loved_one_id, currentUrl || undefined);
     
     const handleQuickCheck = () => {
         console.log('QuickCheck pressed');
@@ -120,19 +95,76 @@ const LovedOneHistory = () => {
     const handleCall = () => {
         console.log('Call pressed');
     };
+    
+    // Accumulate data when new data comes in
+    useEffect(() => {
+        if (historyData?.results) {
+            if (currentUrl) {
+                // Append new data for pagination
+                setAllData(prev => [...prev, ...historyData.results]);
+            } else {
+                // Replace data for refresh
+                setAllData(historyData.results);
+            }
+        }
+    }, [historyData?.results, currentUrl]);
+
+    const handleLoadMore = useCallback(() => {
+        if (historyData?.next && !isLoading) {
+            setCurrentUrl(historyData.next);
+        }
+    }, [historyData?.next, isLoading]);
+    
+    const handleRefresh = useCallback(() => {
+        setCurrentUrl(undefined);
+        setAllData([]);
+        refetch();
+    }, [refetch]);
+    
+    const insets = useSafeAreaInsets();
+
+    if (error) {
+        return (
+            <SafeAreaView className="flex-1 bg-background" edges={['right', 'bottom', 'left']}>
+                <QuickCheckHeader style={{paddingTop: insets.top}}/>
+                <View className="flex-1 justify-center items-center">
+                    <Text className="text-foreground text-lg">Error loading history</Text>
+                    <TouchableOpacity onPress={handleRefresh} className="mt-4">
+                        <Text className="text-primary">Retry</Text>
+                    </TouchableOpacity>
+                </View>
+            </SafeAreaView>
+        );
+    }
 
     return (
-        <SafeAreaView className="flex-1 bg-background">
-            <QuickCheckHeader />
+        <SafeAreaView className="flex-1 bg-background" edges={['right', 'bottom', 'left']}>
+            <QuickCheckHeader style={{paddingTop: insets.top}}/>
             
             {/* Chat bubbles */}
             <FlatList
-                data={mockChatData}
+                data={allData}
                 keyExtractor={(item) => item.id.toString()}
                 renderItem={({ item }) => <ChatBubble item={item} />}
-                className="flex-1"
+                className="flex-1 mt-4 px-4"
                 contentContainerStyle={{ paddingBottom: 96 }}
                 showsVerticalScrollIndicator={false}
+                onEndReached={handleLoadMore}
+                onEndReachedThreshold={0.1}
+                ListFooterComponent={
+                    isLoading && currentUrl ? (
+                        <View className="py-4 items-center">
+                            <ActivityIndicator size="small" color={primary} />
+                        </View>
+                    ) : null
+                }
+                ListEmptyComponent={
+                    !isLoading ? (
+                        <View className="flex-1 justify-center items-center py-8">
+                            <Text className="text-foreground text-lg">No quick checks found</Text>
+                        </View>
+                    ) : null
+                }
             />
             
             {/* Floating Action Buttons */}
@@ -153,7 +185,7 @@ const LovedOneHistory = () => {
                     onPress={handleCall}
                     style={{elevation: 8}}
                 >
-                    <Phone color={secondaryForeground} size={24} />
+                    <Phone color={primaryForeground} size={24} />
                 </TouchableOpacity>
             </View>
         </SafeAreaView>

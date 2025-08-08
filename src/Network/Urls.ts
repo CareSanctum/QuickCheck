@@ -24,13 +24,25 @@ const urls = {
     MARK_AS_INVALID: '/api/mark-as-invalid/',
     PROFILE: '/api/user-profile/',
     QUICK_CHECK_LIST: '/api/loved-one/chat-row/',
+    QUICK_CHECK_HISTORY: '/api/loved-one/{loved_one_id}/quickchecks/',
+    LOVED_ONE_CREATE: '/api/loved-one/',
+    QUICK_CHECK_CREATE: '/api/quick-check/',
+
     // Wallet and Payment endpoints
     CREATE_ORDER: '/api/payments/create-order/',
     VERIFY_PAYMENT: '/api/payments/verify-payment/',
     WALLET_BALANCE: '/api/wallet/',
 }
 
-export function generateUrl(path: keyof typeof urls) {
-    return `${baseUrl}${urls[path]}`;
+export function generateUrl(path: keyof typeof urls, params?: Record<string, string | number>) {
+    let url = `${baseUrl}${urls[path]}`;
+    
+    if (params) {
+        Object.entries(params).forEach(([key, value]) => {
+            url = url.replace(`{${key}}`, String(value));
+        });
+    }
+    
+    return url;
 }
 

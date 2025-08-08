@@ -120,7 +120,7 @@ function useLoginFormStyles() {
       input: {
         color: foreground,
         fontSize: 16,
-        fontWeight: '500',
+        fontWeight: '400',
       }
     })
   }

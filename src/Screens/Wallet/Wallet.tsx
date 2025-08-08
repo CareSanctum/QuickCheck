@@ -16,7 +16,7 @@ const Wallet = () => {
     }
 
     const handleHistoryPress = () => {
-        navigation.navigate('History');
+        navigation.navigate('WalletHistory');
     }
 
     const handleRechargePress = (amount: number) => {

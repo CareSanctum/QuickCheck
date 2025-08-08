@@ -1,17 +1,17 @@
 import { ChevronLeft } from "lucide-react-native";
-import { View, TouchableOpacity, Text, ActivityIndicator } from "react-native";
+import { View, TouchableOpacity, Text, ActivityIndicator, StyleProp, ViewStyle } from "react-native";
 import { useThemeVariables } from "./ThemeVariables";
 import { useNavigation } from "@react-navigation/native";
 import { NavigationProp } from "../App.Navigation";
 import { tva } from "@gluestack-ui/nativewind-utils/tva";
 import { LinearGradient } from "expo-linear-gradient";
-import { Wallet, EllipsisVertical } from "lucide-react-native";
+import { Wallet, EllipsisVertical, Phone } from "lucide-react-native";
 import { useWalletBalance } from "@/src/Hooks/Wallet.hook";
 import { Avatar, AvatarFallbackText } from "@/components/ui/avatar";
 
 const headerStyle = tva({
-    base: 'flex-row items-center gap-4',
-  });
+    base: 'flex-row items-center px-4 py-2',
+});
   
 interface HeaderProps {
     title?: string;
@@ -25,14 +25,15 @@ const Header = ({ title, onBackPress, className }: HeaderProps) => {
     return (
         <View className={headerStyle({ class: className })}>
             <TouchableOpacity onPress={onBackPress ? onBackPress : () => navigation.goBack()}>
-                <ChevronLeft color={foreground} size={26} />
+                <ChevronLeft color={foreground} size={22} />
             </TouchableOpacity>
+            <Text className="text-2xl font-bold text-foreground ml-2">{title}</Text>
         </View>   
     );
 }
 
 const HomeHeaderStyle = tva({
-    base: 'flex-row justify-between px-6 py-2',
+    base: 'flex-row justify-between px-4 py-2',
 });
 
 interface HomeHeaderProps {
@@ -67,50 +68,76 @@ export const HomeHeader = ({ className, showWallet = true, title = 'CareSanctum'
     )
 }
 
-const QuickCheckHeaderStyle = tva({
-    base: 'flex-row items-center justify-between px-4 py-4',
-});
-
+import { Button, ButtonText, ButtonIcon } from "@/components/ui/button";
+import { UserPen } from "lucide-react-native";
 interface QuickCheckHeaderProps {
     name?: string;
+    phone?: string;
     onBackPress?: () => void;
     onMenuPress?: () => void;
     className?: string;
-}
-
-const QuickCheckHeader = ({ name = "Dad", onBackPress, onMenuPress, className }: QuickCheckHeaderProps) => {
-    const foreground = useThemeVariables('--foreground');
+    style?: StyleProp<ViewStyle>;
+  }
+  
+  const QuickCheckHeaderStyle = tva({
+    base: [
+      'bg-card rounded-b-[28px] mb-1 border border-border',
+      'shadow-lg',
+    ],
+  });
+  
+  const QuickCheckHeader = ({
+    name = 'Dad',
+    phone = '+911823344567',
+    onBackPress,
+    onMenuPress,
+    className,
+    style,
+  }: QuickCheckHeaderProps) => {
     const navigation = useNavigation<NavigationProp>();
-    
-    const handleBackPress = onBackPress || (() => navigation.goBack());
-    const handleMenuPress = onMenuPress || (() => console.log('Menu pressed'));
+    const handleBack = onBackPress ?? (() => navigation.goBack());
+    const handleMenu = onMenuPress ?? (() => console.log('Menu pressed'));
+  
+    const foreground = useThemeVariables('--foreground');
+    const mutedForeground = useThemeVariables('--muted-foreground');
+    const primaryForeground = useThemeVariables('--primary-foreground');
     
     return (
-        <View className={QuickCheckHeaderStyle({ class: className })}>
-            {/* Back Button */}
-            <TouchableOpacity onPress={handleBackPress}>
-                <ChevronLeft color={foreground} size={24} />
+      <View className={QuickCheckHeaderStyle({ class: className })} style={style}>
+        <View className="flex-row justify-between items-center px-4 py-2 mb-8">
+            <TouchableOpacity onPress={handleBack} className="">
+              <ChevronLeft color={foreground} size={26} />
             </TouchableOpacity>
-            
-            {/* Center Content - Avatar and Name */}
-            <View className="flex-row items-center flex-1 justify-center">
-                <Avatar size="sm" className="bg-primary mr-2">
-                    <AvatarFallbackText className="text-foreground text-sm">
-                        {name}
-                    </AvatarFallbackText>
-                </Avatar>
-                <Text className="text-foreground text-lg font-medium">
+            <View className="flex-row items-center gap-2">
+                <Button className="bg-primary rounded-full px-4 shadow-md">
+                    <ButtonIcon as= {UserPen} color={primaryForeground} size="sm"/>
+                    <ButtonText className="text-primaryForeground text-sm font-semibold">
+                        Edit
+                    </ButtonText>
+                </Button>
+                <TouchableOpacity onPress={handleMenu} className="">
+                    <EllipsisVertical color={foreground} size={22} />
+                </TouchableOpacity>
+            </View>
+        </View>
+        <View className="flex-row items-start px-4 pb-4">
+            <Avatar size='md' className="bg-primary mr-4">
+                <AvatarFallbackText className="text-primaryForeground text-lg font-semibold">
+                    {name}
+                </AvatarFallbackText>
+            </Avatar>
+            <View className="flex-col">
+                <Text className="text-foreground text-2xl font">
                     {name}
                 </Text>
+                <View className="flex-row items-center">
+                    <Text className="text-mutedForeground text-base ml-0.5">{phone}</Text>
+                </View>
             </View>
-            
-            {/* Kebab Menu */}
-            <TouchableOpacity onPress={handleMenuPress}>
-                <EllipsisVertical color={foreground} size={20} />
-            </TouchableOpacity>
         </View>
+      </View>
     );
-};
+  };
 
 export { QuickCheckHeader };
 export default Header;

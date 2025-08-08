@@ -1,7 +1,9 @@
 import axiosInstance from "../Network/Axios.config";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { generateUrl } from "../Network/Urls";
 import { AxiosResponse } from "axios";
+import { useNavigation } from "@react-navigation/native";
+import { NavigationProp } from "../App.Navigation";
 
 export interface QuickCheckListItem {
     id: number,
@@ -24,9 +26,69 @@ async function getQuickCheckList() {
     }
 }
 
+
+
 export function useQuickCheckList() {
     return useQuery({
         queryKey: ['quick-check-list'],
         queryFn: getQuickCheckList,
+    })
+}
+
+export interface QuickCheckHistoryItem {
+    id: number,
+    status: string | null,
+    priority: string | null,
+    message: string | null,
+    initiated_at: string,
+    closed_at: string | null,
+}
+
+export interface QuickCheckHistoryResponse {
+    count: number,
+    next: string | null,
+    previous: string | null,
+    results: QuickCheckHistoryItem[]
+}
+
+async function getQuickCheckHistory(loved_one_id: number, url?: string) {
+    try{
+        const finalUrl = url || generateUrl('QUICK_CHECK_HISTORY', {loved_one_id});
+        const response: AxiosResponse<QuickCheckHistoryResponse> = await axiosInstance.get(finalUrl);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+}
+
+export function useQuickCheckHistory(loved_one_id: number, url?: string | null) {
+    return useQuery({
+        queryKey: ['quick-check-history', loved_one_id, url],
+        queryFn: () => getQuickCheckHistory(loved_one_id, url || undefined),
+        enabled: !!loved_one_id,
+    })
+}
+
+async function createQuickCheck(initiated_for_id: number) {
+    try{
+        const response = await axiosInstance.post(generateUrl('QUICK_CHECK_CREATE'), {initiated_for_id});
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+}
+
+export function useCreateQuickCheck(initiated_for_id: number) {
+    const queryClient = useQueryClient();
+    const navigation = useNavigation<NavigationProp>();
+    return useMutation({
+        mutationFn: () => createQuickCheck(initiated_for_id),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['quick-check-history', initiated_for_id] });
+            navigation.navigate('LovedOneHistory', {loved_one_id: initiated_for_id});
+        },
+        onError: (error) => {
+            console.log(error);
+        },
     })
 }

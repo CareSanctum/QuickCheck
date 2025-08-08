@@ -15,8 +15,9 @@ import Welcome from "./Screens/Welcome";
 import HomeTabNavigator from "./Components/HomeTabNavigator";
 import PaymentSummary from "./Screens/Wallet/PaymentSummary";
 import LovedOneHistory from "./Screens/Home/LovedOneHistory";
-import History from "./Screens/Wallet/History";
-
+import AddLovedOne from "./Screens/LovedOne/AddLovedOne";
+import WalletHistory from "./Screens/Wallet/WalletHistory";
+import ChangePassword from "./Screens/UserAccount/AccountItems/ChangePassword";
 import { AuthContext, useAuth } from "./Context/AuthContext";
 import { ActivityIndicator } from "react-native";
 import { useContext } from "react";
@@ -41,7 +42,10 @@ const RootStack = createNativeStackNavigator({
             screens: {
                 HomeTabNavigator: HomeTabNavigator,
                 PaymentSummary: PaymentSummary,
-                History: LovedOneHistory,
+                LovedOneHistory: LovedOneHistory,
+                WalletHistory: WalletHistory,
+                AddLovedOne: AddLovedOne,
+                ChangePassword,
             }
         },
         SignedOut: {

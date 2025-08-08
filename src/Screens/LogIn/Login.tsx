@@ -9,6 +9,7 @@ import { NavigationProp } from '../../App.Navigation';
 import { useNavigation } from '@react-navigation/native';
 import { ArrowLeft } from 'lucide-react-native';
 import { getItem, KEYS } from '@/src/Storage';
+import Header from '@/src/Components/Header';
 
 
 
@@ -26,18 +27,15 @@ const Login = () => {
           {/* Main container with padding and spacing */}
           <View style={{gap: 15}}>
             {/* Sign in title */}
-            <View className="flex-row items-center gap-4">
-              <TouchableOpacity onPress={() => navigation.goBack()}>
-              <ArrowLeft color={foreground} size={26} />
-              </TouchableOpacity>
-            </View>
+            <Header />
 
-            <View className="my-10 justify-center items-center">
-              <Text className="font-semibold text-foreground text-[30px]">Welcome Back</Text>
+            <View className="my-10 justify-center">
+              <Text className="font-semibold text-foreground text-[30px]">Welcome Back!</Text>
+              <Text className="font-medium text-mutedForeground text-[16px] ">Let's get you back in</Text>
             </View>
 
             <LoginForm setApiErrorMsg={setApiErrorMsg} />
-            
+            {apiErrorMsg && <ErrorBox errorMsg={apiErrorMsg} />}
             <View className="flex-row justify-center mt-4">
               <TouchableOpacity 
                 className="px-4 py-2 self-end"
@@ -50,8 +48,6 @@ const Login = () => {
           </View>
           </ScrollView>
           </KeyboardAvoidingView>
-
-          {apiErrorMsg && <ErrorBox errorMsg={apiErrorMsg} />}
         </SafeAreaView>
       );
 }

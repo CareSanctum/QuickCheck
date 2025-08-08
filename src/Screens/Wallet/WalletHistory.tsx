@@ -9,7 +9,7 @@ import { useState } from "react";
 import { Transaction } from "../../Hooks/Wallet.hook";
 import { ArrowLeft, Calendar, CreditCard, TrendingUp, TrendingDown, CheckCircle, XCircle, Clock } from "lucide-react-native";
 
-const History = () => {
+const WalletHistory = () => {
     const navigation = useNavigation<NavigationProp>();
     const { data: walletData, isLoading, error, refetch } = useWalletBalance();
     const [refreshing, setRefreshing] = useState(false);
@@ -230,4 +230,4 @@ const History = () => {
     );
 }
 
-export default History; 
+export default WalletHistory; 

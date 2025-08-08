@@ -33,10 +33,10 @@ const NewPassword = () => {
                 </View>
 
                 <NewPasswordForm setApiErrorMsg={setApiErrorMsg} />
+                {apiErrorMsg && <ErrorBox errorMsg={apiErrorMsg} />}
             </View>
             </ScrollView>
             </KeyboardAvoidingView>
-            {apiErrorMsg && <ErrorBox errorMsg={apiErrorMsg} />}
         </SafeAreaView>
     );
 }

@@ -5,7 +5,9 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { AppNavigation } from './src/App.Navigation';
 import { AuthProvider, useAuth } from './src/Context/AuthContext';
 import { ActivityIndicator, View } from 'react-native';
+import { LoadingScreen as LoadingScreenComponent } from './src/Screens/LoadingScreen';
 import { getItem, KEYS } from './src/Storage';
+import { useColorScheme } from 'nativewind';
 
 const queryClient = new QueryClient();
 
@@ -32,12 +34,17 @@ const LoadingScreen = () => {
 const AppScreen = () => {
   const { authStatus } = useAuth();
   const token = getItem(KEYS.SESSION_TOKEN);
-  
+  const { colorScheme } = useColorScheme();
   // Show loading indicator only when status is pending and a token exists
   if (authStatus === "pending" && token) {
-    return <ActivityIndicator size="large" color="#0000ff" />
+    return <LoadingScreenComponent />
   }
   
   // For other states (error, success, or pending without a token), render the navigation
-  return <AppNavigation />
+  return (
+    <>
+        <AppNavigation />
+        <StatusBar style={colorScheme === 'dark' ? 'light' : 'dark'} />
+    </>
+  )
 }

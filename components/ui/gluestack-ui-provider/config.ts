@@ -11,7 +11,7 @@ const lightColors = {
   '--primary': 'rgb(61, 0, 125)',
   '--primary-foreground': 'rgb(250, 250, 250)',
   '--secondary': 'rgb(254, 110, 208)',
-  '--secondary-foreground': 'rgb(23, 23, 23)',
+  '--secondary-foreground': 'rgb(250, 250, 250)',
   '--muted': 'rgb(245, 245, 245)',
   '--muted-foreground': 'rgb(115, 115, 115)',
   '--accent': 'rgb(245, 245, 245)',
