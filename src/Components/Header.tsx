@@ -75,6 +75,7 @@ interface QuickCheckHeaderProps {
     phone?: string;
     onBackPress?: () => void;
     onMenuPress?: () => void;
+    onEditPress?: () => void;
     className?: string;
     style?: StyleProp<ViewStyle>;
   }
@@ -91,6 +92,7 @@ interface QuickCheckHeaderProps {
     phone = '+911823344567',
     onBackPress,
     onMenuPress,
+    onEditPress,
     className,
     style,
   }: QuickCheckHeaderProps) => {
@@ -109,7 +111,7 @@ interface QuickCheckHeaderProps {
               <ChevronLeft color={foreground} size={26} />
             </TouchableOpacity>
             <View className="flex-row items-center gap-2">
-                <Button className="bg-primary rounded-full px-4 shadow-md">
+                <Button className="bg-primary rounded-full px-4 shadow-md" onPress={onEditPress}>
                     <ButtonIcon as= {UserPen} color={primaryForeground} size="sm"/>
                     <ButtonText className="text-primaryForeground text-sm font-semibold">
                         Edit

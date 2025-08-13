@@ -7,11 +7,11 @@ import { z } from "zod"
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm, Controller } from 'react-hook-form';
 import { Button, ButtonSpinner, ButtonText } from "@/components/ui/button"
-import { useResetPassword } from "../../Hooks/PasswordReset.hook"
+import { useResetPassword } from "../../Hooks/Password.hook"
 import { getItem, KEYS, removeMany } from "@/src/Storage";
 import { useNavigation } from "@react-navigation/native";
 import { NavigationProp } from "../../App.Navigation";
-import { useCreateLovedOne } from "../../Hooks/LovedOne.hook";
+import { useCreateLovedOne, useUpdateLovedOne } from "../../Hooks/LovedOne.hook";
 
 import { Dropdown } from 'react-native-element-dropdown';
 
@@ -42,8 +42,12 @@ const preferredLanguageOptions = [
     {label: 'Hindi', value: 'HINDI'},
 
 ]
-
-const AddLovedOneForm = () => {
+interface AddLovedOneFormProps {
+    defaultValues?: z.infer<typeof schema>;
+    isEdit?: boolean;
+    lovedOneId?: number;
+}
+const AddLovedOneForm = ({defaultValues, isEdit = false, lovedOneId}: AddLovedOneFormProps) => {
     const mutedForeground = useThemeVariables('--muted-foreground');
     const navigation = useNavigation<NavigationProp>();
     const foreground = useThemeVariables('--foreground');
@@ -53,9 +57,10 @@ const AddLovedOneForm = () => {
     const styles = useAddLovedOneFormStyles();
     const primaryForeground = useThemeVariables('--primary-foreground');
     const [apiErrorMsg, setApiErrorMsg] = useState<string>("");
-    const { mutate: createLovedOne, status: createLovedOneStatus, error: createLovedOneError } = useCreateLovedOne();
+    const { mutate: createLovedOne, status: createLovedOneStatus, error: createLovedOneError } = isEdit ? useUpdateLovedOne() : useCreateLovedOne();
     const { control, handleSubmit, formState: { errors }, reset, watch} = useForm({
         resolver: zodResolver(schema),
+        defaultValues: defaultValues,
     });
     const onSubmit = async (data: z.infer<typeof schema>) => {
         const request_obj = {
@@ -68,7 +73,7 @@ const AddLovedOneForm = () => {
                 notes: data.notes,
             }
         }
-        createLovedOne(request_obj, {
+        createLovedOne(isEdit ? {id: lovedOneId, data: request_obj} : request_obj, {
             onSuccess: () => {
                 reset();
                 navigation.navigate('HomeTabNavigator', { screen: 'HomeTab' });
@@ -230,7 +235,7 @@ const AddLovedOneForm = () => {
                     createLovedOneStatus === 'pending' ? 
                     <ButtonSpinner color={primaryForeground} /> : 
                     <ButtonText className="text-primaryForeground text-sm font-semibold">
-                        Add Loved One
+                        {isEdit ? 'Update Loved One' : 'Add Loved One'}
                     </ButtonText>
                 }
             </Button>

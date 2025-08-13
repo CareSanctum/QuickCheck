@@ -56,6 +56,24 @@ async function resetPassword({password}: {password: string}) {
     }
 }
 
+async function changePassword({current_password, new_password}: {current_password: string, new_password: string}) {
+    try{
+        const response = await axios.post(generateUrl('CHANGE_PASSWORD'), {
+            current_password,
+            new_password,
+        });
+        return response.data;
+    }catch(error: any){
+        throw error;
+    }
+}
+
+export function useChangePassword() {
+    return useMutation({
+        mutationFn: changePassword,
+    });
+}
+
 export function useVerifyCode() {
     return useMutation({
         mutationFn: verifyCode,

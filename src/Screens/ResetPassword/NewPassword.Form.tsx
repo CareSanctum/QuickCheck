@@ -7,7 +7,7 @@ import { z } from "zod"
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm, Controller } from 'react-hook-form';
 import { Button, ButtonSpinner, ButtonText } from "@/components/ui/button"
-import { useResetPassword } from "../../Hooks/PasswordReset.hook"
+import { useResetPassword } from "../../Hooks/Password.hook"
 import { getItem, KEYS, removeMany } from "@/src/Storage";
 import { useNavigation } from "@react-navigation/native";
 import { NavigationProp } from "../../App.Navigation";

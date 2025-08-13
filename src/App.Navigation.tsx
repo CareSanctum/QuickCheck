@@ -35,6 +35,7 @@ function useIsNotAuthenticated() {
 const RootStack = createNativeStackNavigator({
     screenOptions: {
         headerShown: false,
+        animation: 'ios_from_right'
     },
     groups: {
         SignedIn: {

@@ -27,7 +27,8 @@ const urls = {
     QUICK_CHECK_HISTORY: '/api/loved-one/{loved_one_id}/quickchecks/',
     LOVED_ONE_CREATE: '/api/loved-one/',
     QUICK_CHECK_CREATE: '/api/quick-check/',
-
+    LOVED_ONE_DETAILS: '/api/loved-one/{id}/',
+    LOVED_ONE_UPDATE: '/api/loved-one/{id}/',
     // Wallet and Payment endpoints
     CREATE_ORDER: '/api/payments/create-order/',
     VERIFY_PAYMENT: '/api/payments/verify-payment/',

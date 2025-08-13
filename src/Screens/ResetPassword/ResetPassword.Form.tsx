@@ -7,7 +7,7 @@ import { useForm, Controller } from 'react-hook-form';
 import { useNavigation } from '@react-navigation/native';
 import { NavigationProp } from '../../App.Navigation';
 import { Mail } from 'lucide-react-native';
-import { useRequestPasswordReset } from "../../Hooks/PasswordReset.hook";
+import { useRequestPasswordReset } from "../../Hooks/Password.hook";
 import { useThemeVariables } from "../../Components/ThemeVariables";
 import { useState } from "react";
 import { KEYS, setItem } from "@/src/Storage";

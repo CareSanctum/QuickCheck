@@ -10,6 +10,7 @@ import { useSignup } from "../../Hooks/Signup.hook";
 import { Button, ButtonSpinner, ButtonText } from "@/components/ui/button";
 import { NavigationProp } from "@/src/App.Navigation";
 import { useNavigation } from "@react-navigation/native";
+import INFlag from "../../Components/Icons/IN";
 
 const schema = z.object({
     email: z.email({message: 'Invalid email address'}),
@@ -69,20 +70,25 @@ const SignupForm = () => {
             </Input>
             {errors.email && <Text className="text-destructive text-[14px] font-medium">{errors.email.message}</Text>}
 
-            <Input className="bg-card border border-border data-[focus=true]:border-foreground"
-                style={{borderRadius: 10, height: 55}}
-            >
-                <InputSlot className="pl-3">
-                    <InputIcon as={Phone}  className="text-foreground" />
-                </InputSlot>
-                <Controller 
-                    control={control}
-                    name="phone"
-                    render={({ field }) => (
-                        <InputField placeholder="Phone Number" placeholderTextColor={mutedForeground} cursorColor={foreground} style={styles.input} value={field.value} onChangeText={field.onChange} />
-                    )}
-                />
-            </Input>
+            <View className="flex-row items-center gap-3">
+                <View className="flex-row items-center bg-card border border-border" style={{borderRadius: 10, paddingHorizontal: 12, height: 55}}>
+                    <View className="items-center justify-center">
+                        <INFlag width={24} height={16} />
+                    </View>
+                    <Text className="ml-2 text-foreground text-base">+91</Text>
+                </View>
+                <Input className="flex-1 bg-card border border-border data-[focus=true]:border-foreground"
+                    style={{borderRadius: 10, height: 55}}
+                >
+                    <Controller 
+                        control={control}
+                        name="phone"
+                        render={({ field }) => (
+                            <InputField placeholder="Phone Number" placeholderTextColor={mutedForeground} cursorColor={foreground} style={styles.input} value={field.value} onChangeText={field.onChange} />
+                        )}
+                    />
+                </Input>
+            </View>
             {errors.phone && <Text className="text-destructive text-[14px] font-medium">{errors.phone.message}</Text>}
 
             <Input className='bg-card border border-border data-[focus=true]:border-foreground'  

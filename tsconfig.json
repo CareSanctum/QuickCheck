@@ -10,5 +10,6 @@
         "./tailwind.config.js"
       ]
     }
-  }
+  },
+  
 }

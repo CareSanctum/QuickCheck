@@ -7,7 +7,7 @@ import { ArrowLeft } from "lucide-react-native";
 import { useState, useRef } from "react";
 import { useNavigation } from '@react-navigation/native';
 import { NavigationProp } from "../../App.Navigation";
-import { useVerifyCode } from "../../Hooks/PasswordReset.hook";
+import { useVerifyCode } from "../../Hooks/Password.hook";
 import { Button, ButtonSpinner, ButtonText } from "@/components/ui/button";
 import * as SecureStore from 'expo-secure-store';
 import { setItem, KEYS } from "@/src/Storage";
