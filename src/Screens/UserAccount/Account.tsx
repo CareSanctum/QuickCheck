@@ -1,6 +1,6 @@
-import { View, Text, TouchableOpacity, ScrollView, BackHandler, StyleSheet } from "react-native";
+import { View, Text, TouchableOpacity, ScrollView, BackHandler, StyleSheet, ActivityIndicator } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Avatar, AvatarFallbackText } from "@/components/ui/avatar";
+import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { useLogout } from "../../Hooks/Logout.hook";
 import { useThemeVariables } from "@/src/Components/ThemeVariables";
 import AccountItemsCard from "./AccountItemsCard";
@@ -12,13 +12,17 @@ import { useCallback, useEffect, useState } from "react";
 import { useWindowDimensions } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useTabVisibilityStore } from "@/src/Store/tabVisibility";
+import { LoadingScreen } from "../LoadingScreen";
+import { User } from "lucide-react-native";
+import EditProfile from "./AccountItems/EditProfile";
 
 const Account = () => {
     const { mutate: logout, status: logoutStatus } = useLogout();
-    const { data: profile, status: profileStatus } = useProfile();
+    const { data: profile, status: profileStatus, error: profileError } = useProfile();
     const foreground = useThemeVariables('--foreground');
     const destructive = useThemeVariables('--destructive');
     const background = useThemeVariables('--background');
+    const primaryForeground = useThemeVariables('--primary-foreground');
     const { top, bottom } = useSafeAreaInsets();
     const { height: screenHeight } = useWindowDimensions();
     const navigation = useNavigation();
@@ -85,6 +89,14 @@ const Account = () => {
         opacity: interpolate(expandProgress.value, [0, 1], [1, 0], Extrapolation.CLAMP),
     }));
 
+    if (profileError) {
+        return <View className="flex-1 items-center justify-center">
+            <Text className="text-destructive text-base font-medium">Something went wrong</Text>
+        </View>
+    }
+    if (profileStatus === 'pending') {
+        return <LoadingScreen />
+    }
     return (
         <SafeAreaView className="flex-1 bg-background" edges={['bottom', 'left', 'right']}>
             {/* Curtain header overlay */}
@@ -102,28 +114,30 @@ const Account = () => {
                     <HomeHeader title="Account" className="" />
                     <View className="flex-row items-center mb-8 mt-8 px-4 pt-2">
                         <View className="relative">
-                            <Avatar size="xl" className="bg-primary rounded-full">
-                                <AvatarFallbackText className="text-white">
-                                    Sarang Dutta
-                                </AvatarFallbackText>
+                            <Avatar size="xl" className="bg-primary overflow-hidden rounded-full p-0">
+                                {profile.profile_picture_url ? (
+                                    <AvatarImage
+                                    source={{uri: profile.profile_picture_url}}
+                                    resizeMode="cover"
+                                    className="absolute inset-0 w-full h-full"
+                                    style={{ transform: [{ scale: 2 }] }}
+                                    />
+                                ) : (
+                                    <User color={primaryForeground} size={40} />
+                                )}
                             </Avatar>
                         </View>
                         <View className="ml-2 flex-1">
-                            <Text className="text-2xl font-bold text-foreground">John Doe</Text>
-                            <Text className="font-medium text-mutedForeground">johndoe@email.com</Text>
+                            <Text className="text-2xl font-bold text-foreground">{profile.full_name}</Text>
+                            <Text className="font-medium text-mutedForeground">{profile.email}</Text>
                         </View>
                     </View>
                 </Animated.View>
 
                 {/* Edit content */}
                 {isEditingProfile && (
-                    <Animated.View style={[collapsedHeaderHeight > 0 ? StyleSheet.absoluteFillObject : null, headerEditOpacity, {paddingTop: top}]}> 
-                        <View className="px-4">
-                            <Header title="Edit Profile" onBackPress={handleCloseEdit} />
-                        </View>
-                        <View className="flex-1 px-4 pt-4">
-                            <Text className="text-foreground text-base">Edit form goes here...</Text>
-                        </View>
+                    <Animated.View style={[collapsedHeaderHeight > 0 ? StyleSheet.absoluteFillObject : null, headerEditOpacity]}> 
+                        <EditProfile />
                     </Animated.View>
                 )}
             </Animated.View>
