@@ -95,12 +95,12 @@ const PaymentSummary: React.FC<PaymentSummaryProps> = ({ route }) => {
         <SafeAreaView className="flex-1 bg-background">
             <View className="flex-1 px-5">
                 {/* Header */}
-                <Header className="my-4"/>
+                <Header className="my-4" title="Payment Summary"/>
 
                 <ScrollView className="flex-1">
                     {/* Payment Summary Section */}
                     <View className="bg-white rounded-lg p-6 mb-6 shadow-sm">
-                        <Text className="text-xl font-bold text-gray-800 mb-4">Payment Summary</Text>
+                        {/* <Text className="text-xl font-bold text-gray-800 mb-4">Payment Summary</Text> */}
                         
                         {/* Amount to Pay */}
                         <View className="flex-row justify-between items-center mb-4 pb-4 border-b border-gray-200">
@@ -135,6 +135,17 @@ const PaymentSummary: React.FC<PaymentSummaryProps> = ({ route }) => {
                     {/* Disclaimer Section */}
                     <View className="bg-white rounded-lg p-6 mb-6 shadow-sm">
                         <View className="flex-row items-start mb-3">
+                            <Text className="text-orange-500 mr-3 mt-1">✅</Text>
+                            <Text className="text-gray-800 font-semibold flex-1">Secure Payment</Text>
+                        </View>
+                        <Text className="text-gray-600 text-sm leading-5">
+                            Your payment information is encrypted and secure. We never store your card details. Payments are processed through Razorpay.
+                        </Text>
+                    </View>                    
+
+                    {/* Disclaimer Section */}
+                    <View className="bg-white rounded-lg p-6 mb-6 shadow-sm">
+                        <View className="flex-row items-start mb-3">
                             <Text className="text-orange-500 mr-3 mt-1">⚠️</Text>
                             <Text className="text-gray-800 font-semibold flex-1">Important Notice</Text>
                         </View>
@@ -146,7 +157,7 @@ const PaymentSummary: React.FC<PaymentSummaryProps> = ({ route }) => {
                     {/* Action Buttons */}
                     <View className="space-y-3">
                         <Button 
-                            className="bg-primary w-full" 
+                            className="bg-green-600 w-full" 
                             onPress={handleProceedToPayment}
                             isDisabled={loading}
                         >
@@ -157,13 +168,13 @@ const PaymentSummary: React.FC<PaymentSummaryProps> = ({ route }) => {
                             )}
                         </Button>
                         
-                        <Button 
+                        {/* <Button 
                             className="bg-gray-200 w-full" 
                             onPress={handleBackToWallet}
                             isDisabled={loading}
                         >
                             <ButtonText className="text-gray-800">Cancel</ButtonText>
-                        </Button>
+                        </Button> */}
                     </View>
                 </ScrollView>
             </View>

@@ -1,11 +1,11 @@
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Text, View, TouchableOpacity, ScrollView, ActivityIndicator, RefreshControl } from "react-native";
 import { Button, ButtonText } from "@/components/ui/button";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import { NavigationProp } from "../../App.Navigation";
 import { useWalletBalance } from "../../Hooks/Wallet.hook";
 import Header from "../../Components/Header";
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { Transaction } from "../../Hooks/Wallet.hook";
 import { ArrowLeft, Calendar, CreditCard, TrendingUp, TrendingDown, CheckCircle, XCircle, Clock } from "lucide-react-native";
 
@@ -13,6 +13,14 @@ const WalletHistory = () => {
     const navigation = useNavigation<NavigationProp>();
     const { data: walletData, isLoading, error, refetch } = useWalletBalance();
     const [refreshing, setRefreshing] = useState(false);
+
+    // Refresh wallet data when screen comes into focus
+    useFocusEffect(
+        useCallback(() => {
+            // Refresh wallet balance and history when WalletHistory screen is opened
+            refetch();
+        }, [refetch])
+    );
 
     const handleBackPress = () => {
         navigation.goBack();

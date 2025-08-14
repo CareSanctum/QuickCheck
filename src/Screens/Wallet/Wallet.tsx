@@ -1,16 +1,27 @@
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Text, View, TouchableOpacity, TextInput, Alert, ScrollView, ActivityIndicator } from "react-native";
+import { Text, View, TouchableOpacity, TextInput, Alert, ScrollView, ActivityIndicator, RefreshControl } from "react-native";
 import { Button, ButtonText } from "@/components/ui/button";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import { NavigationProp } from "../../App.Navigation";
 import { useWalletBalance } from "../../Hooks/Wallet.hook";
 import { HomeHeader } from "@/src/Components/Header";
 import { Card } from "@/components/ui/card";
 import { useThemeVariables } from "@/src/Components/ThemeVariables";
+import { useCallback } from "react";
+
 const Wallet = () => {
     const navigation = useNavigation<NavigationProp>();
-    const { data: walletData, isLoading, error } = useWalletBalance();
+    const { data: walletData, isLoading, error, refetch } = useWalletBalance();
     const cardForeground = useThemeVariables('--card-foreground');
+    
+    // Refresh wallet data when screen comes into focus
+    useFocusEffect(
+        useCallback(() => {
+            // Refresh wallet balance and history when wallet screen is opened
+            refetch();
+        }, [refetch])
+    );
+
     const handleBackToHome = () => {
         navigation.goBack();
     }
@@ -36,6 +47,14 @@ const Wallet = () => {
                 <ScrollView 
                     className="flex-1 px-4 pt-2" 
                     showsVerticalScrollIndicator={false}
+                    refreshControl={
+                        <RefreshControl
+                            refreshing={isLoading}
+                            onRefresh={refetch}
+                            colors={[cardForeground || '#000000']}
+                            tintColor={cardForeground || '#000000'}
+                        />
+                    }
                 >
                     {/* 1. Wallet Section */}
                     <Card className="p-4 bg-card border-border mt-8 mb-8" style={{borderRadius: 10, borderWidth: 1}}>
@@ -72,7 +91,7 @@ const Wallet = () => {
                                         <Text className="text-mutedForeground text-sm">50 credits</Text>
                                     </View>
                                     <View className="bg-secondary px-2 py-1 rounded-full">
-                                        <Text className="text-cardForeground text-xs font-medium">Popular</Text>
+                                        <Text className="text-cardForeground text-xs font-medium">Trail</Text>
                                     </View>
                                 </View>
                             </TouchableOpacity>
@@ -87,6 +106,9 @@ const Wallet = () => {
                                     <View>
                                         <Text className="text-lg font-semibold text-cardForeground">₹100</Text>
                                         <Text className="text-mutedForeground text-sm">100 credits</Text>
+                                    </View>
+                                    <View className="bg-secondary px-2 py-1 rounded-full">
+                                        <Text className="text-cardForeground text-xs font-medium">Popular</Text>
                                     </View>
                                 </View>
                             </TouchableOpacity>
@@ -122,7 +144,7 @@ const Wallet = () => {
                     </Card>
 
                     {/* 3. Secure Payment Disclaimer Section */}
-                    {/* <View className="bg-white rounded-lg p-4 shadow-sm">
+                    <View className="bg-white rounded-lg p-4 shadow-sm">
                         <View className="flex-row items-start mb-2">
                             <Text className="text-green-500 mr-3 mt-1">✅</Text>
                             <View className="flex-1">
@@ -132,7 +154,7 @@ const Wallet = () => {
                                 </Text>
                             </View>
                         </View>
-                    </View> */}
+                    </View>
                 </ScrollView>
         </SafeAreaView>
     );

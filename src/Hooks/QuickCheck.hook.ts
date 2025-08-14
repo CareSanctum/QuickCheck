@@ -84,7 +84,12 @@ export function useCreateQuickCheck(initiated_for_id: number) {
     return useMutation({
         mutationFn: () => createQuickCheck(initiated_for_id),
         onSuccess: () => {
+            // Invalidate quick check history to refresh the list
             queryClient.invalidateQueries({ queryKey: ['quick-check-history', initiated_for_id] });
+            // Invalidate wallet balance since QuickCheck creation deducts from wallet
+            queryClient.invalidateQueries({ queryKey: ['wallet-balance'] });
+            // Invalidate quick check list to refresh the main list
+            queryClient.invalidateQueries({ queryKey: ['quick-check-list'] });
             navigation.navigate('LovedOneHistory', {loved_one_id: initiated_for_id});
         },
         onError: (error) => {
