@@ -1,5 +1,5 @@
 import axiosInstance from "../Network/Axios.config";
-import { useQuery, useMutation} from "@tanstack/react-query";
+import { useQuery, useMutation, QueryClient, useQueryClient} from "@tanstack/react-query";
 import { generateUrl } from "../Network/Urls";
 import { AxiosResponse } from "axios";
 
@@ -22,6 +22,25 @@ export const useProfile = () => {
     return useQuery({queryKey: ['profile'], queryFn: getProfile});
 }
 
-// export const useUpdateProfile = () => {
-//     return useMutation({mutationFn: updateProfile});
-// }
+export interface UpdateProfileRequest {
+    full_name: string;
+}
+
+async function updateProfile(data: UpdateProfileRequest) {
+    try{
+        const response  = await axiosInstance.post(generateUrl('PROFILE_UPDATE'), data);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+}
+
+export const useUpdateProfile = () => {
+    const queryClient = useQueryClient();
+    return useMutation(
+        {
+            mutationFn: updateProfile,
+            onSuccess: () => {queryClient.invalidateQueries({queryKey: ['profile']})}
+        }
+    );
+}

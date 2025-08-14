@@ -17,7 +17,7 @@ const QuickCheckList = () => {
             onRefresh={refetch}
             
             keyExtractor={(item) => item.id.toString()}
-            className="flex-1"
+            className="flex-1 px-2"
             renderItem={({item}) => <LovedOneListItem item={item} />}            
         />
     )   

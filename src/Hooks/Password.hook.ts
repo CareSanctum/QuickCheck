@@ -2,6 +2,7 @@ import { useMutation} from "@tanstack/react-query";
 import axios from "axios";
 import { generateUrl } from "../Network/Urls";
 import { getItem, KEYS, setItem} from "../Storage";
+import axiosInstance from "../Network/Axios.config";
 
 async function requestPasswordReset(email: string) {
     try{
@@ -58,7 +59,7 @@ async function resetPassword({password}: {password: string}) {
 
 async function changePassword({current_password, new_password}: {current_password: string, new_password: string}) {
     try{
-        const response = await axios.post(generateUrl('CHANGE_PASSWORD'), {
+        const response = await axiosInstance    .post(generateUrl('CHANGE_PASSWORD'), {
             current_password,
             new_password,
         });

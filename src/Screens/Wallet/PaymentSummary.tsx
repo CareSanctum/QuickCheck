@@ -7,6 +7,7 @@ import { useState } from "react";
 import { useCreateOrder, useVerifyPayment, useWalletBalance } from "../../Hooks/Wallet.hook";
 import { initiateRazorpayPayment } from "../../services/razorpayService";
 import Header from "@/src/Components/Header";
+import { Modal, ModalBackdrop, ModalContent, ModalHeader, ModalBody, ModalFooter, ModalCloseButton } from "@/components/ui/modal";
 
 interface PaymentSummaryProps {
     route: {
@@ -21,6 +22,8 @@ const PaymentSummary: React.FC<PaymentSummaryProps> = ({ route }) => {
     const navigation = useNavigation<NavigationProp>();
     const { amount, credits } = route.params;
     const [loading, setLoading] = useState(false);
+    const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
+    const [successMessage, setSuccessMessage] = useState<string>("");
     
     // Hooks
     const { data: walletData, isLoading: loadingBalance } = useWalletBalance();
@@ -69,16 +72,8 @@ const PaymentSummary: React.FC<PaymentSummaryProps> = ({ route }) => {
             });
 
             if (verificationResult.success) {
-                Alert.alert(
-                    'Payment Successful!',
-                    verificationResult.message,
-                    [
-                        {
-                            text: 'OK',
-                            onPress: () => navigation.navigate('HomeTabNavigator', {screen: 'WalletTab'})
-                        }
-                    ]
-                );
+                setSuccessMessage(verificationResult.message);
+                setIsSuccessModalOpen(true);
             } else {
                 Alert.alert('Payment Verification Failed', verificationResult.message);
             }
@@ -93,6 +88,30 @@ const PaymentSummary: React.FC<PaymentSummaryProps> = ({ route }) => {
 
     return (
         <SafeAreaView className="flex-1 bg-background">
+            <Modal isOpen={isSuccessModalOpen} onClose={() => setIsSuccessModalOpen(false)}>
+                <ModalBackdrop className="bg-black/50" />
+                <ModalContent className="bg-card border border-border">
+                    <ModalHeader>
+                        <Text className="text-2xl font-semibold text-foreground">Payment Successful</Text>
+                    </ModalHeader>
+                    <ModalBody>
+                        <Text>
+                            {successMessage}
+                        </Text>
+                    </ModalBody>
+                    <ModalFooter>
+                        <Button
+                            className="bg-primary rounded-full"
+                            onPress={() => {
+                                setIsSuccessModalOpen(false);
+                                navigation.navigate('HomeTabNavigator', { screen: 'WalletTab' });
+                            }}
+                        >
+                            <ButtonText className="text-primaryForeground">Continue</ButtonText>
+                        </Button>
+                    </ModalFooter>
+                </ModalContent>
+            </Modal>
             <View className="flex-1 px-5">
                 {/* Header */}
                 <Header className="my-4" title="Payment Summary"/>

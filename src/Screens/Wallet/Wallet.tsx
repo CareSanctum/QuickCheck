@@ -91,7 +91,7 @@ const Wallet = () => {
                                         <Text className="text-mutedForeground text-sm">50 credits</Text>
                                     </View>
                                     <View className="bg-secondary px-2 py-1 rounded-full">
-                                        <Text className="text-cardForeground text-xs font-medium">Trail</Text>
+                                        <Text className="text-primaryForeground text-xs font-medium">Trial</Text>
                                     </View>
                                 </View>
                             </TouchableOpacity>
@@ -108,7 +108,7 @@ const Wallet = () => {
                                         <Text className="text-mutedForeground text-sm">100 credits</Text>
                                     </View>
                                     <View className="bg-secondary px-2 py-1 rounded-full">
-                                        <Text className="text-cardForeground text-xs font-medium">Popular</Text>
+                                        <Text className="text-primaryForeground text-xs font-medium">Popular</Text>
                                     </View>
                                 </View>
                             </TouchableOpacity>

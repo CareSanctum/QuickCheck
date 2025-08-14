@@ -15,8 +15,8 @@ const LovedOneListItem = ({item}: {item: QuickCheckListItem}) => {
             onPress={() => {navigation.navigate('LovedOneHistory', {loved_one_id: item.id});}}
             delayPressIn={100}
         >
-            <View className="items-center">
-                <View className="flex-row items-center px-4 py-3">
+            <View className="items-center mb-2">
+                <View className="flex-row items-center px-4 py-3 bg-card border border-border" style={{borderRadius: 10}}>
                     <Avatar className="bg-primary mr-3" size="md">
                         <AvatarFallbackText className="text-xl text-primaryForeground">{item.nickname}</AvatarFallbackText>
                     </Avatar>

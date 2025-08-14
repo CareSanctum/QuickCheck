@@ -137,7 +137,7 @@ const Account = () => {
                 {/* Edit content */}
                 {isEditingProfile && (
                     <Animated.View style={[collapsedHeaderHeight > 0 ? StyleSheet.absoluteFillObject : null, headerEditOpacity]}> 
-                        <EditProfile />
+                        <EditProfile onBackPress={handleCloseEdit} />
                     </Animated.View>
                 )}
             </Animated.View>

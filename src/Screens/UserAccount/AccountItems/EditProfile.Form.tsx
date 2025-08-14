@@ -6,7 +6,11 @@ import { Input, InputField } from "@/components/ui/input";
 import { Button, ButtonSpinner, ButtonText } from "@/components/ui/button";
 import { useThemeVariables } from "@/src/Components/ThemeVariables";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
-import { useProfile } from "@/src/Hooks/Profile.hook";
+import { useProfile, useUpdateProfile } from "@/src/Hooks/Profile.hook";
+import { Mail, Phone, User } from "lucide-react-native";
+import { useState } from "react";
+import SuccessBox from "@/src/Components/SuccessBox";
+import { ErrorBox } from "@/src/Components/ErrorBox";
 
 const schema = z.object({
     full_name: z.string().min(1, { message: "Name is required" }),
@@ -36,10 +40,20 @@ const EditProfileForm = () => {
 
     const styles = useEditProfileFormStyles();
 
+    const { mutate: updateProfile, status: updateProfileStatus, error: updateProfileError } = useUpdateProfile();
+    const [apiMessage, setApiMessage] = useState<{message: string, type: 'success' | 'error'} | null>(null);
     const onSubmit = (values: FormValues) => {
         // TODO: hook up to update profile mutation when available
-        console.log("submit profile:", values);
+        updateProfile({full_name: values.full_name}, {
+            onSuccess: () => {
+                setApiMessage({message: 'Profile updated successfully', type: 'success'});
+            },
+            onError: () => {
+                setApiMessage({message: 'Failed to update profile', type: 'error'});
+            },
+        });
     };
+
 
     return (
         <View className="flex-1 px-4">
@@ -52,12 +66,16 @@ const EditProfileForm = () => {
                             className="absolute inset-0 w-full h-full"
                             style={{ transform: [{ scale: 2 }] }}
                         />
-                    ) : null}
+                    ) : (
+                        <User color={primaryForeground} size={40} />
+                    )}
                 </Avatar>
-                <Text className="text-mutedForeground mt-2">Avatar</Text>
             </View>
 
-            <Text className="text-foreground text-base my-2">Name</Text>
+            <View className="flex-row items-center justify-start gap-2 mb-2">
+                <User color={foreground} size={16} />
+                <Text className="text-foreground text-[16px] font-semibold">Name</Text>
+            </View>
             <Input className="bg-card border border-border data-[focus=true]:border-foreground" style={{ borderRadius: 10, height: 55 }}>
                 <Controller
                     control={control}
@@ -73,9 +91,13 @@ const EditProfileForm = () => {
                         />
                     )}
                 />
+            {errors.full_name && <Text className="text-destructive text-[14px] font-medium my-2">{errors.full_name.message}</Text>}
             </Input>
 
-            <Text className="text-foreground text-base my-2">Phone</Text>
+            <View className="flex-row items-center justify-start gap-2 my-2">
+                <Phone color={foreground} size={16} />
+                <Text className="text-foreground text-[16px] font-semibold">Phone</Text>
+            </View>
             <Input className="bg-card border border-border opacity-75" style={{ borderRadius: 10, height: 55 }}>
                 <Controller
                     control={control}
@@ -96,7 +118,10 @@ const EditProfileForm = () => {
                 />
             </Input>
 
-            <Text className="text-foreground text-base my-2">Email</Text>
+            <View className="flex-row items-center justify-start gap-2 my-2">
+                <Mail color={foreground} size={16} />
+                <Text className="text-foreground text-[16px] font-semibold">Email</Text>
+            </View>
             <Input className="bg-card border border-border opacity-75" style={{ borderRadius: 10, height: 55 }}>
                 <Controller
                     control={control}
@@ -119,10 +144,20 @@ const EditProfileForm = () => {
             </Input>
 
             <View className="flex-row justify-center mt-6">
-                <Button className="px-6 py-3 w-[75%] h-[50px] items-center justify-center bg-primary" style={{ borderRadius: 10 }} onPress={handleSubmit(onSubmit)}>
-                    <ButtonText className="text-primaryForeground font-medium">Save Changes</ButtonText>
+                <Button className="px-6 py-3 w-[75%] h-[50px] items-center justify-center bg-primary" style={{ borderRadius: 10 }} onPress={handleSubmit(onSubmit)} disabled={updateProfileStatus === 'pending'}>
+                    {updateProfileStatus === 'pending' ? (
+                        <ButtonSpinner />
+                    ) : (
+                        <ButtonText className="text-primaryForeground font-medium">Save Changes</ButtonText>
+                    )}
                 </Button>
             </View>
+            {apiMessage?.type === 'success' && (
+                <SuccessBox message={apiMessage.message} />
+            )}
+            {apiMessage?.type === 'error' && (
+                <ErrorBox errorMsg={apiMessage.message} />
+            )}
         </View>
     );
 };

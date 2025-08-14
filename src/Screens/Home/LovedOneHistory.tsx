@@ -229,7 +229,7 @@ const LovedOneHistory: React.FC<LovedOneHistoryProps> = ({ route }) => {
                         <Animated.View style={[collapsedHeaderHeight > 0 ? StyleSheet.absoluteFillObject : null, headerEditOpacity, { paddingTop: insets.top }]}> 
                         {lovedOneDetailsStatus === 'success' && (
                             <>
-                            <Header title={"Edit Details"} />
+                            <Header title={"Edit Details"} onBackPress={handleCloseEdit} />
                             <View className="px-4 py-4">
                                 <AddLovedOneForm defaultValues={lovedOneDetails.data} isEdit={true} lovedOneId={loved_one_id} />
                             </View>
