@@ -28,12 +28,8 @@ export function useLogout(){
             // Clear client-side auth data
             removeItem(KEYS.SESSION_TOKEN);
             // Invalidate auth-status to refresh state
-            setTimeout(() => {
-                setToken(null);
-                // consider queryClient.clear() if you want a hard reset
-                queryClient.invalidateQueries({ queryKey: ['auth-status'] });
-              }, 0);
-        
+            setToken(null);
+            queryClient.invalidateQueries({ queryKey: ['auth-status'] });
         }
     });
 }

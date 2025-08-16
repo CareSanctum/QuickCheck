@@ -54,6 +54,7 @@ const LovedOneListItem = ({item}: {item: QuickCheckListItem}) => {
                                     ? item.latest_response_preview 
                                     : "You can check up on this person!"}
                             </Text>
+                            {item.latest_response_status === ""}
                             <Button className="bg-primary rounded-full" onPress={() => createQuickCheck()} isDisabled={createQuickCheckStatus === 'pending'}>
                                 {
                                     createQuickCheckStatus === 'pending' ? 

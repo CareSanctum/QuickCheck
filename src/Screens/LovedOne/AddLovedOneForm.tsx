@@ -14,10 +14,11 @@ import { NavigationProp } from "../../App.Navigation";
 import { useCreateLovedOne, useUpdateLovedOne } from "../../Hooks/LovedOne.hook";
 
 import { Dropdown } from 'react-native-element-dropdown';
+import INFlag from "../../Components/Icons/IN";
 
 const schema = z.object({
     name: z.string().min(1, 'Name is required'),
-    phone: z.string().min(10, {message: 'Phone number must be at least 10 digits'}),
+    phone: z.string().length(10, {message: 'Phone number must be 10 digits'}),
     relationship: z.string(),
     preferred_language: z.string(),
     address: z.string().optional(),
@@ -104,20 +105,28 @@ const AddLovedOneForm = ({defaultValues, isEdit = false, lovedOneId}: AddLovedOn
                 <Phone color={foreground} size={16} />
                 <Text className="text-foreground text-[16px] font-semibold">Phone Number</Text>
             </View>
-            <Input className="bg-card border border-border data-[focus=true]:border-foreground mb-2"
-                style={{borderRadius: 10, height: 55}}
-            >
-
-                <Controller 
-                    control={control}
-                    name="phone"
-                    render={({ field }) => (
-                        <InputField placeholder="Phone Number" placeholderTextColor={mutedForeground} cursorColor={foreground} style={styles.input} value={field.value} onChangeText={field.onChange} />
-                    )}
-                />
-            </Input>
+            
+            <View className="flex-row items-center gap-3">
+                <View className="flex-row items-center bg-card border border-border" style={{borderRadius: 10, paddingHorizontal: 12, height: 55}}>
+                    <View className="items-center justify-center">
+                        <INFlag width={24} height={16} />
+                    </View>
+                    <Text className="ml-2 text-foreground text-base">+91</Text>
+                </View>
+                <Input className="flex-1 bg-card border border-border data-[focus=true]:border-foreground"
+                    style={{borderRadius: 10, height: 55}}
+                >
+                    <Controller 
+                        control={control}
+                        name="phone"
+                        render={({ field }) => (
+                            <InputField placeholder="Phone Number" placeholderTextColor={mutedForeground} cursorColor={foreground} style={styles.input} value={field.value} onChangeText={field.onChange} />
+                        )}
+                    />
+                </Input>
+            </View>
             {errors.phone && <Text className="text-destructive text-[14px] font-medium mb-2">{errors.phone.message}</Text>}
-
+            
             <View className="flex-row items-center justify-start gap-2 mt-2 mb-2">
                 <Text className="text-foreground text-[16px] font-semibold">Relationship</Text>
             </View>

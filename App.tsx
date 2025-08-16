@@ -13,7 +13,7 @@ const queryClient = new QueryClient();
 
 export default function App() {
   return (
-    <GluestackUIProvider mode="system">
+    <GluestackUIProvider mode="light">
       <QueryClientProvider client={queryClient}>
         <AuthProvider>
           <AppScreen />
