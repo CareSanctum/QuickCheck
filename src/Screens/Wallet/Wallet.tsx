@@ -65,7 +65,7 @@ const Wallet = () => {
                             </TouchableOpacity>
                         </View>
                         <Text className="text-3xl font-bold text-cardForeground">
-                            {isLoading ? <ActivityIndicator size="small" color={cardForeground} /> : `₹${walletData?.balance?.toFixed(2) || '0.00'}`}
+                            {isLoading ? <ActivityIndicator size="small" color={cardForeground} /> : `${walletData?.balance?.toFixed(2) || '0.00'}`}
                         </Text>
                     </Card>
 

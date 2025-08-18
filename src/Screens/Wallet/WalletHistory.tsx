@@ -191,7 +191,7 @@ const WalletHistory = () => {
                                             <Text className={`text-lg font-bold ${
                                                 transaction.type === 'credit_added' ? 'text-green-600' : 'text-red-600'
                                             }`}>
-                                                {transaction.type === 'credit_added' ? '+' : '-'}₹{transaction.amount}
+                                                {transaction.type === 'credit_added' ? '+' : ''}{transaction.amount}
                                             </Text>
                                             <View className="flex-row items-center mt-1">
                                                 {getStatusIcon(transaction.status)}

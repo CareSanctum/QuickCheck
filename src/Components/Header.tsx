@@ -60,7 +60,7 @@ export const HomeHeader = ({ className, showWallet = true, title = 'CareSanctum'
                     {walletStatus === 'pending' ? (
                         <ActivityIndicator size="small" color={primaryForeground} />
                     ) : (
-                        <Text className="text-primaryForeground font-semibold">₹{walletData?.balance?.toFixed(2) || '0.00'}</Text>
+                        <Text className="text-primaryForeground font-semibold">{walletData?.balance?.toFixed(2) || '0.00'}</Text>
                     )}
                 </View>
             </LinearGradient>}
