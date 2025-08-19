@@ -7,6 +7,7 @@ import { useThemeVariables } from "../Components/ThemeVariables";
 import { NavigationProp } from "../App.Navigation";
 import { LinearGradient } from "expo-linear-gradient";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import DecorativeShapes from "../Components/DecorativeShapes";
 
 const Welcome = () => {
     const navigation = useNavigation<NavigationProp>();
@@ -33,6 +34,10 @@ const Welcome = () => {
                 // colors={['#000000', '#3D007D']}
                 className="flex-1"
             >
+
+                {/* 2) Add subtle shapes behind content */}
+                <DecorativeShapes />
+
                 <View className="flex-1 justify-center items-center">
                     <View className="items-center" style={{ gap: 32 }}>
                         <SVGComponent />
