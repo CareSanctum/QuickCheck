@@ -35,6 +35,9 @@ const urls = {
     CREATE_ORDER: '/api/payments/create-order/',
     VERIFY_PAYMENT: '/api/payments/verify-payment/',
     WALLET_BALANCE: '/api/wallet/',
+
+    PRIVACY_POLICY: '/privacy-policy',
+    DATA_SAFETY: '/data-safety',
 }
 
 export function generateUrl(path: keyof typeof urls, params?: Record<string, string | number>) {

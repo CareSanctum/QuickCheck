@@ -12,16 +12,17 @@ import { getItem, KEYS, removeMany } from "@/src/Storage";
 import { useNavigation } from "@react-navigation/native";
 import { NavigationProp } from "../../App.Navigation";
 import { useCreateLovedOne, useUpdateLovedOne } from "../../Hooks/LovedOne.hook";
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Dropdown } from 'react-native-element-dropdown';
 import INFlag from "../../Components/Icons/IN";
 
 const schema = z.object({
     name: z.string().min(1, 'Name is required'),
-    phone: z.string().length(10, {message: 'Phone number must be 10 digits'}),
+    phone: z.string().length(10, {message: 'Must be 10 digits'}),
     relationship: z.string(),
     preferred_language: z.string(),
-    address: z.string().optional(),
+    address: z.string().regex(/^\d{6}$/, 'Must be Numeric and 6 digits').optional(),
     notes: z.string().optional(),
 })
 
@@ -35,6 +36,10 @@ const relationshipOptions = [
     {label: 'Spouse', value: 'SPOUSE'},
     {label: 'Mother-in-law', value: 'MOTHER_IN_LAW'},
     {label: 'Father-in-law', value: 'FATHER_IN_LAW'},
+    {label: 'Son', value: 'SON'},
+    {label: 'Daughter', value: 'DAUGHTER'},
+    {label: 'Friend', value: 'FRIEND'},
+    {label: 'Relative', value: 'RELATIVE'},
     {label: 'Other', value: 'OTHER'},
 ]
 
@@ -57,8 +62,10 @@ const AddLovedOneForm = ({defaultValues, isEdit = false, lovedOneId}: AddLovedOn
     const [showPassword, setShowPassword] = useState(false);
     const styles = useAddLovedOneFormStyles();
     const primaryForeground = useThemeVariables('--primary-foreground');
+    const cardForeground = useThemeVariables('--card-foreground');
     const [apiErrorMsg, setApiErrorMsg] = useState<string>("");
     const { mutate: createLovedOne, status: createLovedOneStatus, error: createLovedOneError } = isEdit ? useUpdateLovedOne() : useCreateLovedOne();
+    const insets = useSafeAreaInsets();
     const { control, handleSubmit, formState: { errors }, reset, watch} = useForm({
         resolver: zodResolver(schema),
         defaultValues: defaultValues,
@@ -82,7 +89,7 @@ const AddLovedOneForm = ({defaultValues, isEdit = false, lovedOneId}: AddLovedOn
         });
     }
     return(
-        <>
+        <View className="flex-1 pb-5">
             <View className="flex-row items-center justify-start gap-2 mb-2">
                 <User color={foreground} size={16} />
                 <Text className="text-foreground text-[16px] font-semibold">Name</Text>
@@ -144,22 +151,33 @@ const AddLovedOneForm = ({defaultValues, isEdit = false, lovedOneId}: AddLovedOn
                             height: 48,
                             backgroundColor: card,
                         }}
-
+                        containerStyle={{
+                            backgroundColor: card,
+                            borderWidth: 0,
+                            borderRadius: 10,
+                            marginTop: insets.top,
+                            marginBottom: insets.bottom,
+                            maxHeight: '85%',
+                        }}
+                        itemTextStyle={{
+                            color: cardForeground
+                        }}
+                        activeColor={card}
+                        autoScroll={false}
+                        mode="modal"
+                        backgroundColor="rgba(0,0,0,0.5)"
                         placeholderStyle={{ color: mutedForeground, fontWeight: '500' }}
                         selectedTextStyle={{ color: foreground }}
-                        showsVerticalScrollIndicator={false}
                         data={relationshipOptions}
                         labelField="label"
                         valueField="value"
                         placeholder="Select Relationship"
-                        dropdownPosition="top"
                         value={field.value}
                         onChange={(item) => field.onChange(item.value)}
                     />
                     </>
                 )}
             />
-            {errors.relationship && <Text className="text-destructive text-[14px] font-medium mb-2">{errors.relationship.message}</Text>}
 
             <View className="flex-row items-center justify-start gap-2 mt-2 mb-2">
                 <Globe color={foreground} size={16} />
@@ -179,7 +197,20 @@ const AddLovedOneForm = ({defaultValues, isEdit = false, lovedOneId}: AddLovedOn
                             height: 48,
                             backgroundColor: card,
                         }}
-
+                        containerStyle={{
+                            backgroundColor: card,
+                            borderWidth: 0,
+                            borderRadius: 10,
+                            marginTop: insets.top,
+                            marginBottom: insets.bottom,
+                            maxHeight: '85%',
+                        }}
+                        itemTextStyle={{
+                            color: cardForeground
+                        }}
+                        activeColor={card}
+                        mode="modal"
+                        autoScroll={false}
                         placeholderStyle={{ color: mutedForeground, fontWeight: '500' }}
                         selectedTextStyle={{ color: foreground }}
                         showsVerticalScrollIndicator={false}
@@ -187,16 +218,14 @@ const AddLovedOneForm = ({defaultValues, isEdit = false, lovedOneId}: AddLovedOn
                         labelField="label"
                         valueField="value"
                         placeholder="Select Language"
-                        dropdownPosition="top"
                         value={field.value}
                         onChange={(item) => field.onChange(item.value)}
                     />
                     </>
                 )}
             />
-            {errors.preferred_language && <Text className="text-destructive text-[14px] font-medium mb-2">{errors.preferred_language.message}</Text>}
 
-            <View className="flex-row items-center justify-start gap-2 mb-2">
+            <View className="flex-row items-center justify-start gap-2  mt-2 mb-2">
                 <MapPin color={foreground} size={16} />
                 <Text className="text-foreground text-[16px] font-semibold">Address(Optional)</Text>
             </View>
@@ -210,7 +239,7 @@ const AddLovedOneForm = ({defaultValues, isEdit = false, lovedOneId}: AddLovedOn
                     }}
                     name="address"
                     render={({ field }) => (
-                        <InputField placeholder="Address" placeholderTextColor={mutedForeground} cursorColor={foreground} style={styles.input} value={field.value} onChangeText={field.onChange} multiline={true}/>
+                        <InputField placeholder="PIN Code" placeholderTextColor={mutedForeground} cursorColor={foreground} style={styles.input} value={field.value} onChangeText={field.onChange} multiline={true}/>
                     )}
                 />
             </Input>
@@ -249,7 +278,7 @@ const AddLovedOneForm = ({defaultValues, isEdit = false, lovedOneId}: AddLovedOn
                 }
             </Button>
             
-        </>
+        </View>
     )
 }
 

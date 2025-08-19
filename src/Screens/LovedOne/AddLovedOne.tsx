@@ -4,7 +4,7 @@ import Header from "@/src/Components/Header";
 import AddLovedOneForm from "./AddLovedOneForm";
 const AddLovedOne = () => {
     return (
-        <SafeAreaView className="flex-1 p-5 bg-background">
+        <SafeAreaView className="flex-1 px-5 bg-background">
             <Header />
             <KeyboardAvoidingView
                 behavior={Platform.OS === "ios" ? "padding" : "height"}

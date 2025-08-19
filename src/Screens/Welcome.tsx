@@ -36,7 +36,7 @@ const Welcome = () => {
             >
 
                 {/* 2) Add subtle shapes behind content */}
-                <DecorativeShapes />
+                {/* <DecorativeShapes /> */}
 
                 <View className="flex-1 justify-center items-center">
                     <View className="items-center" style={{ gap: 32 }}>

@@ -185,12 +185,13 @@ function CornerRings({
 
 // === Main component ===
 export default function DecorativeShapes() {
+  const SHAPE_OPACITY = 0.08;
   return (
     <View pointerEvents="none" style={StyleSheet.absoluteFill}>
       {/* Large soft circles */}
       {/* <Circle size={W * 0.75} left={-W * 0.2} top={H * 0.06} opacity={0.04} /> */}
-      <Circle size={W * 0.95} left={W * 0.55} top={H * 0.18} opacity={0.04} />
-      <Circle size={W * 0.85} left={-W * 0.25} top={H * 0.70} opacity={0.04} />
+      <Circle size={W * 0.95} left={W * 0.55} top={H * 0.18} opacity={SHAPE_OPACITY} />
+      <Circle size={W * 0.85} left={-W * 0.25} top={H * 0.70} opacity={SHAPE_OPACITY} />
 
       {/* Mid accent circles */}
       {/* <Circle size={W * 0.32} left={W * 0.08} top={H * 0.11} opacity={0.04} /> */}
@@ -203,7 +204,7 @@ export default function DecorativeShapes() {
         rings={2}
         gap={100}
         stroke={30}
-        baseOpacity={0.07}
+        baseOpacity={SHAPE_OPACITY}
         fade={0.02}
       />
 
@@ -212,7 +213,7 @@ export default function DecorativeShapes() {
 
       {/* Small accents near bottom */}
       {/* <Circle size={W * 0.18} left={W * 0.22} top={H * 0.74} opacity={0.04} /> */}
-      <Circle size={W * 0.14} left={W * 0.06} top={H * 0.58} opacity={0.04} />
+      <Circle size={W * 0.14} left={W * 0.06} top={H * 0.58} opacity={SHAPE_OPACITY} />
     </View>
   );
 }

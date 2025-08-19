@@ -1,5 +1,5 @@
 import { SafeAreaView } from "react-native-safe-area-context";
-import { View, Text, FlatList, TouchableOpacity, ActivityIndicator, StyleSheet, BackHandler } from "react-native";
+import { View, Text, FlatList, TouchableOpacity, ActivityIndicator, StyleSheet, BackHandler, ScrollView, KeyboardAvoidingView, Platform } from "react-native";
 import Header, { QuickCheckHeader } from "@/src/Components/Header";
 import { Card } from "@/components/ui/card";
 import { useThemeVariables } from "@/src/Components/ThemeVariables";
@@ -230,9 +230,11 @@ const LovedOneHistory: React.FC<LovedOneHistoryProps> = ({ route }) => {
                         {lovedOneDetailsStatus === 'success' && (
                             <>
                             <Header title={"Edit Details"} onBackPress={handleCloseEdit} />
-                            <View className="px-4 py-4">
-                                <AddLovedOneForm defaultValues={lovedOneDetails.data} isEdit={true} lovedOneId={loved_one_id} />
-                            </View>
+                            <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : undefined} style={{ flex: 1 }}>
+                                <ScrollView className="px-4 py-4">
+                                    <AddLovedOneForm defaultValues={lovedOneDetails.data} isEdit={true} lovedOneId={loved_one_id} />
+                                </ScrollView>
+                            </KeyboardAvoidingView>
                             </>
                             
                         )}
