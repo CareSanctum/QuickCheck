@@ -46,12 +46,11 @@ npx expo prebuild --clean
 ## 🏃‍♂️ Running the Application
 
 ### Development Mode
+Create Dev Build
 ```bash
-# Start the development server
-npm run android  # Android
+APP_VARIANT=development npx expo run:android
 ```
-
-### Production Build
+Start Dev Server
 ```bash
-# Android
-npx expo run:android
+APP_VARIANT=development npx expo start
+```

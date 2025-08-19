@@ -44,7 +44,17 @@ const SignupVerifyOTP = () => {
                 style={{ flex: 1 }}
             >
                 <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ flexGrow: 1 }}>
-            <OTP onSubmit={onSubmit} code={key} setCode={setKey} disableReset={disableReset} verifyCodeStatus={verifyEmailStatus} apiErrorMsg={apiErrorMsg} PageTitle="Verification Code" PageSubtitle="Enter the 5 digit code sent to your email to verify your email" />
+            <OTP 
+                onSubmit={onSubmit} 
+                code={key} 
+                setCode={setKey} 
+                disableReset={disableReset} 
+                verifyCodeStatus={verifyEmailStatus} 
+                apiErrorMsg={apiErrorMsg} 
+                PageTitle="Verification Code" 
+                PageSubtitle="Enter the 5 digit code sent to your email to verify your email" 
+                onTryAgainPress={() => navigation.navigate('Signup')}
+            />
             </ScrollView>
             </KeyboardAvoidingView>
         </SafeAreaView>

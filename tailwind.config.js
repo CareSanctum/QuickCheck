@@ -36,6 +36,8 @@ module.exports = {
           accentForeground: 'var(--accent-foreground)',
           destructive: 'var(--destructive)',
           destructiveForeground: 'var(--destructive-foreground)',
+          success: 'var(--success)',
+          successForeground: 'var(--success-foreground)',
           border: 'var(--border)',
           input: 'var(--input)',
           ring: 'var(--ring)',

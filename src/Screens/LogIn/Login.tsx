@@ -4,7 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import Icon from '../../Components/Icon';
 import { useThemeVariables } from '../../Components/ThemeVariables';
 import LoginForm from './Login.Form';
-import { ErrorBox } from '@/src/Components/ErrorBox';
+import ErrorBox from '@/src/Components/ErrorBox';
 import { NavigationProp } from '../../App.Navigation';
 import { useNavigation } from '@react-navigation/native';
 import { ArrowLeft } from 'lucide-react-native';
@@ -35,7 +35,7 @@ const Login = () => {
             </View>
 
             <LoginForm setApiErrorMsg={setApiErrorMsg} />
-            {apiErrorMsg && <ErrorBox errorMsg={apiErrorMsg} />}
+            {apiErrorMsg && <ErrorBox message={apiErrorMsg} />}
             <View className="flex-row justify-center mt-4">
               <TouchableOpacity 
                 className="px-4 py-2 self-end"

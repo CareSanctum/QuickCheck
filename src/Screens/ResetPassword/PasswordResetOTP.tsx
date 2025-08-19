@@ -11,7 +11,7 @@ import { useVerifyCode } from "../../Hooks/Password.hook";
 import { Button, ButtonSpinner, ButtonText } from "@/components/ui/button";
 import * as SecureStore from 'expo-secure-store';
 import { setItem, KEYS } from "@/src/Storage";
-import { ErrorBox } from "@/src/Components/ErrorBox";
+import ErrorBox from "@/src/Components/ErrorBox";
 import { OTP } from "@/src/Components/OTP";
 
 const PasswordResetOTP = () => {
@@ -59,7 +59,16 @@ const PasswordResetOTP = () => {
                 style={{ flex: 1 }}
             >
                 <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ flexGrow: 1 }}>
-            <OTP onSubmit={onSubmit} code={code} setCode={setCode} disableReset={disableReset} verifyCodeStatus={verifyCodeStatus} apiErrorMsg={apiErrorMsg} PageTitle="Verification Code" PageSubtitle="Enter the 5 digit code sent to your email" />
+            <OTP 
+                onSubmit={onSubmit} 
+                code={code} 
+                setCode={setCode} 
+                disableReset={disableReset} 
+                verifyCodeStatus={verifyCodeStatus} 
+                apiErrorMsg={apiErrorMsg} 
+                PageTitle="Verification Code" PageSubtitle="Enter the 5 digit code sent to your email" 
+                onTryAgainPress={() => navigation.navigate('ResetPassword')} 
+            />
             </ScrollView>
             </KeyboardAvoidingView>
         </SafeAreaView>

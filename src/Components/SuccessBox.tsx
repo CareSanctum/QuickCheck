@@ -1,15 +1,16 @@
 import { CheckCircle } from "lucide-react-native";
-import { View } from "react-native";
-import { Text } from "react-native";
+import { Text, View } from "react-native";
 import { useThemeVariables } from "./ThemeVariables";
 
-
 const SuccessBox = ({message}: {message: string}) => {
-    const primaryForeground = useThemeVariables('--primary-foreground');
+    const successForeground = useThemeVariables('--success-foreground');
     return (
-        <View className="flex-row items-center bg-green-500 px-4 py-3 mt-auto rounded-[10px]">
-            <CheckCircle color={primaryForeground} size={20} className="text-primaryForeground" />
-            <Text className="text-primaryForeground text-[16px] ml-2 font-semibold flex-1 flex-wrap">
+        <View className="flex-row items-center bg-success px-4 py-3 mt-auto rounded-[10px]">
+            <CheckCircle color={successForeground} size={20}/>
+            <Text 
+                className="text-successForeground text-base ml-2 font-medium flex-1 flex-wrap"
+                numberOfLines={0}
+            >
                 {message}
             </Text>
         </View>

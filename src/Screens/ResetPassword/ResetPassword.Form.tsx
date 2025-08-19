@@ -11,6 +11,7 @@ import { useRequestPasswordReset } from "../../Hooks/Password.hook";
 import { useThemeVariables } from "../../Components/ThemeVariables";
 import { useState } from "react";
 import { KEYS, setItem } from "@/src/Storage";
+import { ALLAUTH_CODES, ALLAUTH_API_CODE, getErrorMessage, isAllauthCode } from "@/src/Network/AllauthCodes";
 
 const schema = z.object({
     email: z.email({message: 'Invalid email address'}),
@@ -36,8 +37,12 @@ const ResetPasswordForm = ({setApiErrorMsg}: {setApiErrorMsg: (msg: string) => v
             onError: (error: any) => {
                 switch (error?.response?.status) {
                     case 400:
-                        setApiErrorMsg("The email address is invalid");
-                        break;
+                        const errors = error?.response?.data?.errors;
+                        if (errors && Array.isArray(errors)) {
+                            const errorCode: ALLAUTH_API_CODE = isAllauthCode(errors[0]?.code) ? errors[0].code : ALLAUTH_CODES.DEFAULT_ERROR;
+                            setApiErrorMsg(getErrorMessage(errorCode));
+                            return;
+                        } 
                     case 429:
                         setApiErrorMsg("Too many requests. Please try again later.");
                         break;

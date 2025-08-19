@@ -10,7 +10,7 @@ import { useProfile, useUpdateProfile } from "@/src/Hooks/Profile.hook";
 import { Mail, Phone, User } from "lucide-react-native";
 import { useState } from "react";
 import SuccessBox from "@/src/Components/SuccessBox";
-import { ErrorBox } from "@/src/Components/ErrorBox";
+import ErrorBox from "@/src/Components/ErrorBox";
 
 const schema = z.object({
     full_name: z.string().min(1, { message: "Name is required" }),
@@ -156,7 +156,7 @@ const EditProfileForm = () => {
                 <SuccessBox message={apiMessage.message} />
             )}
             {apiMessage?.type === 'error' && (
-                <ErrorBox errorMsg={apiMessage.message} />
+                <ErrorBox message={apiMessage.message} />
             )}
         </View>
     );

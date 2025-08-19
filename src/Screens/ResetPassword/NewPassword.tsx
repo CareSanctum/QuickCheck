@@ -7,7 +7,7 @@ import { useState } from "react";
 import { NewPasswordForm } from "./NewPassword.Form";
 import { useNavigation } from "@react-navigation/native";
 import { NavigationProp } from "../../App.Navigation";
-import { ErrorBox } from "@/src/Components/ErrorBox";
+import ErrorBox from "@/src/Components/ErrorBox";
 
 const NewPassword = () => {
     const foreground = useThemeVariables('--foreground');
@@ -33,7 +33,7 @@ const NewPassword = () => {
                 </View>
 
                 <NewPasswordForm setApiErrorMsg={setApiErrorMsg} />
-                {apiErrorMsg && <ErrorBox errorMsg={apiErrorMsg} />}
+                {apiErrorMsg && <ErrorBox message={apiErrorMsg} />}
             </View>
             </ScrollView>
             </KeyboardAvoidingView>

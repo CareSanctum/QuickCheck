@@ -10,7 +10,7 @@ import { NavigationProp } from "@/src/App.Navigation";
 import { Modal, ModalBackdrop, ModalHeader, ModalContent, ModalBody, ModalFooter, ModalCloseButton } from "@/components/ui/modal";
 import { Button, ButtonText, ButtonSpinner } from "@/components/ui/button";
 import { useDeleteAccount } from "@/src/Hooks/DeleteAccount.hook";
-import { ErrorBox } from "@/src/Components/ErrorBox";
+import ErrorBox from "@/src/Components/ErrorBox";
 
 type AccountItemsCardProps = {
   onEditProfile: () => void;
@@ -82,7 +82,7 @@ const AccountItemsCard = ({ onEditProfile }: AccountItemsCardProps) => {
                                 </Text>
 									{deleteError ? (
 										<View className="mt-3">
-											<ErrorBox errorMsg={deleteError} />
+											<ErrorBox message={deleteError} />
 										</View>
 									) : null}
                             </ModalBody>

@@ -7,7 +7,7 @@ import { useNavigation } from '@react-navigation/native';
 import { NavigationProp } from '../../App.Navigation';
 import { AlertTriangle, ArrowLeft } from 'lucide-react-native';
 import { useThemeVariables } from '@/src/Components/ThemeVariables';
-import { ErrorBox } from '@/src/Components/ErrorBox';
+import ErrorBox from '@/src/Components/ErrorBox';
 
 const API_ERROR_MESSAGES = {
     STATUS_429: "Too many requests. Please try again later.",
@@ -34,7 +34,7 @@ const ResetPassword = () => {
                 </View>
 
                 <ResetPasswordForm setApiErrorMsg={setApiErrorMsg} />
-                {apiErrorMsg && <ErrorBox errorMsg={apiErrorMsg} />}
+                {apiErrorMsg && <ErrorBox message={apiErrorMsg} />}
             </View>
 
             
