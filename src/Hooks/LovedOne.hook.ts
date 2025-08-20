@@ -87,3 +87,23 @@ export function useCreateLovedOne() {
         },
     })
 }
+
+
+async function deleteLovedOne(id: number) {
+    try{
+        const response = await axiosInstance.delete(generateUrl('LOVED_ONE_DELETE', {id}));
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+}
+
+export function useDeleteLovedOne() {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: deleteLovedOne,
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['quick-check-list'] });
+        },
+    })
+}

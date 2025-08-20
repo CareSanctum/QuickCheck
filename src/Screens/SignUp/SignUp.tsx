@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, ScrollView, KeyboardAvoidingView, Platform } from "react-native";
+import { View, Text, TouchableOpacity, ScrollView, KeyboardAvoidingView, Platform, Linking } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useThemeVariables } from "../../Components/ThemeVariables";
 import { useState } from "react";
@@ -7,6 +7,7 @@ import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../App.Navigation";
 import Header from "@/src/Components/Header";
+import { generateUrl } from "@/src/Network/Urls";
 
 const SignUp = () => {
     const foreground = useThemeVariables('--foreground');
@@ -14,6 +15,9 @@ const SignUp = () => {
     const styles = useSignUpStyles();
     const [showPassword, setShowPassword] = useState(false);
     const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+    const handlePrivacyPolicy = () => {
+        Linking.openURL(generateUrl('PRIVACY_POLICY'));
+    }
     return (
         <SafeAreaView className="flex-1 bg-background">
             <KeyboardAvoidingView
@@ -35,8 +39,8 @@ const SignUp = () => {
 
                     <View className="flex justify-center mt-4 items-center">
                         <Text className="font-base text-foreground text-[16px] ">By creating an account, you agree to our</Text>
-                        <TouchableOpacity>
-                            <Text className="font-medium text-secondary text-[16px] ">Terms & Conditions</Text>
+                        <TouchableOpacity onPress={handlePrivacyPolicy}>
+                            <Text className="font-medium text-secondary text-[16px] ">Privacy Policy</Text>
                         </TouchableOpacity>
                     </View>
                 </View>

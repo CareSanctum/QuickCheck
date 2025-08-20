@@ -188,7 +188,7 @@ const LovedOneHistory: React.FC<LovedOneHistoryProps> = ({ route }) => {
     if (error) {
         return (
             <SafeAreaView className="flex-1 bg-background" edges={['right', 'bottom', 'left']}>
-                <QuickCheckHeader style={{paddingTop: insets.top}}/>
+                <QuickCheckHeader style={{paddingTop: insets.top}} lovedOneId={loved_one_id}/>
                 <View className="flex-1 justify-center items-center">
                     <Text className="text-foreground text-lg">Error loading history</Text>
                     <TouchableOpacity onPress={handleRefresh} className="mt-4">
@@ -220,6 +220,7 @@ const LovedOneHistory: React.FC<LovedOneHistoryProps> = ({ route }) => {
                             style={{ paddingTop: 0 }}
                             name={lovedOneDetailsStatus === 'success' ? lovedOneDetails.data.name : ''}
                             phone={lovedOneDetailsStatus === 'success' ? lovedOneDetails.data.phone : ''}
+                            lovedOneId={loved_one_id}
                             onEditPress={handleStartEdit}
                         />
                     </Animated.View>

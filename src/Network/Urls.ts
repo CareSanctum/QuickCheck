@@ -30,6 +30,7 @@ const urls = {
     QUICK_CHECK_CREATE: '/api/quick-check/',
     LOVED_ONE_DETAILS: '/api/loved-one/{id}/',
     LOVED_ONE_UPDATE: '/api/loved-one/{id}/',
+    LOVED_ONE_DELETE: '/api/loved-one/{id}/',
     DELETE_ACCOUNT: '/api/delete-user-data/',
     // Wallet and Payment endpoints
     CREATE_ORDER: '/api/payments/create-order/',

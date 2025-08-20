@@ -1,13 +1,18 @@
-import { ChevronLeft } from "lucide-react-native";
+
 import { View, TouchableOpacity, Text, ActivityIndicator, StyleProp, ViewStyle } from "react-native";
 import { useThemeVariables } from "./ThemeVariables";
 import { useNavigation } from "@react-navigation/native";
 import { NavigationProp } from "../App.Navigation";
 import { tva } from "@gluestack-ui/nativewind-utils/tva";
 import { LinearGradient } from "expo-linear-gradient";
-import { Wallet, EllipsisVertical, Phone } from "lucide-react-native";
+import { Wallet,  AlertTriangle, ChevronLeft } from "lucide-react-native";
 import { useWalletBalance } from "@/src/Hooks/Wallet.hook";
 import { Avatar, AvatarFallbackText } from "@/components/ui/avatar";
+import HamburgerMenu from "./HamburgerMenu";
+import { useQueryClient } from "@tanstack/react-query";
+import { useDeleteLovedOne } from "@/src/Hooks/LovedOne.hook";
+import { Toast, ToastTitle, useToast } from "@/components/ui/toast";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const headerStyle = tva({
     base: 'flex-row items-center px-4 py-2',
@@ -70,12 +75,15 @@ export const HomeHeader = ({ className, showWallet = true, title = 'CareSanctum'
 
 import { Button, ButtonText, ButtonIcon } from "@/components/ui/button";
 import { UserPen } from "lucide-react-native";
+import { useState } from "react";
+import ErrorBox from "./ErrorBox";
 interface QuickCheckHeaderProps {
     name?: string;
     phone?: string;
     onBackPress?: () => void;
     onMenuPress?: () => void;
     onEditPress?: () => void;
+    lovedOneId: number;
     className?: string;
     style?: StyleProp<ViewStyle>;
   }
@@ -93,16 +101,42 @@ interface QuickCheckHeaderProps {
     onBackPress,
     onMenuPress,
     onEditPress,
+    lovedOneId,
     className,
     style,
   }: QuickCheckHeaderProps) => {
+    const queryClient = useQueryClient();
     const navigation = useNavigation<NavigationProp>();
     const handleBack = onBackPress ?? (() => navigation.goBack());
     const handleMenu = onMenuPress ?? (() => console.log('Menu pressed'));
   
     const foreground = useThemeVariables('--foreground');
-    const mutedForeground = useThemeVariables('--muted-foreground');
     const primaryForeground = useThemeVariables('--primary-foreground');
+    const { mutate: deleteLovedOne, status: deleteLovedOneStatus, error: deleteLovedOneError } = useDeleteLovedOne();
+    const [deleteLovedOneErrorMsg, setDeleteLovedOneErrorMsg] = useState('');
+    const toast = useToast();
+    const {bottom} = useSafeAreaInsets();
+    const onConfirmDelete = () => {
+        deleteLovedOne(lovedOneId, {
+            onSuccess: () => {
+            },
+            onError: (error: any) => {
+                toast.show({
+                    placement: "bottom",
+                    render: ({id}) => {
+                        const toastId = "toast-" + id;
+                        return (
+                            <Toast nativeID={toastId} className="bg-destructive" style={{marginBottom: bottom + 10}}>
+                                    <ToastTitle className="text-destructiveForeground">
+                                        Something went wrong. Please try again
+                                    </ToastTitle>
+                            </Toast>
+                        )
+                    }
+                })
+            }
+        });
+    }
     
     return (
       <View className={QuickCheckHeaderStyle({ class: className })} style={style}>
@@ -117,9 +151,7 @@ interface QuickCheckHeaderProps {
                         Edit
                     </ButtonText>
                 </Button>
-                <TouchableOpacity onPress={handleMenu} className="">
-                    <EllipsisVertical color={foreground} size={22} />
-                </TouchableOpacity>
+                <HamburgerMenu onConfirmDelete={onConfirmDelete} deleteStatus={deleteLovedOneStatus}/>
             </View>
         </View>
         <View className="flex-row items-start px-4 pb-4">
