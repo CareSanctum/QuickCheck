@@ -36,7 +36,7 @@ export interface WalletBalanceResponse {
 }
 
 export interface Transaction {
-    id: string;
+    id: number;
     type: string;
     type_display: string;
     amount: number;
@@ -45,11 +45,8 @@ export interface Transaction {
     related_feature: string;
     related_feature_display: string;
     note: string;
-    status: string;
-    status_display: string;
-    timestamp: string;
-    external_order_id: string;
-    external_payment_id: string;
+    created_at: string;
+    payment_transaction: any;
 }
 
 // API Functions
