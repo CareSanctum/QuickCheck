@@ -8,7 +8,7 @@ const lightColors = {
   '--card-foreground': 'rgb(10, 10, 10)',
   '--popover': 'rgb(255, 255, 255)',
   '--popover-foreground': 'rgb(10, 10, 10)',
-  '--primary': 'rgb(61, 0, 125)',
+  '--primary': '61, 0, 125',
   '--primary-foreground': 'rgb(250, 250, 250)',
   '--secondary': 'rgb(254, 110, 208)',
   '--secondary-foreground': 'rgb(250, 250, 250)',

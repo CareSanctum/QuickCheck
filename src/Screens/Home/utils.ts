@@ -13,14 +13,21 @@ const formatDate = (dateString: string) => {
 const getPriorityColor = (priority: string | null) => {
     switch (priority?.toUpperCase()) {
         case 'URGENT':
-            return 'bg-red-500';
+            return 'red-500';
         case 'SEMI-URGENT':
-            return 'bg-yellow-500';
-        case 'NORMAL':
-            return 'bg-green-500';
+            return 'yellow-500';
+        case 'NOT_URGENT':
+            return 'green-500';
         default:
-            return 'bg-gray-500';
+            return 'gray-500';
     }
 };
 
-export { formatDate, getPriorityColor };
+const getStatusBadgeColor = (status: string) => {
+    switch (status.toUpperCase()) {
+        case 'IN_PROGRESS':
+            return 'blue-500';
+    }
+};
+
+export { formatDate, getPriorityColor, getStatusBadgeColor };

@@ -26,7 +26,7 @@ module.exports = {
           cardForeground: 'var(--card-foreground)',
           popover: 'var(--popover)',
           popoverForeground: 'var(--popover-foreground)',
-          primary: 'var(--primary)',
+          primary: 'rgb(var(--primary) / <alpha-value>)',
           primaryForeground: 'var(--primary-foreground)',
           secondary: 'var(--secondary)',
           secondaryForeground: 'var(--secondary-foreground)',
