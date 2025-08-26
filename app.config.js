@@ -39,7 +39,8 @@ export default {
         "backgroundColor": "#ffffff"
       },
       "edgeToEdgeEnabled": true,
-      "package": bundleIdentifier
+      "package": bundleIdentifier,
+      "googleServicesFile": "./google-services-CareSanctum.json"
     },
     "web": {
       "favicon": "./assets/favicon.png"

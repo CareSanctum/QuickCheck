@@ -15,6 +15,7 @@ import { useTabVisibilityStore } from "@/src/Store/tabVisibility";
 import { LoadingScreen } from "../LoadingScreen";
 import { User } from "lucide-react-native";
 import EditProfile from "./AccountItems/EditProfile";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const Account = () => {
     const { mutate: logout, status: logoutStatus } = useLogout();
@@ -94,9 +95,9 @@ const Account = () => {
             <Text className="text-destructive text-base font-medium">Something went wrong</Text>
         </View>
     }
-    if (profileStatus === 'pending') {
-        return <LoadingScreen />
-    }
+    // if (profileStatus === 'pending') {
+    //     return <LoadingScreen />
+    // }
     return (
         <SafeAreaView className="flex-1 bg-background" edges={['bottom', 'left', 'right']}>
             {/* Curtain header overlay */}
@@ -115,7 +116,7 @@ const Account = () => {
                     <View className="flex-row items-center mb-8 mt-8 px-4 pt-2">
                         <View className="relative">
                             <Avatar size="xl" className="bg-primary overflow-hidden rounded-full p-0">
-                                {profile.profile_picture_url ? (
+                                {profile?.profile_picture_url ? (
                                     <AvatarImage
                                     source={{uri: profile.profile_picture_url}}
                                     resizeMode="cover"
@@ -128,8 +129,12 @@ const Account = () => {
                             </Avatar>
                         </View>
                         <View className="ml-2 flex-1">
-                            <Text className="text-2xl font-bold text-foreground">{profile.full_name}</Text>
-                            <Text className="font-medium text-mutedForeground">{profile.email}</Text>
+                            <Skeleton className="w-24 h-6 mb-2" variant="rounded" isLoaded={profileStatus === "success" } startColor="bg-mutedForeground/40" speed={4}>
+                                {profile && <Text className="text-2xl font-bold text-foreground">{profile.full_name}</Text>}
+                            </Skeleton>
+                            <Skeleton className="w-36 h-4" variant="rounded" isLoaded={profileStatus === "success" } startColor="bg-gray-300" speed={4}>
+                                {profile && <Text className="font-medium text-mutedForeground">{profile.email}</Text>}
+                            </Skeleton>
                         </View>
                     </View>
                 </Animated.View>

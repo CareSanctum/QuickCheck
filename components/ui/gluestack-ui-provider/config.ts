@@ -13,7 +13,7 @@ const lightColors = {
   '--secondary': 'rgb(254, 110, 208)',
   '--secondary-foreground': 'rgb(250, 250, 250)',
   '--muted': 'rgb(245, 245, 245)',
-  '--muted-foreground': 'rgb(115, 115, 115)',
+  '--muted-foreground': '115, 115, 115',
   '--accent': 'rgb(245, 245, 245)',
   '--accent-foreground': 'rgb(23, 23, 23)',
   '--destructive': 'rgb(231, 0, 11)',
@@ -40,6 +40,10 @@ const lightColors = {
   '--font-serif': 'ui-serif, Georgia, Cambria, "Times New Roman", Times, serif',
   '--font-mono': 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
   '--radius': '0.625rem',
+  '--status-in-progress': '0, 166, 244',
+  '--urgency-urgent' : '251, 44, 54',
+  '--urgency-semi-urgent' : '253, 154, 0',
+  '--urgency-normal' : '5, 223, 114',
   // --shadow-2xs: 0 1px 3px 0px hsl(0 0% 0% / 0.05);
   // --shadow-xs: 0 1px 3px 0px hsl(0 0% 0% / 0.05);
   // --shadow-sm: 0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 1px 2px -1px hsl(0 0% 0% / 0.10);
@@ -93,6 +97,11 @@ const darkColors = {
   '--font-serif': 'ui-serif, Georgia, Cambria, "Times New Roman", Times, serif',
   '--font-mono': 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
   '--radius': '0.625rem',
+
+  '--status-in-progress': '0, 166, 244',
+  '--urgency-urgent' : '251, 44, 54',
+  '--urgency-semi-urgent' : '253, 154, 0',
+  '--urgency-normal' : '5, 223, 114',
   // --shadow-2xs: 0 1px 3px 0px hsl(0 0% 0% / 0.05);
   // --shadow-xs: 0 1px 3px 0px hsl(0 0% 0% / 0.05);
   // --shadow-sm: 0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 1px 2px -1px hsl(0 0% 0% / 0.10);

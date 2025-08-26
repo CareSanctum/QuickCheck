@@ -9,25 +9,47 @@ const formatDate = (dateString: string) => {
     });
 };
 
+// Returns HH:mm if the date is today, otherwise MM/DD/YY
+const formatDateCondensed = (dateInput: string | Date) => {
+    const date = typeof dateInput === 'string' ? new Date(dateInput) : dateInput;
+    const now = new Date();
+
+    const isToday = date.toDateString() === now.toDateString();
+
+    if (isToday) {
+        return date.toLocaleTimeString('en-US', {
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: false,
+        });
+    }
+
+    return date.toLocaleDateString('en-US', {
+        month: '2-digit',
+        day: '2-digit',
+        year: '2-digit',
+    });
+};
+
 // Get priority color based on priority
 const getPriorityColor = (priority: string | null) => {
     switch (priority?.toUpperCase()) {
         case 'URGENT':
-            return 'red-500';
+            return 'urgencyUrgent';
         case 'SEMI-URGENT':
-            return 'yellow-500';
+            return 'urgencySemiUrgent';
         case 'NOT_URGENT':
-            return 'green-500';
+            return 'urgencyNormal';
         default:
-            return 'gray-500';
+            return 'mutedForeground';
     }
 };
 
 const getStatusBadgeColor = (status: string) => {
     switch (status.toUpperCase()) {
         case 'IN_PROGRESS':
-            return 'blue-500';
+            return 'statusInProgress';
     }
 };
 
-export { formatDate, getPriorityColor, getStatusBadgeColor };
+export { formatDate, formatDateCondensed, getPriorityColor, getStatusBadgeColor };

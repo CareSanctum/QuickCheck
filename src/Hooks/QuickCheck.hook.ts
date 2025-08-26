@@ -38,7 +38,7 @@ export function useQuickCheckList() {
 export interface QuickCheckHistoryItem {
     id: number,
     status: string | null,
-    priority: string | null,
+    urgency: string | null,
     message: string | null,
     initiated_at: string,
     closed_at: string | null,
