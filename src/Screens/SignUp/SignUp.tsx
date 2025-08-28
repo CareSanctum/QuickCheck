@@ -18,6 +18,10 @@ const SignUp = () => {
     const handlePrivacyPolicy = () => {
         Linking.openURL(generateUrl('PRIVACY_POLICY'));
     }
+    
+    const handleTermsAndConditions = () => {
+        Linking.openURL(generateUrl('TERMS_AND_CONDITIONS'));
+    }
     return (
         <SafeAreaView className="flex-1 bg-background">
             <KeyboardAvoidingView
@@ -39,9 +43,15 @@ const SignUp = () => {
 
                     <View className="flex justify-center mt-4 items-center">
                         <Text className="font-base text-foreground text-[16px] ">By creating an account, you agree to our</Text>
-                        <TouchableOpacity onPress={handlePrivacyPolicy}>
-                            <Text className="font-medium text-secondary text-[16px] ">Privacy Policy</Text>
-                        </TouchableOpacity>
+                        <View className="flex-row items-center gap-1">
+                            <TouchableOpacity onPress={handlePrivacyPolicy}>
+                                <Text className="font-medium text-secondary text-[16px] ">Privacy Policy</Text>
+                            </TouchableOpacity>
+                            <Text className="font-base text-foreground text-[16px] ">and</Text>
+                            <TouchableOpacity onPress={handleTermsAndConditions}>
+                                <Text className="font-medium text-secondary text-[16px] ">Terms & Conditions</Text>
+                            </TouchableOpacity>
+                        </View>
                     </View>
                 </View>
             </ScrollView>

@@ -38,6 +38,7 @@ const urls = {
     WALLET_BALANCE: '/api/wallet/',
 
     PRIVACY_POLICY: '/privacy-policy',
+    TERMS_AND_CONDITIONS: '/terms-and-conditions',
     DATA_SAFETY: '/data-safety',
 }
 

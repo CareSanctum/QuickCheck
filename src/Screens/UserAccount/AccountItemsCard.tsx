@@ -1,7 +1,7 @@
 import { View, TouchableOpacity, Text, ActivityIndicator, Linking } from "react-native";
 import { Card } from "@/components/ui/card";
 import { Divider } from "@/components/ui/divider";
-import { ChevronRightIcon, Handshake, KeyRound, LogOutIcon, Trash2, UserPen, X } from "lucide-react-native";
+import { ChevronRightIcon, Handshake, KeyRound, LogOutIcon, Trash2, UserPen, X, FileText } from "lucide-react-native";
 import { useThemeVariables } from "@/src/Components/ThemeVariables";
 import { useLogout } from "@/src/Hooks/Logout.hook";
 import { Fragment, useState } from "react";
@@ -37,7 +37,8 @@ const AccountItemsCard = ({ onEditProfile }: AccountItemsCardProps) => {
         { id: 2, title: "Change Password", onPress: () => { navigation.navigate('ChangePassword') }, icon: <KeyRound size={22} color={foreground} /> },
         // { id: 3, title: "QuickCheck History", onPress: () => {}, icon: <History size={22} color={foreground} /> },
         { id: 4, title: "Privacy Policy", onPress: () => {Linking.openURL(generateUrl('PRIVACY_POLICY'))}, icon: <Handshake size={22} color={foreground} /> },
-		{ id: 5, title: "Delete Account", onPress: openDeleteModal, icon: <Trash2 size={22} color={foreground} /> },
+        { id: 5, title: "Terms & Conditions", onPress: () => {Linking.openURL(generateUrl('TERMS_AND_CONDITIONS'))}, icon: <FileText size={22} color={foreground} /> },
+		{ id: 6, title: "Delete Account", onPress: openDeleteModal, icon: <Trash2 size={22} color={foreground} /> },
         
     ];
 	const { mutateAsync: deleteAccountAsync, isPending: deleteAccountPending } = useDeleteAccount();
