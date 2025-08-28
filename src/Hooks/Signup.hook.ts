@@ -43,6 +43,20 @@ async function verifyEmail({key}: {key: string}) {
     }
 }
 
+async function resendEmailVerificationcode() {
+    try{
+        const response = await axiosInstance.post(generateUrl('RESEND_EMAIL_CODE'));
+        return response.data;
+    }catch(error: any){
+        throw error;
+    }
+}
+export function useResendEmailVerificationCode() {
+    return useMutation({
+        mutationFn: resendEmailVerificationcode,
+    });
+}
+
 export function useVerifyEmail() {
     const queryClient = useQueryClient();
     const {setToken} = useAuth();

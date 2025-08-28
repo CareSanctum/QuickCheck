@@ -44,7 +44,7 @@ const SignupForm = () => {
             onSuccess: () => {
                 reset();
                 console.log("Signup successful");
-                navigation.navigate('SignupVerifyOTP');
+                navigation.navigate('SignupVerifyOTP', {userEmail: data.email});
             },
             onError: (error: any) => {
                 setApiErrorMsg("Something went wrong. Please try again later.");
