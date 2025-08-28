@@ -18,6 +18,7 @@ import LovedOneHistory from "./Screens/Home/LovedOneHistory";
 import AddLovedOne from "./Screens/LovedOne/AddLovedOne";
 import WalletHistory from "./Screens/Wallet/WalletHistory";
 import ChangePassword from "./Screens/UserAccount/AccountItems/ChangePassword";
+import SignUpBonus from "./Screens/SignUpBonus";
 import { AuthContext, useAuth } from "./Context/AuthContext";
 import { ActivityIndicator } from "react-native";
 import { useContext } from "react";
@@ -47,6 +48,7 @@ const RootStack = createNativeStackNavigator({
                 WalletHistory: WalletHistory,
                 AddLovedOne: AddLovedOne,
                 ChangePassword,
+                SignUpBonus: SignUpBonus,
             }
         },
         SignedOut: {

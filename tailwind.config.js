@@ -12,9 +12,9 @@ module.exports = {
   presets: [require('nativewind/preset')],
   safelist: [
     // Ensure dynamic classnames like `bg-${statusBadgeColor}` are kept
-    {
-      pattern: /(bg|text|border|stroke|fill)-(statusInProgress|urgencyUrgent|urgencySemiUrgent|urgencyNormal|mutedForeground|gray-500)/,
-    },
+    // {
+    //   pattern: /(bg|text|border|stroke|fill)-(statusInProgress|urgencyUrgent|urgencySemiUrgent|urgencyNormal|mutedForeground|gray-500)/,
+    // },
   ],
   theme: {
     extend: {
@@ -26,12 +26,12 @@ module.exports = {
           cardForeground: 'var(--card-foreground)',
           popover: 'var(--popover)',
           popoverForeground: 'var(--popover-foreground)',
-          primary: 'rgb(var(--primary) / <alpha-value>)',
+          primary: 'var(--primary)',
           primaryForeground: 'var(--primary-foreground)',
           secondary: 'var(--secondary)',
           secondaryForeground: 'var(--secondary-foreground)',
           muted: 'var(--muted)',
-          mutedForeground: 'rgb(var(--muted-foreground) / <alpha-value>)',
+          mutedForeground: 'var(--muted-foreground)',
           accent: 'var(--accent)',
           accentForeground: 'var(--accent-foreground)',
           destructive: 'var(--destructive)',
@@ -55,10 +55,10 @@ module.exports = {
           sidebarBorder: 'var(--sidebar-border)',
           sidebarRing: 'var(--sidebar-ring)',
 
-          statusInProgress: 'rgb(var(--status-in-progress) / <alpha-value>)',
-          urgencyUrgent: 'rgb(var(--urgency-urgent) / <alpha-value>)',
-          urgencySemiUrgent: 'rgb(var(--urgency-semi-urgent) / <alpha-value>)',
-          urgencyNormal: 'rgb(var(--urgency-normal) / <alpha-value>)',
+          statusInProgress: 'var(--status-in-progress)',
+          urgencyUrgent: 'var(--urgency-urgent)',
+          urgencySemiUrgent: 'var(--urgency-semi-urgent)',
+          urgencyNormal: 'var(--urgency-normal)',
 
         // },
       },

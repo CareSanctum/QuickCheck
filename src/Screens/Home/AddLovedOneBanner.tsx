@@ -62,12 +62,11 @@ export default function AddLovedOneBanner() {
         {/* Descriptive text - provides context and guidance */}
         <Text className="text-mutedForeground text-center text-base">
           Ensure you are always available for your family by adding your first loved one
-        </Text>
+        </Text> 
 
         {/* Primary call-to-action button */}
         <TouchableOpacity
-          className="mt-5 w-full items-center justify-center rounded-full h-12"
-          style={{ backgroundColor: primary }}
+          className="mt-5 w-full items-center justify-center rounded-full h-12 bg-primary"
           onPress={handleAddLovedOne}
           accessibilityRole="button"
           accessibilityLabel="Add Loved One"

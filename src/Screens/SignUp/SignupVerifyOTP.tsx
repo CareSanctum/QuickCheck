@@ -53,7 +53,7 @@ const SignupVerifyOTP = () => {
                 apiErrorMsg={apiErrorMsg} 
                 PageTitle="Verification Code" 
                 PageSubtitle="Enter the 5 digit code sent to your email to verify your email" 
-                onTryAgainPress={() => navigation.navigate('Signup')}
+                onTryAgainPress={() => navigation.navigate('SignUp')}
             />
             </ScrollView>
             </KeyboardAvoidingView>

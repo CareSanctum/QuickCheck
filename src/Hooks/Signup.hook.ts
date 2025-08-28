@@ -11,7 +11,7 @@ async function signup({email, phone_number, password}: {email: string, phone_num
         
         const response = await axiosInstance.post(generateUrl('SIGNUP'), {
             email,
-            phone_number: formattedPhoneNumber,
+            phone: formattedPhoneNumber,
             password,
             role: 'USERS'
         },{
