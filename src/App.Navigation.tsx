@@ -22,6 +22,7 @@ import SignUpBonus from "./Screens/SignUpBonus";
 import { AuthContext, useAuth } from "./Context/AuthContext";
 import { ActivityIndicator } from "react-native";
 import { useContext } from "react";
+import { getItem, KEYS } from "./Storage";
 
 function useIsAuthenticated() {
     const data = useContext(AuthContext);
@@ -33,6 +34,11 @@ function useIsNotAuthenticated() {
     return data?.isSignedOut ?? true;
 }
 
+function useHasSeenSignupBonus() {
+    const value = getItem(KEYS.SIGNUP_BONUS_SEEN);
+    return !!value && value !== 'false' && value !== '0';
+}
+
 const RootStack = createNativeStackNavigator({
     screenOptions: {
         headerShown: false,
@@ -41,14 +47,16 @@ const RootStack = createNativeStackNavigator({
     groups: {
         SignedIn: {
             if: useIsAuthenticated,
+            initialRouteName: useHasSeenSignupBonus() ? 'HomeTabNavigator' : 'SignUpBonus',
+            // initialRouteName: 'AddLovedOne',
             screens: {
+                ...(useHasSeenSignupBonus() ? {} : { SignUpBonus }),
                 HomeTabNavigator: HomeTabNavigator,
                 PaymentSummary: PaymentSummary,
                 LovedOneHistory: LovedOneHistory,
                 WalletHistory: WalletHistory,
                 AddLovedOne: AddLovedOne,
                 ChangePassword,
-                SignUpBonus: SignUpBonus,
             }
         },
         SignedOut: {

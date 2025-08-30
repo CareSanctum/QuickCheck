@@ -47,7 +47,7 @@ const LovedOneListItem = ({item}: {item: QuickCheckListItem}) => {
         ? item.latest_response_status === "IN_PROGRESS" 
             ? getStatusBadgeColor(item.latest_response_status)
             : getPriorityColor(item.latest_response_urgency)
-        : 'gray-500';
+        : 'bg-gray-500';
 
     const statusBadgeText = item.latest_response_status === "IN_PROGRESS" 
         ? item.latest_response_status 
@@ -97,7 +97,7 @@ const LovedOneListItem = ({item}: {item: QuickCheckListItem}) => {
                             </Text>
                             <View className="flex-row items-center gap-2">
                         {
-                            <View className={`bg-${statusBadgeColor} rounded-full px-3 py-1`}>
+                            <View className={`${statusBadgeColor} rounded-full px-3 py-1`}>
                                 <Text className="text-white text-xs font-semibold uppercase">{statusBadgeText?.replace('_', ' ')}</Text>
                             </View>
                         }
@@ -113,7 +113,7 @@ const LovedOneListItem = ({item}: {item: QuickCheckListItem}) => {
                             className={`flex-1 mr-2 text-base font-medium text-mutedForeground`}
                         >
                             {item.latest_response_status === "IN_PROGRESS"
-                                ? "Your QuickCheck is in progress"
+                                ? "QuickCheck is in progress"
                                 : item.latest_response_preview}
                         </Text>
                         <Text className={`text-mutedForeground text-sm font-semibold flex-shrink-0`}>

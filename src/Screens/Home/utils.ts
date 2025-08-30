@@ -35,20 +35,20 @@ const formatDateCondensed = (dateInput: string | Date) => {
 const getPriorityColor = (priority: string | null) => {
     switch (priority?.toUpperCase()) {
         case 'URGENT':
-            return 'urgencyUrgent';
+            return 'bg-urgencyUrgent';
         case 'SEMI-URGENT':
-            return 'urgencySemiUrgent';
+            return 'bg-urgencySemiUrgent';
         case 'NOT_URGENT':
-            return 'urgencyNormal';
+            return 'bg-urgencyNormal';
         default:
-            return 'mutedForeground';
+            return 'bg-mutedForeground';
     }
 };
 
 const getStatusBadgeColor = (status: string) => {
     switch (status.toUpperCase()) {
         case 'IN_PROGRESS':
-            return 'statusInProgress';
+            return 'bg-statusInProgress';
     }
 };
 

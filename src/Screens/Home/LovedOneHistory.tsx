@@ -26,7 +26,7 @@ const ChatBubble = ({ item }: { item: QuickCheckHistoryItem }) => {
     ? item.status === "IN_PROGRESS" 
         ? getStatusBadgeColor(item.status)
         : getPriorityColor(item.urgency)
-    : 'gray-500';
+    : 'bg-gray-500';
 
 const statusBadgeText = item.status === "IN_PROGRESS" 
     ? item.status 
@@ -39,7 +39,7 @@ const statusBadgeText = item.status === "IN_PROGRESS"
                 <View className="p-2">
                     {/* Badges */}
                     <View className="flex-row justify-end gap-2 mb-1">
-                        <View className={`px-2 py-1 rounded-full bg-${statusBadgeColor}`}>
+                        <View className={`px-2 py-1 rounded-full ${statusBadgeColor}`}>
                             <Text className="text-xs font-medium text-white">
                                 {statusBadgeText?.replaceAll("_", " ")}
                             </Text>

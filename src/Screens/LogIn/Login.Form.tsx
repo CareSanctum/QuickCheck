@@ -51,8 +51,12 @@ const LoginForm = ({setApiErrorMsg}: {setApiErrorMsg: (msg: string) => void}) =>
                         setApiErrorMsg("Username password mismatch");
                         break;
                     case 401:
-                        setApiErrorMsg("Email not verified, Please verify your email");
-                        break;
+                            const flows = error?.response?.data?.data?.flows;
+                            const verifyEmailFlow = Array.isArray(flows) ? flows.find((f: any) => f?.id === 'verify_email') : undefined;
+                            if (verifyEmailFlow?.is_pending) {
+                                navigation.navigate('SignupVerifyOTP', { userEmail: data.username });
+                                break;
+                            }
                     default:
                         setApiErrorMsg("Something went wrong. Please try again later.");
                         break;
