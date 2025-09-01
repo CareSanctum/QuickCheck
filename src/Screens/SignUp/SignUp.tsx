@@ -1,4 +1,5 @@
-import { View, Text, TouchableOpacity, ScrollView, KeyboardAvoidingView, Platform, Linking } from "react-native";
+import { View, Text, TouchableOpacity, Linking } from "react-native";
+import {KeyboardAwareScrollView} from 'react-native-keyboard-controller';
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useThemeVariables } from "../../Components/ThemeVariables";
 import { useState } from "react";
@@ -24,11 +25,7 @@ const SignUp = () => {
     }
     return (
         <SafeAreaView className="flex-1 bg-background">
-            <KeyboardAvoidingView
-                behavior={Platform.OS === "ios" ? "padding" : "height"}
-                style={{ flex: 1 }}
-            >
-            <ScrollView className="flex-1 p-5" showsVerticalScrollIndicator={false}>
+            <KeyboardAwareScrollView className="flex-1 p-5" showsVerticalScrollIndicator={false} bottomOffset={10} keyboardShouldPersistTaps="handled">
                 <View style={{gap: 15}}>
                     <Header />
 
@@ -54,8 +51,7 @@ const SignUp = () => {
                         </View>
                     </View>
                 </View>
-            </ScrollView>
-            </KeyboardAvoidingView>
+            </KeyboardAwareScrollView>
         </SafeAreaView>
     )
 }

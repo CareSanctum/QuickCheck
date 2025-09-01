@@ -11,6 +11,7 @@ import { useResetPassword } from "../../Hooks/Password.hook"
 import { getItem, KEYS, removeMany } from "@/src/Storage";
 import { useNavigation } from "@react-navigation/native";
 import { NavigationProp } from "../../App.Navigation";
+import NewPasswordRules from "../UserAccount/AccountItems/NewPasswordRules"
 
 const schema = z.object({
     password: z
@@ -117,6 +118,8 @@ export const NewPasswordForm = ({setApiErrorMsg}: {setApiErrorMsg: (msg: string)
                 </Input>
                 {errors.confirmPassword && <Text className="text-destructive text-[14px] font-medium">{errors.confirmPassword.message}</Text>}
             </View>
+            
+            <NewPasswordRules />
 
             <View className="flex-row justify-center"> 
                 <Button className="px-6 py-3 w-[75%] h-[50px] items-center justify-center bg-primary" 

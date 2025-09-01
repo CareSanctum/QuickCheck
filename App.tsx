@@ -8,17 +8,20 @@ import { ActivityIndicator, View } from 'react-native';
 import { LoadingScreen as LoadingScreenComponent } from './src/Screens/LoadingScreen';
 import { getItem, KEYS } from './src/Storage';
 import { useColorScheme } from 'nativewind';
+import { KeyboardProvider } from 'react-native-keyboard-controller';
 
 const queryClient = new QueryClient();
 
 export default function App() {
   return (
     <GluestackUIProvider mode="light">
-      <QueryClientProvider client={queryClient}>
-        <AuthProvider>
-          <AppScreen />
-        </AuthProvider>
-      </QueryClientProvider>
+      <KeyboardProvider>
+        <QueryClientProvider client={queryClient}>
+          <AuthProvider>
+            <AppScreen />
+          </AuthProvider>
+        </QueryClientProvider>
+      </KeyboardProvider>
     </GluestackUIProvider>
   );
 }

@@ -2,7 +2,7 @@ import { Input, InputField, InputIcon, InputSlot } from "@/components/ui/input";
 import { View, TouchableOpacity, Text, StyleSheet } from "react-native";
 import { Mail, Lock, Eye, EyeOff } from "lucide-react-native";
 import { useThemeVariables } from "../../Components/ThemeVariables";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Button, ButtonSpinner, ButtonText } from '@/components/ui/button';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -34,6 +34,7 @@ const LoginForm = ({setApiErrorMsg}: {setApiErrorMsg: (msg: string) => void}) =>
     const styles = useLoginFormStyles();
     const navigation = useNavigation<NavigationProp>();
     const [showPassword, setShowPassword] = useState(true);
+    const passwordRef = useRef<any>(null);
 
     const { control, handleSubmit, formState: { errors }, reset, watch} = useForm({
         resolver: zodResolver(schema),
@@ -78,7 +79,15 @@ const LoginForm = ({setApiErrorMsg}: {setApiErrorMsg: (msg: string) => void}) =>
               control={control}
               name="username"
               render={({ field }) => (
-                <InputField placeholder="Email or Phone" placeholderTextColor={mutedForeground} cursorColor={foreground} style={styles.input} value={field.value} onChangeText={field.onChange} />
+                <InputField 
+                  placeholder="Email or Phone" 
+                  placeholderTextColor={mutedForeground} 
+                  cursorColor={foreground} 
+                  style={styles.input} 
+                  value={field.value} 
+                  onChangeText={field.onChange} 
+                  returnKeyType="next" 
+                  onSubmitEditing={() => passwordRef.current?.focus()} />
               )}
             />
           </Input>
@@ -94,7 +103,18 @@ const LoginForm = ({setApiErrorMsg}: {setApiErrorMsg: (msg: string) => void}) =>
               control={control}
               name="password"
               render={({ field }) => (
-                <InputField placeholder="Password" placeholderTextColor={mutedForeground} cursorColor={foreground} style={styles.input} type={showPassword ? "text" : "password"} value={field.value} onChangeText={field.onChange} />
+                <InputField 
+                  ref={passwordRef}
+                  placeholder="Password" 
+                  placeholderTextColor={mutedForeground} 
+                  cursorColor={foreground} 
+                  style={styles.input} 
+                  type={showPassword ? "text" : "password"} 
+                  value={field.value} 
+                  onChangeText={field.onChange} 
+                  returnKeyType="done" 
+                  onSubmitEditing={handleSubmit(onSubmit)} 
+                />
               )}
             />
             <InputSlot className="pr-3" onPress={() => setShowPassword(!showPassword)}>
