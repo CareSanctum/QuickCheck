@@ -1,20 +1,21 @@
 import { MMKV } from 'react-native-mmkv';
+import { logger } from '../Logger';
 
 const storage = new MMKV({id: 'session-storage'});
 
 function setItem(key: string, value: any) {
-    console.log(`Setting ${key}:`, value);
+    logger.info(`Setting KV pair: ${key}: ${value}`);
     storage.set(key, value)
 }
 
 function getItem(key: string) {
-    const value = storage.getString(key);
-    console.log(`Getting ${key}:`, value);
+    const value = storage.getString(key);   
+    logger.info(`Getting KV pair: ${key}: ${value}`);
     return value;
 }
 
 function removeItem(key: string) {
-    console.log(`Removing ${key}`);
+    logger.info(`Removing KV pair: ${key}`);
     storage.delete(key);
 }
 
