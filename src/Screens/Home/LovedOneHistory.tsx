@@ -11,7 +11,7 @@ import Animated, { Extrapolation, interpolate, runOnJS, useAnimatedStyle, useSha
 import { useWindowDimensions } from "react-native";
 import { useQuickCheckHistory, QuickCheckHistoryItem } from "@/src/Hooks/QuickCheck.hook";
 import { useRoute } from "@react-navigation/native";
-import { formatDate, getPriorityColor } from "./utils";
+import { formatDate, getPriorityColor, getStatusBadgeColor } from "./utils";
 import { useLovedOneDetails } from "@/src/Hooks/LovedOne.hook";
 import AddLovedOneForm from "../LovedOne/AddLovedOneForm";
 
@@ -22,31 +22,33 @@ const ChatBubble = ({ item }: { item: QuickCheckHistoryItem }) => {
     
     // Format dates
 
+    const statusBadgeColor = item.status 
+    ? item.status === "IN_PROGRESS" 
+        ? getStatusBadgeColor(item.status)
+        : getPriorityColor(item.urgency)
+    : 'bg-gray-500';
+
+const statusBadgeText = item.status === "IN_PROGRESS" 
+    ? item.status 
+    : item.urgency;
+
     
     return (
         <View className="flex-row justify-start mb-2 mx-2">
             <Card className="bg-card border-border" style={{borderRadius: 12, borderWidth: 1, width: '100%'}}>
                 <View className="p-2">
                     {/* Badges */}
-                    {item.priority ? (<View className="flex-row justify-end gap-2 mb-1">
-                        <View className={`px-2 py-1 rounded-full ${getPriorityColor(item.priority)}`}>
+                    <View className="flex-row justify-end gap-2 mb-1">
+                        <View className={`px-2 py-1 rounded-full ${statusBadgeColor}`}>
                             <Text className="text-xs font-medium text-white">
-                                {item.priority}
+                                {statusBadgeText?.replaceAll("_", " ")}
                             </Text>
                         </View>
-                    </View>) : (
-                        <View className="flex-row justify-end gap-2 mb-1">
-                            <View className="px-2 py-1 rounded-full bg-sky-300">
-                                <Text className="text-xs font-medium text-primaryForeground">
-                                    {item.status?.replaceAll("_", " ")}
-                                </Text>
-                            </View>
-                        </View>
-                    )}
+                    </View>
                     
                     {/* Message */}
                     <Text className="text-foreground text-base mb-2 leading-5" numberOfLines={0}>
-                        {item.message || 'No message available'}
+                        {item.message || 'Your QuickCheck is in progress'}
                     </Text>
                     
                     {/* Timestamps */}
@@ -272,8 +274,8 @@ const LovedOneHistory: React.FC<LovedOneHistoryProps> = ({ route }) => {
             </Animated.View>
             
             {/* Floating Action Buttons */}
-            <View className="absolute bottom-6 left-4 right-4 flex-row justify-between">
-                {/* QuickCheck Button */}
+            {/* <View className="absolute bottom-6 left-4 right-4 flex-row justify-between">
+                
                 <TouchableOpacity 
                     className="bg-primary px-6 py-3 rounded-full shadow-lg flex-row items-center"
                     onPress={handleQuickCheck}
@@ -283,7 +285,7 @@ const LovedOneHistory: React.FC<LovedOneHistoryProps> = ({ route }) => {
                     <Text className="text-primaryForeground font-medium ml-2">QuickCheck</Text>
                 </TouchableOpacity>
                 
-                {/* Call Button */}
+                
                 <TouchableOpacity 
                     className="bg-secondary w-14 h-14 rounded-full shadow-lg items-center justify-center"
                     onPress={handleCall}
@@ -291,7 +293,7 @@ const LovedOneHistory: React.FC<LovedOneHistoryProps> = ({ route }) => {
                 >
                     <Phone color={primaryForeground} size={24} />
                 </TouchableOpacity>
-            </View>
+            </View> */}
         </SafeAreaView>
     );
 };

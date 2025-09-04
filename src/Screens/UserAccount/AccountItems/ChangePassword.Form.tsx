@@ -1,16 +1,17 @@
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, Keyboard } from "react-native";
 import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input, InputSlot, InputField, InputIcon } from "@/components/ui/input";
 import { useThemeVariables } from "@/src/Components/ThemeVariables";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Eye, EyeOff } from "lucide-react-native";
 import { Button, ButtonSpinner, ButtonText } from "@/components/ui/button";
 import { useChangePassword } from "@/src/Hooks/Password.hook";
 import ErrorBox from "@/src/Components/ErrorBox";
 import SuccessBox from "@/src/Components/SuccessBox";
 import { ALLAUTH_API_CODE, ALLAUTH_CODES, getErrorMessage, isAllauthCode } from "@/src/Network/AllauthCodes";
+import NewPasswordRules from "./NewPasswordRules";
 const schema = z.object({
     currentPassword: z.string(),
     newPassword: z.string()
@@ -37,7 +38,10 @@ const ChangePasswordForm = () => {
     const foreground = useThemeVariables('--foreground');
     const primaryForeground = useThemeVariables('--primary-foreground');
     const {mutate: changePassword, status: changePasswordStatus, error: changePasswordError} = useChangePassword();
+    const newPasswordRef = useRef<any>(null);
+    const confirmPasswordRef = useRef<any>(null);
     const onSubmit = (data: z.infer<typeof schema>) => {
+        Keyboard.dismiss();
         changePassword({current_password: data.currentPassword, new_password: data.newPassword}, {
             onSuccess: () => {
                 reset();
@@ -77,7 +81,18 @@ const ChangePasswordForm = () => {
                     control={control}
                     name="currentPassword"
                     render={({ field }) => (
-                        <InputField placeholder="Current Password" placeholderTextColor={mutedForeground} cursorColor={foreground} style={styles.input} type={showcurrentPassword ? "text" : "password"} value={field.value} onChangeText={field.onChange} />
+                        <InputField 
+                            placeholder="Current Password" 
+                            placeholderTextColor={mutedForeground} 
+                            cursorColor={foreground} 
+                            style={styles.input} 
+                            type={showcurrentPassword ? "text" : "password"} 
+                            value={field.value} 
+                            onChangeText={field.onChange} 
+                            returnKeyType="next"
+                            submitBehavior="submit"
+                            onSubmitEditing={() => newPasswordRef.current?.focus()}
+                        />
                     )}
                 />
                 <InputSlot className="pr-3" onPress={() => setShowcurrentPassword(!showcurrentPassword)}>
@@ -94,7 +109,19 @@ const ChangePasswordForm = () => {
                     control={control}
                     name="newPassword"
                     render={({ field }) => (
-                        <InputField placeholder="New Password" placeholderTextColor={mutedForeground} cursorColor={foreground} style={styles.input} type={showNewPassword ? "text" : "password"} value={field.value} onChangeText={field.onChange} />
+                        <InputField 
+                            ref={newPasswordRef}
+                            placeholder="New Password" 
+                            placeholderTextColor={mutedForeground} 
+                            cursorColor={foreground} 
+                            style={styles.input} 
+                            type={showNewPassword ? "text" : "password"}
+                            value={field.value} 
+                            onChangeText={field.onChange} 
+                            returnKeyType="next"
+                            onSubmitEditing={() => confirmPasswordRef.current?.focus()}
+                            submitBehavior="submit"
+                        />
                     )}
                 />
                 <InputSlot className="pr-3" onPress={() => setShowNewPassword(!showNewPassword)}>
@@ -111,7 +138,19 @@ const ChangePasswordForm = () => {
                     control={control}
                     name="confirmPassword"
                     render={({ field }) => (
-                        <InputField placeholder="Confirm Password" placeholderTextColor={mutedForeground} cursorColor={foreground} style={styles.input} type={showConfirmPassword ? "text" : "password"} value={field.value} onChangeText={field.onChange} />
+                        <InputField 
+                            ref={confirmPasswordRef}
+                            placeholder="Confirm Password" 
+                            placeholderTextColor={mutedForeground} 
+                            cursorColor={foreground} 
+                            style={styles.input} 
+                            type={showConfirmPassword ? "text" : "password"} 
+                            value={field.value} 
+                            onChangeText={field.onChange} 
+                            returnKeyType="done"
+                            onSubmitEditing={handleSubmit(onSubmit)}
+                            submitBehavior="submit"
+                        />
                     )}
                 />
                 <InputSlot className="pr-3" onPress={() => setShowConfirmPassword(!showConfirmPassword)}>
@@ -120,9 +159,9 @@ const ChangePasswordForm = () => {
             </Input>
             {errors.confirmPassword && <Text className="text-destructive font-medium">{errors.confirmPassword.message}</Text>}
 
+            <NewPasswordRules />
 
-
-            <View className="flex-row justify-center mt-4"> 
+            <View className="flex-row justify-center my-4"> 
                 <Button 
                     className="px-6 py-3 w-[75%] h-[50px] items-center justify-center bg-primary" 
                     style={{borderRadius: 10}} 

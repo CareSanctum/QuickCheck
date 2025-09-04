@@ -1,8 +1,8 @@
 import { Input, InputSlot, InputField, InputIcon } from "@/components/ui/input";
 import { Mail, Phone, Eye, EyeOff, Lock } from "lucide-react-native";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useThemeVariables } from "../../Components/ThemeVariables";
-import { StyleSheet, Text, View} from "react-native";
+import { StyleSheet, Text, View, TextInput} from "react-native";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
@@ -11,10 +11,12 @@ import { Button, ButtonSpinner, ButtonText } from "@/components/ui/button";
 import { NavigationProp } from "@/src/App.Navigation";
 import { useNavigation } from "@react-navigation/native";
 import INFlag from "../../Components/Icons/IN";
+import { normalizeAllauthErrors, composeAllauthErrorMessage } from "@/src/Network/AllauthCodes";
+import ErrorBox from "@/src/Components/ErrorBox";
 
 const schema = z.object({
     email: z.email({message: 'Invalid email address'}),
-    phone: z.string().length(10, {message: 'Phone number must be 10 digits'}),
+    phone: z.string().regex(/^\d{10}$/, 'Must be Numeric and 10 digits'),
     password: z
         .string()
         .min(8, 'Password must be at least 8 characters long')
@@ -39,15 +41,28 @@ const SignupForm = () => {
     });
     const {mutate: signup, status: signupStatus, error: signupError} = useSignup();
     const navigation = useNavigation<NavigationProp>();
+    const phoneRef = useRef<any>(null);
+    const passwordRef = useRef<any>(null);
+    const confirmPasswordRef = useRef<any>(null);
     const onSubmit = async (data: z.infer<typeof schema>) => {
         signup({email: data.email, phone_number: data.phone, password: data.password}, {
             onSuccess: () => {
                 reset();
                 console.log("Signup successful");
-                navigation.navigate('SignupVerifyOTP');
+                navigation.navigate('SignupVerifyOTP', {userEmail: data.email});
             },
             onError: (error: any) => {
                 setApiErrorMsg("Something went wrong. Please try again later.");
+                switch (error?.response?.status) {
+                    case 400:
+                        const errors = error?.response?.data?.errors;
+                        const normalizedErrors = normalizeAllauthErrors(errors);
+                        setApiErrorMsg(composeAllauthErrorMessage(normalizedErrors));
+                        break;
+                    case 500:
+                        setApiErrorMsg("Something went wrong. Please try again later.");
+                        break;  
+                }
             }
         });
     }
@@ -64,7 +79,16 @@ const SignupForm = () => {
                     control={control}
                     name="email"
                     render={({ field }) => (
-                        <InputField placeholder="Email Address" placeholderTextColor={mutedForeground} cursorColor={foreground} style={styles.input} value={field.value} onChangeText={field.onChange} />
+                        <InputField 
+                            placeholder="Email Address" 
+                            placeholderTextColor={mutedForeground} 
+                            cursorColor={foreground} style={styles.input} 
+                            value={field.value} 
+                            onChangeText={field.onChange} 
+                            returnKeyType="next"
+                            submitBehavior="submit"
+                            onSubmitEditing={() => phoneRef.current?.focus()}
+                            autoCapitalize="none" />
                     )}
                 />
             </Input>
@@ -84,7 +108,19 @@ const SignupForm = () => {
                         control={control}
                         name="phone"
                         render={({ field }) => (
-                            <InputField placeholder="Phone Number" placeholderTextColor={mutedForeground} cursorColor={foreground} style={styles.input} value={field.value} onChangeText={field.onChange} />
+                            <InputField 
+                                ref={phoneRef}
+                                placeholder="Phone Number" 
+                                inputMode="tel" 
+                                placeholderTextColor={mutedForeground} 
+                                cursorColor={foreground} 
+                                style={styles.input} 
+                                value={field.value} 
+                                onChangeText={field.onChange} 
+                                returnKeyType="next"    
+                                submitBehavior="submit"
+                                onSubmitEditing={() => passwordRef.current?.focus()}
+                            />
                         )}
                     />
                 </Input>
@@ -101,7 +137,18 @@ const SignupForm = () => {
                     control={control}
                     name="password"
                     render={({ field }) => (
-                        <InputField placeholder="Password" placeholderTextColor={mutedForeground} cursorColor={foreground} style={styles.input} type={showPassword ? "text" : "password"} value={field.value} onChangeText={field.onChange} />
+                        <InputField 
+                            ref={passwordRef}
+                            placeholder="Password" 
+                            placeholderTextColor={mutedForeground} 
+                            cursorColor={foreground} 
+                            style={styles.input} 
+                            type={showPassword ? "text" : "password"} 
+                            value={field.value} onChangeText={field.onChange}
+                            returnKeyType="next" 
+                            submitBehavior="submit"
+                            onSubmitEditing={() => confirmPasswordRef.current?.focus()}
+                        />
                     )}
                 />
                 <InputSlot className="pr-3" onPress={() => setShowPassword(!showPassword)}>
@@ -120,7 +167,18 @@ const SignupForm = () => {
                     control={control}
                     name="confirmPassword"
                     render={({ field }) => (
-                        <InputField placeholder="Confirm Password" placeholderTextColor={mutedForeground} cursorColor={foreground} style={styles.input} type={showPassword ? "text" : "password"} value={field.value} onChangeText={field.onChange} />
+                        <InputField 
+                            ref={confirmPasswordRef}
+                            placeholder="Confirm Password" 
+                            placeholderTextColor={mutedForeground} 
+                            cursorColor={foreground} 
+                            style={styles.input} 
+                            type={showPassword ? "text" : "password"} 
+                            value={field.value} 
+                            onChangeText={field.onChange} 
+                            returnKeyType="done" 
+                            onSubmitEditing={handleSubmit(onSubmit)}
+                        />
                     )}
                 />
                 <InputSlot className="pr-3" onPress={() => setShowPassword(!showPassword)}>
@@ -142,6 +200,7 @@ const SignupForm = () => {
                     }
                 </Button>
             </View>
+            {apiErrorMsg && <ErrorBox message={apiErrorMsg} />}
         </>
     )
 }

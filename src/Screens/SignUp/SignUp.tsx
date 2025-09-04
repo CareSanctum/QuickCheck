@@ -1,4 +1,5 @@
-import { View, Text, TouchableOpacity, ScrollView, KeyboardAvoidingView, Platform, Linking } from "react-native";
+import { View, Text, TouchableOpacity, Linking } from "react-native";
+import {KeyboardAwareScrollView} from 'react-native-keyboard-controller';
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useThemeVariables } from "../../Components/ThemeVariables";
 import { useState } from "react";
@@ -18,13 +19,13 @@ const SignUp = () => {
     const handlePrivacyPolicy = () => {
         Linking.openURL(generateUrl('PRIVACY_POLICY'));
     }
+    
+    const handleTermsAndConditions = () => {
+        Linking.openURL(generateUrl('TERMS_AND_CONDITIONS'));
+    }
     return (
         <SafeAreaView className="flex-1 bg-background">
-            <KeyboardAvoidingView
-                behavior={Platform.OS === "ios" ? "padding" : "height"}
-                style={{ flex: 1 }}
-            >
-            <ScrollView className="flex-1 p-5" showsVerticalScrollIndicator={false}>
+            <KeyboardAwareScrollView className="flex-1 p-5" showsVerticalScrollIndicator={false} bottomOffset={10} keyboardShouldPersistTaps="handled">
                 <View style={{gap: 15}}>
                     <Header />
 
@@ -39,13 +40,18 @@ const SignUp = () => {
 
                     <View className="flex justify-center mt-4 items-center">
                         <Text className="font-base text-foreground text-[16px] ">By creating an account, you agree to our</Text>
-                        <TouchableOpacity onPress={handlePrivacyPolicy}>
-                            <Text className="font-medium text-secondary text-[16px] ">Privacy Policy</Text>
-                        </TouchableOpacity>
+                        <View className="flex-row items-center gap-1">
+                            <TouchableOpacity onPress={handlePrivacyPolicy}>
+                                <Text className="font-medium text-secondary text-[16px] ">Privacy Policy</Text>
+                            </TouchableOpacity>
+                            <Text className="font-base text-foreground text-[16px] ">and</Text>
+                            <TouchableOpacity onPress={handleTermsAndConditions}>
+                                <Text className="font-medium text-secondary text-[16px] ">Terms & Conditions</Text>
+                            </TouchableOpacity>
+                        </View>
                     </View>
                 </View>
-            </ScrollView>
-            </KeyboardAvoidingView>
+            </KeyboardAwareScrollView>
         </SafeAreaView>
     )
 }

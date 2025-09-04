@@ -34,23 +34,21 @@ export interface RazorpayResponse {
 }
 
 export const initiateRazorpayPayment = async (
-    orderData: CreateOrderResponse,
-    userEmail: string = 'user@example.com',
-    userPhone: string = '9999999999',
-    userName: string = 'User'
+    orderData: CreateOrderResponse
 ): Promise<RazorpayResponse> => {
+    console.log('orderData', orderData);
     const options: RazorpayOptions = {
-        description: 'Credits towards consultation', // TODO: Get from backend and add internalOrderId, or a stringified JSON?
-        image: 'https://i.imgur.com/3g7nmJC.jpg',
+        description: 'Credit topup',
+        image: orderData.wallet_display_image,
         currency: orderData.currency,
         key: orderData.external_key_id,
         amount: orderData.amount * 100, // Razorpay expects amount in paise
         name: 'QuickCheck',
         order_id: orderData.external_order_id,
-        prefill: { // TODO: Get from backend
-            email: userEmail,
-            contact: userPhone,
-            name: userName,
+        prefill: {
+            email: orderData.email,
+            contact: orderData.contact,
+            name: orderData.name,
         },
         theme: {
             color: '#3399cc',

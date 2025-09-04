@@ -5,6 +5,7 @@ import { NavigationProp } from "../App.Navigation";
 import { useThemeVariables } from "../Components/ThemeVariables";
 import { LinearGradient } from "expo-linear-gradient";
 import { Star, Sparkles } from "lucide-react-native";
+import { setItem, KEYS } from "../Storage";
 
 /**
  * SignUpBonus Component
@@ -21,7 +22,8 @@ export default function SignUpBonus() {
    * Handles navigation to home screen
    */
   const handleContinue = () => {
-    navigation.navigate('Home');
+    setItem(KEYS.SIGNUP_BONUS_SEEN, '1');
+    navigation.navigate('HomeTabNavigator', { screen: 'HomeTab' });
   };
 
   return (

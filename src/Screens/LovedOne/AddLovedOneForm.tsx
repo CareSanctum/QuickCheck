@@ -1,8 +1,8 @@
 import { Input, InputField, InputIcon, InputSlot } from "@/components/ui/input"
-import { TouchableOpacity, View, Text, StyleSheet } from "react-native"
-import { User, Phone, MapPin, Globe} from "lucide-react-native";
+import { TouchableOpacity, View, Text, StyleSheet, Keyboard } from "react-native"
+import { User, Phone, MapPin, Globe, NotepadText, Users} from "lucide-react-native";
 import { useThemeVariables } from "../../Components/ThemeVariables"
-import { useState } from "react"
+import { useRef, useState } from "react"
 import { z } from "zod"
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm, Controller } from 'react-hook-form';
@@ -19,7 +19,7 @@ import INFlag from "../../Components/Icons/IN";
 
 const schema = z.object({
     name: z.string().min(1, 'Name is required'),
-    phone: z.string().length(10, {message: 'Must be 10 digits'}),
+    phone: z.string().regex(/^\d{10}$/, 'Must be Numeric and 10 digits'),
     relationship: z.string(),
     preferred_language: z.string(),
     address: z.string().regex(/^\d{6}$/, 'Must be Numeric and 6 digits').optional(),
@@ -66,6 +66,10 @@ const AddLovedOneForm = ({defaultValues, isEdit = false, lovedOneId}: AddLovedOn
     const [apiErrorMsg, setApiErrorMsg] = useState<string>("");
     const { mutate: createLovedOne, status: createLovedOneStatus, error: createLovedOneError } = isEdit ? useUpdateLovedOne() : useCreateLovedOne();
     const insets = useSafeAreaInsets();
+    const phoneRef = useRef<any>(null);
+    const relationshipRef = useRef<any>(null);
+    const notesRef = useRef<any>(null);
+
     const { control, handleSubmit, formState: { errors }, reset, watch} = useForm({
         resolver: zodResolver(schema),
         defaultValues: defaultValues,
@@ -92,7 +96,7 @@ const AddLovedOneForm = ({defaultValues, isEdit = false, lovedOneId}: AddLovedOn
         <View className="flex-1 pb-5">
             <View className="flex-row items-center justify-start gap-2 mb-2">
                 <User color={foreground} size={16} />
-                <Text className="text-foreground text-[16px] font-semibold">Name</Text>
+                <Text className="text-foreground text-[16px] font-semibold">Name *</Text>
             </View>
             <Input className="bg-card border border-border data-[focus=true]:border-foreground mb-2"
                 style={{borderRadius: 10, height: 55}}
@@ -102,7 +106,17 @@ const AddLovedOneForm = ({defaultValues, isEdit = false, lovedOneId}: AddLovedOn
                     control={control}
                     name="name"
                     render={({ field }) => (
-                        <InputField placeholder="e.g., Dad, Mom" placeholderTextColor={mutedForeground} cursorColor={foreground} style={styles.input} value={field.value} onChangeText={field.onChange} />
+                        <InputField 
+                            placeholder="Enter Name" 
+                            placeholderTextColor={mutedForeground} 
+                            cursorColor={foreground} 
+                            style={styles.input} 
+                            value={field.value} 
+                            onChangeText={field.onChange} 
+                            returnKeyType="next"
+                            submitBehavior="submit"
+                            onSubmitEditing={() => phoneRef.current?.focus()}
+                        />
                     )}
                 />
             </Input>
@@ -110,7 +124,7 @@ const AddLovedOneForm = ({defaultValues, isEdit = false, lovedOneId}: AddLovedOn
             
             <View className="flex-row items-center justify-start gap-2 mb-2">
                 <Phone color={foreground} size={16} />
-                <Text className="text-foreground text-[16px] font-semibold">Phone Number</Text>
+                <Text className="text-foreground text-[16px] font-semibold">Phone Number *</Text>
             </View>
             
             <View className="flex-row items-center gap-3">
@@ -127,7 +141,19 @@ const AddLovedOneForm = ({defaultValues, isEdit = false, lovedOneId}: AddLovedOn
                         control={control}
                         name="phone"
                         render={({ field }) => (
-                            <InputField placeholder="Phone Number" placeholderTextColor={mutedForeground} cursorColor={foreground} style={styles.input} value={field.value} onChangeText={field.onChange} />
+                            <InputField 
+                                ref={phoneRef}
+                                placeholder="Phone Number" 
+                                inputMode="tel" 
+                                placeholderTextColor={mutedForeground} 
+                                cursorColor={foreground} 
+                                style={styles.input} 
+                                value={field.value} 
+                                onChangeText={field.onChange} 
+                                returnKeyType="next"
+                                submitBehavior="submit"
+                                onSubmitEditing={() => relationshipRef.current?.open()}
+                            />
                         )}
                     />
                 </Input>
@@ -135,7 +161,8 @@ const AddLovedOneForm = ({defaultValues, isEdit = false, lovedOneId}: AddLovedOn
             {errors.phone && <Text className="text-destructive text-[14px] font-medium mb-2">{errors.phone.message}</Text>}
             
             <View className="flex-row items-center justify-start gap-2 mt-2 mb-2">
-                <Text className="text-foreground text-[16px] font-semibold">Relationship</Text>
+                <Users color={foreground} size={16} />
+                <Text className="text-foreground text-[16px] font-semibold">Relationship *</Text>
             </View>
             <Controller 
                 control={control}
@@ -143,6 +170,7 @@ const AddLovedOneForm = ({defaultValues, isEdit = false, lovedOneId}: AddLovedOn
                 render={({ field }) => (
                     <>
                     <Dropdown
+                        ref={relationshipRef}
                         style={{
                             borderWidth: 1,
                             borderColor: errors.relationship ? 'red' : border,
@@ -181,7 +209,7 @@ const AddLovedOneForm = ({defaultValues, isEdit = false, lovedOneId}: AddLovedOn
 
             <View className="flex-row items-center justify-start gap-2 mt-2 mb-2">
                 <Globe color={foreground} size={16} />
-                <Text className="text-foreground text-[16px] font-semibold">Preferred Language</Text>
+                <Text className="text-foreground text-[16px] font-semibold">Preferred Language *</Text>
             </View>
             <Controller 
                 control={control}
@@ -227,7 +255,7 @@ const AddLovedOneForm = ({defaultValues, isEdit = false, lovedOneId}: AddLovedOn
 
             <View className="flex-row items-center justify-start gap-2  mt-2 mb-2">
                 <MapPin color={foreground} size={16} />
-                <Text className="text-foreground text-[16px] font-semibold">Address(Optional)</Text>
+                <Text className="text-foreground text-[16px] font-semibold">Pincode</Text>
             </View>
             <Input className="bg-card border border-border data-[focus=true]:border-foreground mb-2"
                 style={{borderRadius: 10, height: 55}}
@@ -239,14 +267,26 @@ const AddLovedOneForm = ({defaultValues, isEdit = false, lovedOneId}: AddLovedOn
                     }}
                     name="address"
                     render={({ field }) => (
-                        <InputField placeholder="PIN Code" placeholderTextColor={mutedForeground} cursorColor={foreground} style={styles.input} value={field.value} onChangeText={field.onChange} multiline={true}/>
+                        <InputField 
+                            placeholder="PIN Code" 
+                            placeholderTextColor={mutedForeground} 
+                            cursorColor={foreground} 
+                            style={styles.input} 
+                            value={field.value} 
+                            onChangeText={field.onChange} 
+                            multiline={true}
+                            returnKeyType="next"
+                            submitBehavior="submit"
+                            onSubmitEditing={() => notesRef.current?.focus()}
+                        />
                     )}
                 />
             </Input>
             {errors.address && <Text className="text-destructive text-[14px] font-medium mb-2">{errors.address.message}</Text>}
 
             <View className="flex-row items-center justify-start gap-2 mb-2">
-                <Text  className="text-foreground text-[16px] font-semibold">Notes(Optional)</Text>
+                <NotepadText color={foreground} size={16} />
+                <Text  className="text-foreground text-[16px] font-semibold">Notes</Text>
             </View>
             <Input className="bg-card border border-border data-[focus=true]:border-foreground mb-2"
                 style={{borderRadius: 10, height: 55}}
@@ -258,7 +298,19 @@ const AddLovedOneForm = ({defaultValues, isEdit = false, lovedOneId}: AddLovedOn
                     }}
                     name="notes"
                     render={({ field }) => (
-                        <InputField placeholder="Notes" placeholderTextColor={mutedForeground} cursorColor={foreground} style={styles.input} value={field.value} onChangeText={field.onChange} multiline={true}/>
+                        <InputField 
+                            placeholder="Notes" 
+                            ref={notesRef}
+                            placeholderTextColor={mutedForeground} 
+                            cursorColor={foreground} 
+                            style={styles.input} 
+                            value={field.value} 
+                            onChangeText={field.onChange} 
+                            multiline={true}
+                            returnKeyType="done"
+                            submitBehavior="submit"
+                            onSubmitEditing={() => Keyboard.dismiss()}
+                        />
                     )}
                 />
             </Input>

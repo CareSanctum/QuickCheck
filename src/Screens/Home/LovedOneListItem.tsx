@@ -4,10 +4,10 @@ import { Avatar, AvatarFallbackText } from "@/components/ui/avatar";
 import { Button, ButtonSpinner } from "@/components/ui/button";
 import { useNavigation } from "@react-navigation/native";
 import { NavigationProp } from "../../App.Navigation";
-import { formatDate, getPriorityColor, getStatusBadgeColor} from "./utils";
+import { formatDate, formatDateCondensed, getPriorityColor, getStatusBadgeColor} from "./utils";
 import { useThemeVariables } from "@/src/Components/ThemeVariables";
 import { LinearGradient } from "expo-linear-gradient";
-import { Phone } from "lucide-react-native";
+import { Phone, User } from "lucide-react-native";
 import { Dot } from "@/src/Components/TypingAnimation";
 import Animated, { useSharedValue, useAnimatedStyle, useAnimatedProps, withTiming, withSequence, withRepeat, interpolate, Easing, withDelay, runOnJS } from 'react-native-reanimated';
 import { useState } from "react";
@@ -53,6 +53,9 @@ const LovedOneListItem = ({item}: {item: QuickCheckListItem}) => {
         ? item.latest_response_status 
         : item.latest_response_urgency;
 
+
+    console.log(statusBadgeColor);
+    console.log(statusBadgeText);
     return (
         <TouchableOpacity
             onPress={() => {navigation.navigate('LovedOneHistory', {loved_one_id: item.id});}}
@@ -78,10 +81,11 @@ const LovedOneListItem = ({item}: {item: QuickCheckListItem}) => {
                 {/* Profile and contact info section */}
                 <View className="flex-row items-start mb-4">
                     {/* Avatar - keeping your existing style */}
-                    <Avatar className="bg-primary mr-4" size="md">
-                        <AvatarFallbackText className="text-xl text-primaryForeground">
-                            {item.nickname}
-                        </AvatarFallbackText>
+                    <Avatar className="bg-[#542c7d] mr-4" size="md">
+                        {/* <AvatarFallbackText className="text-xl text-primaryForeground">
+                            {item.nickname}formatDate(item.latest_response_closed_atformatDate(item.latest_response_closed_at))
+                        </AvatarFallbackText> */}
+                        <User size={20} color={primaryForeground} />
                     </Avatar>
                     
                     {/* Contact information */}
@@ -92,28 +96,29 @@ const LovedOneListItem = ({item}: {item: QuickCheckListItem}) => {
                                 {item.nickname}
                             </Text>
                             <View className="flex-row items-center gap-2">
-                        {item.latest_response_status  && (
-                            <View className={`bg-red-500 rounded-full px-3 py-1`}>
+                        {
+                            <View className={`${statusBadgeColor} rounded-full px-3 py-1`}>
                                 <Text className="text-white text-xs font-semibold uppercase">{statusBadgeText?.replace('_', ' ')}</Text>
                             </View>
-                        )}
+                        }
                     </View>
                         </View>
                         
                         
                         {/* Status/Description text */}
-                        <View className="flex-row gap-2">
+                        <View className="flex-row items-center">
                         <Text
                             numberOfLines={1}
-                            className={`text-base font-medium text-mutedForeground`}
+                            ellipsizeMode="tail"
+                            className={`flex-1 mr-2 text-base font-medium text-mutedForeground`}
                         >
                             {item.latest_response_status === "IN_PROGRESS"
-                                ? "Your QuickCheck is in progress"
+                                ? "QuickCheck is in progress"
                                 : item.latest_response_preview}
                         </Text>
-                        <Text className={`text-mutedForeground text-sm font-semibold `}>
-                                {item.latest_response_closed_at ? formatDate(item.latest_response_closed_at) : "Just now"}
-                            </Text>
+                        <Text className={`text-mutedForeground text-sm font-semibold flex-shrink-0`}>
+                                {item.latest_response_closed_at ? formatDateCondensed(item.latest_response_closed_at) : "Just now"}
+                        </Text>
 
                         </View>
                     </View>

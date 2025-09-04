@@ -22,7 +22,7 @@ const Home = () => {
   return (
     <SafeAreaView className="flex-1 bg-background">
       <HomeHeader title="QuickCheck"/>
-      <HomeSearch/>
+      {/* <HomeSearch/> */}
       
       {/* Conditional rendering: Show either the list or empty state */}
       {isListEmpty ? (

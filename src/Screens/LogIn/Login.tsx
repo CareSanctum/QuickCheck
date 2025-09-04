@@ -1,14 +1,12 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-controller';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import Icon from '../../Components/Icon';
 import { useThemeVariables } from '../../Components/ThemeVariables';
 import LoginForm from './Login.Form';
 import ErrorBox from '@/src/Components/ErrorBox';
 import { NavigationProp } from '../../App.Navigation';
 import { useNavigation } from '@react-navigation/native';
-import { ArrowLeft } from 'lucide-react-native';
-import { getItem, KEYS } from '@/src/Storage';
 import Header from '@/src/Components/Header';
 
 
@@ -19,9 +17,10 @@ const Login = () => {
   const navigation = useNavigation<NavigationProp>();
     return (
         <SafeAreaView className="flex-1 p-5 bg-background">
-          <KeyboardAvoidingView
-            behavior={Platform.OS === "ios" ? "padding" : "height"}
+          <KeyboardAwareScrollView
             style={{ flex: 1 }}
+            bottomOffset={10}
+            keyboardShouldPersistTaps="handled"
           >
             <ScrollView showsVerticalScrollIndicator={false}>
           {/* Main container with padding and spacing */}
@@ -47,7 +46,7 @@ const Login = () => {
             </View>
           </View>
           </ScrollView>
-          </KeyboardAvoidingView>
+          </KeyboardAwareScrollView>
         </SafeAreaView>
       );
 }

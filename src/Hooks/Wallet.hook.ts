@@ -10,11 +10,15 @@ export interface CreateOrderRequest {
 }
 
 export interface CreateOrderResponse {
-    internal_order_id: string;
+    internal_order_id: number;
     external_order_id: string;
     amount: number;
     currency: string;
     external_key_id: string;
+    email: string;
+    contact: string;
+    name: string;
+    wallet_display_image: string;
 }
 
 export interface VerifyPaymentRequest {

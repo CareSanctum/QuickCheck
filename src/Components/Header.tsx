@@ -54,7 +54,7 @@ export const HomeHeader = ({ className, showWallet = true, title = 'CareSanctum'
         <View className={HomeHeaderStyle({ class: className })}>
             <Text className="text-2xl font-bold text-foreground">{title}</Text>
             {showWallet && <LinearGradient 
-                colors={["#3d007d", "#fe6ed0"]} 
+                colors={["#A93EAC", "#B745B1",  "#C24CB7", "#FE6ED0"]}
                 start={{x: 0, y: 0}}
                 end={{x: 1, y: 0}}
                 className="" 

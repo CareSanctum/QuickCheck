@@ -21,11 +21,13 @@
     },
     "staging": {
       "autoIncrement": true,
-      "channel": "staging"
+      "channel": "staging",
+      "environment": "preview"
     },
     "production": {
       "autoIncrement": true,
-      "channel": "production"
+      "channel": "production",
+      "environment": "production"
     }
   },
   "submit": {
