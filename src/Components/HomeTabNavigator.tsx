@@ -24,6 +24,7 @@ const HomeTabNavigator = () => {
     const secondary = useThemeVariables('--secondary');
     const background = useThemeVariables('--background');
     const isTabHidden = useTabVisibilityStore((s) => s.isTabHidden);
+    const insets = useSafeAreaInsets();
     return (
         <Tab.Navigator
             screenOptions={{
@@ -33,6 +34,8 @@ const HomeTabNavigator = () => {
                     backgroundColor: background, // dark background
                     borderTopWidth: 0,
                     display: isTabHidden ? 'none' as const : 'flex' as const,
+                    paddingBottom: insets.bottom,
+                    height: 60 + insets.bottom,
                 },
                 tabBarItemStyle: {
 
