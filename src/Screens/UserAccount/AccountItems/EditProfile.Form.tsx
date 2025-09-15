@@ -13,7 +13,6 @@ import SuccessBox from "@/src/Components/SuccessBox";
 import ErrorBox from "@/src/Components/ErrorBox";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { BottomSheetModal, BottomSheetView} from "@/src/Components/ui/BottomSheet";
-import { usePhotoLibraryPermission } from "@/src/lib/hooks/usePermission";
 import { openImagePicker } from "@/src/lib/media/picker";
 import { useUploadFile } from "@/src/Hooks/UploadFile.hook";
 
@@ -44,7 +43,6 @@ const EditProfileForm = () => {
     const primaryForeground = useThemeVariables('--primary-foreground');
     const card = useThemeVariables('--card');
     const styles = useEditProfileFormStyles();
-    const {handleRequestPermission} = usePhotoLibraryPermission();
     const { mutate: uploadFile, status: uploadFileStatus} = useUploadFile();
 
 
@@ -72,9 +70,6 @@ const EditProfileForm = () => {
     };
 
     const onLibraryPress = async () => {
-        if (!(await handleRequestPermission())) {
-            return;
-        }
         const items = await openImagePicker();
         const item = items[0];
         if (!item) {
