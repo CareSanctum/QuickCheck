@@ -32,7 +32,7 @@ const Welcome = () => {
                 end={{x: 1, y: 0}}
                 colors={[ '#A93EAC',  '#C24CB7', '#FE6ED0']}
                 // colors={['#000000', '#3D007D']}
-                className="flex-1"
+                style={{flex: 1}}
             >
 
                 {/* 2) Add subtle shapes behind content */}
@@ -47,18 +47,16 @@ const Welcome = () => {
                 {/* Bottom Buttons */}
                 <View className="w-full gap-4 items-center" style={{paddingBottom: bottom*4}}>
                     <Button
-                        className="items-center justify-center  h-[56px] bg-secondary w-[90%] rounded-full"
+                        className="items-center justify-center h-[56px] bg-secondary w-[90%] rounded-full"
                         onPress={handleSignupPress}
-                        
                     >
                         <ButtonText className="font-semibold text-[16px] text-secondaryForeground">
                             Sign Up
                         </ButtonText>
                     </Button>
                     <Button
-                        className="items-center justify-center  h-[56px] bg-transparent w-[90%] rounded-full"
+                        className="items-center justify-center h-[56px] bg-transparent w-[90%] rounded-full"
                         onPress={handleLoginPress}
-                        
                     >
                         <ButtonText className="font-semibold text-xl text-primaryForeground">
                             Login

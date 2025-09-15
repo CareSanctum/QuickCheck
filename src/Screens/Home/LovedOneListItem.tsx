@@ -129,8 +129,11 @@ const LovedOneListItem = ({item}: {item: QuickCheckListItem}) => {
                     colors={["#A93EAC", "#B745B1",  "#C24CB7", "#FE6ED0"]} // Blue to purple gradient
                     start={{x: 0, y: 0}}
                     end={{x: 1, y: 0}}
-                    className="rounded-3xl overflow-hidden w-[75%] mx-auto"
                     style={{
+                        borderRadius: 24, // equivalent to rounded-3xl
+                        overflow: 'hidden',
+                        width: '75%',
+                        marginHorizontal: 'auto',
                         shadowColor: "#3B82F6",
                         shadowOffset: { width: 0, height: 4 },
                         shadowOpacity: 0.3,
