@@ -29,7 +29,7 @@ export function useLogout(){
             removeItem(KEYS.SESSION_TOKEN);
             // Invalidate auth-status to refresh state
             setToken(null);
-            queryClient.invalidateQueries({ queryKey: ['auth-status'] });
+            queryClient.clear();
         }
     });
 }

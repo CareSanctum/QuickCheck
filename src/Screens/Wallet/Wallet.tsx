@@ -59,13 +59,13 @@ const Wallet = () => {
                     {/* 1. Wallet Section */}
                     <Card className="p-4 bg-card border-border mt-8 mb-8" style={{borderRadius: 10, borderWidth: 1}}>
                         <View className="flex-row justify-between items-center mb-2">
-                            <Text className="text-xl font-semibold text-cardForeground">Current Credits</Text>
+                            <Text className="text-xl font-semibold text-cardForeground">Your Credits</Text>
                             <TouchableOpacity onPress={handleHistoryPress}>
                                 <Text className="text-secondary font-bold">History</Text>
                             </TouchableOpacity>
                         </View>
                         <Text className="text-3xl font-bold text-cardForeground">
-                            {isLoading ? <ActivityIndicator size="small" color={cardForeground} /> : `${walletData?.balance?.toFixed(2) || '0.00'}`}
+                            {isLoading ? <ActivityIndicator size="small" color={cardForeground} /> : `${walletData?.balance || '0'}`}
                         </Text>
                     </Card>
 
@@ -155,6 +155,16 @@ const Wallet = () => {
                             </View>
                         </View>
                     </View>
+                    {/* <Card className="bg-card p-6 mb-6" style={{borderRadius: 10}}>
+                        <View>
+
+                        </View>
+                        <View className="">
+                            <Text className="text-cardForeground">
+                                We never store your payment details. All transactions are processed securely by our payment partner. 
+                            </Text>
+                        </View>
+                    </Card> */}
                 </ScrollView>
         </SafeAreaView>
     );

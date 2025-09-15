@@ -40,7 +40,7 @@ export default {
       },
       "edgeToEdgeEnabled": true,
       "package": bundleIdentifier,
-      "googleServicesFile": "./google-services-CareSanctum.json"
+      "googleServicesFile": "./google-services.json"
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -51,11 +51,12 @@ export default {
         "expo-splash-screen",
         {
           "backgroundColor": "#ffffff",
-          "image": "./assets/icons/splash-icon-light.png",
-          "dark": {
-            "image": "./assets/icons/splash-icon-dark.png",
-            "backgroundColor": "#000000"
-          },
+          "image": "./assets/icons/splash-icon.png",
+          // "dark": {
+          //   "image": "./assets/icons/splash-icon-dark.png",
+          //   "backgroundColor": "#000000"
+          // },
+          "imageWidth": 200,
         }
       ]
     ],

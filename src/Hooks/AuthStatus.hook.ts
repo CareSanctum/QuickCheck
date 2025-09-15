@@ -20,7 +20,6 @@ async function getAuthStatus(token: string){
   }
 
 export function useAuthStatus(token?: string| null) {
-
     return useQuery({
         queryKey: ['auth-status', token],
         queryFn: () => getAuthStatus(token!), // will never fire when token is falsy

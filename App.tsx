@@ -9,6 +9,10 @@ import { LoadingScreen as LoadingScreenComponent } from './src/Screens/LoadingSc
 import { getItem, KEYS } from './src/Storage';
 import { useColorScheme } from 'nativewind';
 import { KeyboardProvider } from 'react-native-keyboard-controller';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
+import { ToastOutlet } from './src/Components/ui/Toast';
+
 
 const queryClient = new QueryClient();
 
@@ -18,7 +22,12 @@ export default function App() {
       <KeyboardProvider>
         <QueryClientProvider client={queryClient}>
           <AuthProvider>
-            <AppScreen />
+            <GestureHandlerRootView style={{ flex: 1 }}>
+              <BottomSheetModalProvider> 
+                <AppScreen />
+                {/* <ToastOutlet /> */}
+              </BottomSheetModalProvider>
+            </GestureHandlerRootView>
           </AuthProvider>
         </QueryClientProvider>
       </KeyboardProvider>

@@ -7,10 +7,15 @@ import { Button, ButtonSpinner, ButtonText } from "@/components/ui/button";
 import { useThemeVariables } from "@/src/Components/ThemeVariables";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { useProfile, useUpdateProfile } from "@/src/Hooks/Profile.hook";
-import { Mail, Phone, User } from "lucide-react-native";
-import { useState } from "react";
+import { Mail, Phone, User, SquarePen, Images, Camera} from "lucide-react-native";
+import { useRef, useState } from "react";
 import SuccessBox from "@/src/Components/SuccessBox";
 import ErrorBox from "@/src/Components/ErrorBox";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { BottomSheetModal, BottomSheetView} from "@/src/Components/ui/BottomSheet";
+import { usePhotoLibraryPermission } from "@/src/lib/hooks/usePermission";
+import { openImagePicker } from "@/src/lib/media/picker";
+import { useUploadFile } from "@/src/Hooks/UploadFile.hook";
 
 const schema = z.object({
     full_name: z.string().min(1, { message: "Name is required" }),
@@ -23,7 +28,7 @@ type FormValues = z.infer<typeof schema>;
 
 const EditProfileForm = () => {
     const { data: profile } = useProfile();
-
+    const insets = useSafeAreaInsets();
     const { control, handleSubmit, formState: { errors }, reset } = useForm<FormValues>({
         resolver: zodResolver(schema),
         values: {
@@ -37,8 +42,11 @@ const EditProfileForm = () => {
     const mutedForeground = useThemeVariables('--muted-foreground');
     const foreground = useThemeVariables('--foreground');
     const primaryForeground = useThemeVariables('--primary-foreground');
-
+    const card = useThemeVariables('--card');
     const styles = useEditProfileFormStyles();
+    const {handleRequestPermission} = usePhotoLibraryPermission();
+    const { mutate: uploadFile, status: uploadFileStatus} = useUploadFile();
+
 
     const { mutate: updateProfile, status: updateProfileStatus, error: updateProfileError } = useUpdateProfile();
     const [apiMessage, setApiMessage] = useState<{message: string, type: 'success' | 'error'} | null>(null);
@@ -54,22 +62,88 @@ const EditProfileForm = () => {
         });
     };
 
+    const bottomSheetModalRef = useRef<any>(null);
+    const handlePresentModalPress = () => {
+        bottomSheetModalRef.current?.present();
+    };
+
+    const handleCancelPress = () => {
+        bottomSheetModalRef.current?.close();
+    };
+
+    const onLibraryPress = async () => {
+        if (!(await handleRequestPermission())) {
+            return;
+        }
+        const items = await openImagePicker();
+        const item = items[0];
+        if (!item) {
+            return;
+        }
+        const request_obj = new FormData();
+        request_obj.append('file', {
+            uri: item.path,
+            name: item.name,
+            type: item.mime,
+        } as any)
+        uploadFile(request_obj, {
+            onSettled: () => {
+                bottomSheetModalRef.current?.close();
+            }
+        });
+    }
+
+    
+
 
     return (
         <View className="flex-1 px-4">
             <View className="items-center mb-6">
-                <Avatar size="xl" className="bg-primary overflow-hidden rounded-full">
-                    {profile?.profile_picture_url ? (
-                        <AvatarImage
-                            source={{ uri: profile.profile_picture_url }}
-                            resizeMode="cover"
-                            className="absolute inset-0 w-full h-full"
-                            style={{ transform: [{ scale: 2 }] }}
-                        />
-                    ) : (
-                        <User color={primaryForeground} size={40} />
-                    )}
-                </Avatar>
+                <View className="relative">
+                    <Avatar size="xl" className="bg-primary overflow-hidden rounded-full">
+                        {profile?.profile_picture_url ? (
+                            <AvatarImage
+                                source={{ uri: profile.profile_picture_url }}
+                                resizeMode="cover"
+                                className="absolute inset-0 w-full h-full"
+                                style={{ transform: [{ scale: 2 }] }}
+                            />
+                        ) : (
+                            <User color={primaryForeground} size={40} />
+                        )}
+                    </Avatar>
+                    <TouchableOpacity
+                        className="absolute -bottom-0 -right-0 rounded-full bg-card p-1.5 shadow-lg items-center justify-center"
+                        onPress={handlePresentModalPress}
+                        hitSlop={{ top: 8, right: 8, bottom: 8, left: 8 }}
+                    >
+                        <SquarePen size={14} color={foreground} />
+                    </TouchableOpacity>
+                </View>
+                <BottomSheetModal ref={bottomSheetModalRef}>
+                    <BottomSheetView
+                        className="px-4 pt-4" 
+                        style={{ paddingBottom: insets.bottom + 20 }}
+                    >
+                        {uploadFileStatus === 'pending' ? (
+                            <ButtonSpinner color={mutedForeground} />
+                        ) : (
+                            <>
+                                <TouchableOpacity className="flex-row justify-between bg-background px-4 py-4"
+                                    style={{borderRadius: 10}}
+                                    onPress={onLibraryPress}
+                                >
+                                    <Text className="text-foreground font-medium">Upload from Library</Text>
+                                    <Images size={18} color={foreground} />
+                                </TouchableOpacity>
+                                <TouchableOpacity className="flex-row justify-center p-2 my-4" onPress={handleCancelPress}>
+                                    <Text className="text-foreground font-medium ">Cancel</Text>
+                                </TouchableOpacity>
+                            </>
+                        )}
+                    </BottomSheetView>
+                </BottomSheetModal>
+
             </View>
 
             <View className="flex-row items-center justify-start gap-2 mb-2">

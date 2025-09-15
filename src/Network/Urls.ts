@@ -32,11 +32,14 @@ const urls = {
     LOVED_ONE_UPDATE: '/api/loved-one/{id}/',
     LOVED_ONE_DELETE: '/api/loved-one/{id}/',
     DELETE_ACCOUNT: '/api/delete-user-data/',
+    UPLOAD_PROFILE_PIC: '/api/upload-profile-picture/',
     // Wallet and Payment endpoints
     CREATE_ORDER: '/api/payments/create-order/',
     VERIFY_PAYMENT: '/api/payments/verify-payment/',
     WALLET_BALANCE: '/api/wallet/',
 
+    REMAINING_SCREENS: '/onboarding/remaining-screens/',
+    
     PRIVACY_POLICY: '/privacy-policy',
     TERMS_AND_CONDITIONS: '/terms-and-conditions',
     DATA_SAFETY: '/data-safety',

@@ -1,4 +1,4 @@
-import {format} from 'date-fns/format';
+import {format} from 'date-fns';
 import { LogLevel, Transport } from '../types'
 import {prepareMetadata} from '../utils'
 
