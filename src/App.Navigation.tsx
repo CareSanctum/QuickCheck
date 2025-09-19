@@ -41,12 +41,7 @@ function useHasSeenSignupBonus() {
     return !!value && value !== 'false' && value !== '0';
 }
 
-function useIsSignupOpenEnabled() {
-    const { data, status } = useIsSignupOpen();
-    if (status !== 'success') return false;
-    console.log(data?.open_for_signup ?? false);
-    return data?.open_for_signup ?? false;
-}
+// We now decide signup vs waitlist navigation inside Welcome screen itself
 
 const RootStack = createNativeStackNavigator({
     screenOptions: {
@@ -68,11 +63,12 @@ const RootStack = createNativeStackNavigator({
                 ChangePassword,
             }
         },
-        SignedOutOpen: {
-            if: () => useIsNotAuthenticated() && useIsSignupOpenEnabled(),
+        SignedOut: {
+            if: useIsNotAuthenticated,
             initialRouteName: 'Welcome',
             screens: {
                 Welcome: Welcome,
+                WaitlistAdd: WaitlistAdd,
                 Login: Login,
                 SignUp: SignUp,
                 SignupVerifyOTP: SignupVerifyOTP,
@@ -80,13 +76,6 @@ const RootStack = createNativeStackNavigator({
                 PasswordResetOTP: PasswordResetOTP,
                 NewPassword: NewPassword, 
                 PasswordResetSuccess: PasswordResetSuccess,
-            }
-        },
-        SignedOutClosed: {
-            if: () => useIsNotAuthenticated() && !useIsSignupOpenEnabled(),
-            initialRouteName: 'WaitlistAdd',
-            screens: {
-                WaitlistAdd: WaitlistAdd,
             }
         }
     }

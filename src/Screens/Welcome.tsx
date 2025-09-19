@@ -1,13 +1,14 @@
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Text, View } from "react-native";
 import SVGComponent from "../Components/Icons/SvgLogo";
-import { Button, ButtonText } from "@/components/ui/button";
+import { Button, ButtonText, ButtonSpinner } from "@/components/ui/button";
 import {  useNavigation } from '@react-navigation/native';
 import { useThemeVariables } from "../Components/ThemeVariables";
 import { NavigationProp } from "../App.Navigation";
 import { LinearGradient } from "expo-linear-gradient";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import DecorativeShapes from "../Components/DecorativeShapes";
+import { useIsSignupOpen } from "@/src/Hooks/Waitlist.hook";
 
 const Welcome = () => {
     const navigation = useNavigation<NavigationProp>();
@@ -19,8 +20,12 @@ const Welcome = () => {
         navigation.navigate('Login');
     };
 
+    const { data: signupOpenData, status: signupOpenStatus } = useIsSignupOpen();
+    const openForSignup = signupOpenData?.open_for_signup === true;
+
     const handleSignupPress = () => {
-        navigation.navigate('SignUp');
+        if (signupOpenStatus === 'pending') return;
+        navigation.navigate(openForSignup ? 'SignUp' : 'WaitlistAdd');
     };
     const {top, bottom} = useSafeAreaInsets();
 
@@ -49,7 +54,11 @@ const Welcome = () => {
                     <Button
                         className="items-center justify-center h-[56px] bg-secondary w-[90%] rounded-full"
                         onPress={handleSignupPress}
+                        isDisabled={signupOpenStatus === 'pending'}
                     >
+                        {signupOpenStatus === 'pending' && (
+                            <ButtonSpinner className="mr-2" />
+                        )}
                         <ButtonText className="font-semibold text-[16px] text-secondaryForeground">
                             Sign Up
                         </ButtonText>
