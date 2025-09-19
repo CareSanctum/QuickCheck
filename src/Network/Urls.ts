@@ -43,6 +43,9 @@ const urls = {
     PRIVACY_POLICY: '/privacy-policy',
     TERMS_AND_CONDITIONS: '/terms-and-conditions',
     DATA_SAFETY: '/data-safety',
+
+    IS_SIGNUP_OPEN: '/onboarding/open-for-signup/',
+    ADD_TO_WAITLIST: '/onboarding/add-to-waitlist/',
 }
 
 export function generateUrl(path: keyof typeof urls, params?: Record<string, string | number>) {

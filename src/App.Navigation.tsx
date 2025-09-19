@@ -18,11 +18,13 @@ import LovedOneHistory from "./Screens/Home/LovedOneHistory";
 import AddLovedOne from "./Screens/LovedOne/AddLovedOne";
 import WalletHistory from "./Screens/Wallet/WalletHistory";
 import ChangePassword from "./Screens/UserAccount/AccountItems/ChangePassword";
+import WaitlistAdd from "./Screens/Waitlist/WaitlistAdd";
 import SignUpBonus from "./Screens/SignUpBonus";
 import { AuthContext, useAuth } from "./Context/AuthContext";
 import { ActivityIndicator } from "react-native";
 import { useContext } from "react";
 import { getItem, KEYS } from "./Storage";
+import { useIsSignupOpen } from "./Hooks/Waitlist.hook";
 
 function useIsAuthenticated() {
     const data = useContext(AuthContext);
@@ -37,6 +39,13 @@ function useIsNotAuthenticated() {
 function useHasSeenSignupBonus() {
     const value = getItem(KEYS.SIGNUP_BONUS_SEEN);
     return !!value && value !== 'false' && value !== '0';
+}
+
+function useIsSignupOpenEnabled() {
+    const { data, status } = useIsSignupOpen();
+    if (status !== 'success') return false;
+    console.log(data?.open_for_signup ?? false);
+    return data?.open_for_signup ?? false;
 }
 
 const RootStack = createNativeStackNavigator({
@@ -59,8 +68,9 @@ const RootStack = createNativeStackNavigator({
                 ChangePassword,
             }
         },
-        SignedOut: {
-            if: useIsNotAuthenticated,
+        SignedOutOpen: {
+            if: () => useIsNotAuthenticated() && useIsSignupOpenEnabled(),
+            initialRouteName: 'Welcome',
             screens: {
                 Welcome: Welcome,
                 Login: Login,
@@ -70,6 +80,13 @@ const RootStack = createNativeStackNavigator({
                 PasswordResetOTP: PasswordResetOTP,
                 NewPassword: NewPassword, 
                 PasswordResetSuccess: PasswordResetSuccess,
+            }
+        },
+        SignedOutClosed: {
+            if: () => useIsNotAuthenticated() && !useIsSignupOpenEnabled(),
+            initialRouteName: 'WaitlistAdd',
+            screens: {
+                WaitlistAdd: WaitlistAdd,
             }
         }
     }
