@@ -37,6 +37,7 @@ const urls = {
     CREATE_ORDER: '/api/payments/create-order/',
     VERIFY_PAYMENT: '/api/payments/verify-payment/',
     WALLET_BALANCE: '/api/wallet/',
+    QUICK_CHECK_STREAM: '/quickcheck/stream/',
 
     REMAINING_SCREENS: '/onboarding/remaining-screens/',
     

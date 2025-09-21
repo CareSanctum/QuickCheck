@@ -12,6 +12,10 @@ import { KeyboardProvider } from 'react-native-keyboard-controller';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import { ToastOutlet } from './src/Components/ui/Toast';
+import { useEffect } from 'react';
+import { AppState, Platform } from 'react-native';
+import { focusManager } from '@tanstack/react-query';
+import type { AppStateStatus } from 'react-native';
 
 
 const queryClient = new QueryClient();
@@ -47,11 +51,25 @@ const AppScreen = () => {
   const { authStatus } = useAuth();
   const token = getItem(KEYS.SESSION_TOKEN);
   const { colorScheme } = useColorScheme();
+
+  // App focus management for React Query
+  useEffect(() => {
+    const onAppStateChange = (status: AppStateStatus) => {
+      if (Platform.OS !== 'web') {
+        focusManager.setFocused(status === 'active')
+      }
+    }
+
+    const subscription = AppState.addEventListener('change', onAppStateChange)
+
+    return () => subscription.remove()
+  }, [])
+
   // Show loading indicator only when status is pending and a token exists
   if (authStatus === "pending" && token) {
     return <LoadingScreenComponent />
   }
-  
+
   // For other states (error, success, or pending without a token), render the navigation
   return (
     <>

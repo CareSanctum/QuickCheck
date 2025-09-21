@@ -47,7 +47,7 @@ const LovedOneListItem = ({item}: {item: QuickCheckListItem}) => {
         ? item.latest_response_status === "IN_PROGRESS" 
             ? getStatusBadgeColor(item.latest_response_status)
             : getPriorityColor(item.latest_response_urgency)
-        : 'bg-gray-500';
+        : 'bg-transparent';
 
     const statusBadgeText = item.latest_response_status === "IN_PROGRESS" 
         ? item.latest_response_status 
@@ -96,11 +96,15 @@ const LovedOneListItem = ({item}: {item: QuickCheckListItem}) => {
                                 {item.nickname}
                             </Text>
                             <View className="flex-row items-center gap-2">
-                        {
-                            <View className={`${statusBadgeColor} rounded-full px-3 py-1`}>
-                                <Text className="text-white text-xs font-semibold uppercase">{statusBadgeText?.replace('_', ' ')}</Text>
-                            </View>
-                        }
+                        
+                                <View style={{ borderRadius: 12, overflow: 'hidden' }}>
+    <View className={`${statusBadgeColor} px-3 py-1`}>
+        <Text className="text-white text-xs font-semibold uppercase">
+        {statusBadgeText?.replace('_', ' ')}
+        </Text>
+    </View>
+    </View>
+                        
                     </View>
                         </View>
                         

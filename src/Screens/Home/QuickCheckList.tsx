@@ -1,9 +1,11 @@
 import { FlatList, Text } from "react-native";
 import { useQuickCheckList } from "@/src/Hooks/QuickCheck.hook";
 import { LoadingScreen } from "../LoadingScreen";
+import { useQuickCheckStream } from "@/src/Hooks/QuickCheckStream.hook";
 import LovedOneListItem from "./LovedOneListItem";
 const QuickCheckList = () => {
     const {data: quickCheckList, isLoading, status: quickCheckListStatus, error: quickCheckListError, refetch} = useQuickCheckList();
+    useQuickCheckStream(quickCheckListStatus === 'success');
     if (quickCheckListStatus === 'pending') {
         return <LoadingScreen />
     }

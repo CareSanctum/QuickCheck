@@ -1,9 +1,33 @@
 import axiosInstance from "../Network/Axios.config";
+import React from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { generateUrl } from "../Network/Urls";
 import { AxiosResponse } from "axios";
 import { useNavigation } from "@react-navigation/native";
 import { NavigationProp } from "../App.Navigation";
+import { useFocusEffect } from "@react-navigation/native";
+
+// Hook for refreshing queries on screen focus
+export function useRefreshOnScreenFocus<T>(queryKey: any[]) {
+  const queryClient = useQueryClient()
+  const firstTimeRef = React.useRef(true)
+
+  useFocusEffect(
+    React.useCallback(() => {
+      if (firstTimeRef.current) {
+        firstTimeRef.current = false
+        return
+      }
+
+      // refetch all stale active queries matching the key pattern
+      queryClient.refetchQueries({
+        queryKey,
+        stale: true,
+        type: 'active',
+      })
+    }, [queryClient, queryKey]),
+  )
+}
 
 export interface QuickCheckListItem {
     id: number,
@@ -29,10 +53,15 @@ async function getQuickCheckList() {
 
 
 export function useQuickCheckList() {
-    return useQuery({
+    const query = useQuery({
         queryKey: ['quick-check-list'],
         queryFn: getQuickCheckList,
     })
+
+    // Enable screen focus refetching
+    useRefreshOnScreenFocus(['quick-check-list'])
+
+    return query
 }
 
 export interface QuickCheckHistoryItem {
@@ -62,11 +91,16 @@ async function getQuickCheckHistory(loved_one_id: number, url?: string) {
 }
 
 export function useQuickCheckHistory(loved_one_id: number, url?: string | null) {
-    return useQuery({
+    const query = useQuery({
         queryKey: ['quick-check-history', loved_one_id, url],
         queryFn: () => getQuickCheckHistory(loved_one_id, url || undefined),
         enabled: !!loved_one_id,
     })
+
+    // Enable screen focus refetching
+    useRefreshOnScreenFocus(['quick-check-history', loved_one_id])
+
+    return query
 }
 
 async function createQuickCheck(initiated_for_id: number) {
