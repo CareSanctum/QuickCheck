@@ -36,7 +36,7 @@ const getPriorityColor = (priority: string | null) => {
     switch (priority?.toUpperCase()) {
         case 'URGENT':
             return 'bg-urgencyUrgent';
-        case 'SEMI-URGENT':
+        case 'SEMI_URGENT':
             return 'bg-urgencySemiUrgent';
         case 'NOT_URGENT':
             return 'bg-urgencyNormal';

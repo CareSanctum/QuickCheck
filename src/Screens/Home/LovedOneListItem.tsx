@@ -98,14 +98,14 @@ const LovedOneListItem = ({item}: {item: QuickCheckListItem}) => {
                             <View className="flex-row items-center gap-2">
                         
                                 <View style={{ borderRadius: 12, overflow: 'hidden' }}>
-    <View className={`${statusBadgeColor} px-3 py-1`}>
-        <Text className="text-white text-xs font-semibold uppercase">
-        {statusBadgeText?.replace('_', ' ')}
-        </Text>
-    </View>
-    </View>
+                                    <View className={`${statusBadgeColor} px-3 py-1`}>
+                                        <Text className="text-white text-xs font-semibold uppercase">
+                                        {statusBadgeText?.replace('_', ' ')}
+                                        </Text>
+                                    </View>
+                                </View>
                         
-                    </View>
+                            </View>
                         </View>
                         
                         

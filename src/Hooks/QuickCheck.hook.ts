@@ -124,7 +124,7 @@ export function useCreateQuickCheck(initiated_for_id: number) {
             queryClient.invalidateQueries({ queryKey: ['wallet-balance'] });
             // Invalidate quick check list to refresh the main list
             queryClient.invalidateQueries({ queryKey: ['quick-check-list'] });
-            navigation.navigate('LovedOneHistory', {loved_one_id: initiated_for_id});
+            // navigation.navigate('LovedOneHistory', {loved_one_id: initiated_for_id});
         },
         onError: (error) => {
             console.log(error);
