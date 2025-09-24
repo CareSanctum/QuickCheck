@@ -15,6 +15,8 @@ import {KeyboardAwareScrollView} from 'react-native-keyboard-controller';
 import SuccessBox from "@/src/Components/SuccessBox";
 import ErrorBox from "@/src/Components/ErrorBox";
 
+import {toast} from 'sonner-native';
+
 const WaitlistAdd = () => {
     const foreground = useThemeVariables('--foreground');
     const primary = useThemeVariables('--primary');
@@ -55,7 +57,6 @@ const WaitlistAdd = () => {
 
     return (
         <KeyboardAwareScrollView className="flex-1" showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled" contentContainerStyle={{ flexGrow: 1 }}>
-
             <LinearGradient
                 start={{x: 0, y: 1}}
                 end={{x: 1, y: 0}}

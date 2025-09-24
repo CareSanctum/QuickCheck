@@ -58,6 +58,9 @@ export default {
           // },
           "imageWidth": 200,
         }
+      ],
+      [
+        "expo-notifications",
       ]
     ],
     "updates": {

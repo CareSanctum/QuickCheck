@@ -16,6 +16,8 @@ import { useEffect } from 'react';
 import { AppState, Platform } from 'react-native';
 import { focusManager } from '@tanstack/react-query';
 import type { AppStateStatus } from 'react-native';
+import { NotificationProvider } from './src/Context/ExpoPushNotifcation';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 
 const queryClient = new QueryClient();
@@ -27,10 +29,14 @@ export default function App() {
         <QueryClientProvider client={queryClient}>
           <AuthProvider>
             <GestureHandlerRootView style={{ flex: 1 }}>
+              <NotificationProvider>
               <BottomSheetModalProvider> 
-                <AppScreen />
-                {/* <ToastOutlet /> */}
+                <SafeAreaProvider>
+                  <AppScreen />
+                  <ToastOutlet />
+                </SafeAreaProvider>
               </BottomSheetModalProvider>
+              </NotificationProvider>
             </GestureHandlerRootView>
           </AuthProvider>
         </QueryClientProvider>
