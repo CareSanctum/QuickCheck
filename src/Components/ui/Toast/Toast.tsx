@@ -6,4 +6,3 @@ export const ICONS = {
     SUCCESS: CircleCheck,
     DEFAULT: Info,
 }
-

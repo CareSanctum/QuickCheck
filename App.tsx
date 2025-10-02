@@ -19,7 +19,6 @@ import type { AppStateStatus } from 'react-native';
 import { NotificationProvider } from './src/Context/ExpoPushNotifcation';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
-
 const queryClient = new QueryClient();
 
 export default function App() {
@@ -30,12 +29,12 @@ export default function App() {
           <AuthProvider>
             <GestureHandlerRootView style={{ flex: 1 }}>
               <NotificationProvider>
-              <BottomSheetModalProvider> 
-                <SafeAreaProvider>
-                  <AppScreen />
-                  <ToastOutlet />
-                </SafeAreaProvider>
-              </BottomSheetModalProvider>
+                <BottomSheetModalProvider> 
+                  <SafeAreaProvider>
+                    <AppScreen />
+                    <ToastOutlet />
+                  </SafeAreaProvider>
+                </BottomSheetModalProvider>
               </NotificationProvider>
             </GestureHandlerRootView>
           </AuthProvider>

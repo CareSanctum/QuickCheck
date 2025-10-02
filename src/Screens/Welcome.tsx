@@ -1,4 +1,3 @@
-import { SafeAreaView } from "react-native-safe-area-context";
 import { Text, View } from "react-native";
 import SVGComponent from "../Components/Icons/SvgLogo";
 import { Button, ButtonText, ButtonSpinner } from "@/components/ui/button";
