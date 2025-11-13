@@ -18,6 +18,7 @@ import { focusManager } from '@tanstack/react-query';
 import type { AppStateStatus } from 'react-native';
 import { NotificationProvider } from './src/Context/ExpoPushNotifcation';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import Webview from './src/Screens/Webview';
 
 const queryClient = new QueryClient();
 
@@ -31,7 +32,8 @@ export default function App() {
               <NotificationProvider>
                 <BottomSheetModalProvider> 
                   <SafeAreaProvider>
-                    <AppScreen />
+                    {/* <AppScreen /> */}
+                    <Webview />
                     <ToastOutlet />
                   </SafeAreaProvider>
                 </BottomSheetModalProvider>
