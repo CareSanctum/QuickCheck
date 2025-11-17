@@ -24,25 +24,26 @@ const queryClient = new QueryClient();
 
 export default function App() {
   return (
-    <GluestackUIProvider mode="light">
-      <KeyboardProvider>
-        <QueryClientProvider client={queryClient}>
-          <AuthProvider>
-            <GestureHandlerRootView style={{ flex: 1 }}>
-              <NotificationProvider>
-                <BottomSheetModalProvider> 
-                  <SafeAreaProvider>
-                    {/* <AppScreen /> */}
-                    <Webview />
-                    <ToastOutlet />
-                  </SafeAreaProvider>
-                </BottomSheetModalProvider>
-              </NotificationProvider>
-            </GestureHandlerRootView>
-          </AuthProvider>
-        </QueryClientProvider>
-      </KeyboardProvider>
-    </GluestackUIProvider>
+    // <GluestackUIProvider mode="light">
+    //   <KeyboardProvider>
+    //     <QueryClientProvider client={queryClient}>
+    //       <AuthProvider>
+    //         <GestureHandlerRootView style={{ flex: 1 }}>
+    //           <NotificationProvider>
+    //             <BottomSheetModalProvider> 
+    //               <SafeAreaProvider>
+    //                 {/* <AppScreen /> */}
+    //                 <Webview />
+    //                 <ToastOutlet />
+    //               </SafeAreaProvider>
+    //             </BottomSheetModalProvider>
+    //           </NotificationProvider>
+    //         </GestureHandlerRootView>
+    //       </AuthProvider>
+    //     </QueryClientProvider>
+    //   </KeyboardProvider>
+    // </GluestackUIProvider>
+    <Webview />
   );
 }
 
