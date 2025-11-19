@@ -19,31 +19,32 @@ import type { AppStateStatus } from 'react-native';
 import { NotificationProvider } from './src/Context/ExpoPushNotifcation';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import Webview from './src/Screens/Webview';
+import SetTracker from './src/Screens/SetTracker';
 
 const queryClient = new QueryClient();
 
 export default function App() {
   return (
-    // <GluestackUIProvider mode="light">
-    //   <KeyboardProvider>
-    //     <QueryClientProvider client={queryClient}>
-    //       <AuthProvider>
-    //         <GestureHandlerRootView style={{ flex: 1 }}>
-    //           <NotificationProvider>
-    //             <BottomSheetModalProvider> 
-    //               <SafeAreaProvider>
-    //                 {/* <AppScreen /> */}
-    //                 <Webview />
-    //                 <ToastOutlet />
-    //               </SafeAreaProvider>
-    //             </BottomSheetModalProvider>
-    //           </NotificationProvider>
-    //         </GestureHandlerRootView>
-    //       </AuthProvider>
-    //     </QueryClientProvider>
-    //   </KeyboardProvider>
-    // </GluestackUIProvider>
-    <Webview />
+    <GluestackUIProvider mode="light">
+      <KeyboardProvider>
+        <QueryClientProvider client={queryClient}>
+          <AuthProvider>
+            <GestureHandlerRootView style={{ flex: 1 }}>
+              <NotificationProvider>
+                <BottomSheetModalProvider> 
+                  <SafeAreaProvider>
+                    {/* <AppScreen /> */}
+                    <SetTracker />
+                    <ToastOutlet />
+                  </SafeAreaProvider>
+                </BottomSheetModalProvider>
+              </NotificationProvider>
+            </GestureHandlerRootView>
+          </AuthProvider>
+        </QueryClientProvider>
+      </KeyboardProvider>
+    </GluestackUIProvider>
+    // <Webview />
   );
 }
 
