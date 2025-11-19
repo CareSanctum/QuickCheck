@@ -2,7 +2,7 @@ import { Input, InputField, InputIcon, InputSlot } from "@/components/ui/input";
 import { View, TouchableOpacity, Text, StyleSheet } from "react-native";
 import { Mail, Lock, Eye, EyeOff } from "lucide-react-native";
 import { useThemeVariables } from "../../Components/ThemeVariables";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Button, ButtonSpinner, ButtonText } from '@/components/ui/button';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -34,6 +34,7 @@ const LoginForm = ({setApiErrorMsg}: {setApiErrorMsg: (msg: string) => void}) =>
     const styles = useLoginFormStyles();
     const navigation = useNavigation<NavigationProp>();
     const [showPassword, setShowPassword] = useState(true);
+    const passwordRef = useRef<any>(null);
 
     const { control, handleSubmit, formState: { errors }, reset, watch} = useForm({
         resolver: zodResolver(schema),
@@ -51,8 +52,12 @@ const LoginForm = ({setApiErrorMsg}: {setApiErrorMsg: (msg: string) => void}) =>
                         setApiErrorMsg("Username password mismatch");
                         break;
                     case 401:
-                        setApiErrorMsg("Email not verified, Please verify your email");
-                        break;
+                            const flows = error?.response?.data?.data?.flows;
+                            const verifyEmailFlow = Array.isArray(flows) ? flows.find((f: any) => f?.id === 'verify_email') : undefined;
+                            if (verifyEmailFlow?.is_pending) {
+                                navigation.navigate('SignupVerifyOTP', { userEmail: data.username });
+                                break;
+                            }
                     default:
                         setApiErrorMsg("Something went wrong. Please try again later.");
                         break;
@@ -64,37 +69,56 @@ const LoginForm = ({setApiErrorMsg}: {setApiErrorMsg: (msg: string) => void}) =>
     return (
       <>
         <View className="gap-[10px]">
-          <Input className='bg-muted data-[focus=true]:border-foreground data-[focus=true]:border-[1px]'
+          <Input className='bg-card border border-border data-[focus=true]:border-foreground'
             style={{borderRadius: 10, height: 55}}
           >
             <InputSlot className="pl-3">
-              <InputIcon as={Mail}  color={mutedForeground} />
+              <InputIcon as={Mail}  color={foreground} />
             </InputSlot>
             <Controller
               control={control}
               name="username"
               render={({ field }) => (
-                <InputField placeholder="Email or Phone" placeholderTextColor={mutedForeground} cursorColor={foreground} style={styles.input} value={field.value} onChangeText={field.onChange} />
+                <InputField 
+                  placeholder="Email or Phone" 
+                  placeholderTextColor={mutedForeground} 
+                  cursorColor={foreground} 
+                  style={styles.input} 
+                  value={field.value} 
+                  onChangeText={field.onChange} 
+                  returnKeyType="next" 
+                  onSubmitEditing={() => passwordRef.current?.focus()} />
               )}
             />
           </Input>
           {errors.username && <Text className="text-destructive text-[14px] font-medium">{errors.username.message}</Text>}
 
-          <Input className='bg-muted data-[focus=true]:border-foreground data-[focus=true]:border-[1px]' 
+          <Input className='bg-card border border-border data-[focus=true]:border-foreground' 
             style={{borderRadius: 10, height: 55}}
           >
             <InputSlot className="pl-3">
-              <InputIcon as={Lock}  color={mutedForeground} />
+              <InputIcon as={Lock}  color={foreground} />
             </InputSlot>
             <Controller
               control={control}
               name="password"
               render={({ field }) => (
-                <InputField placeholder="Password" placeholderTextColor={mutedForeground} cursorColor={foreground} style={styles.input} type={showPassword ? "text" : "password"} value={field.value} onChangeText={field.onChange} />
+                <InputField 
+                  ref={passwordRef}
+                  placeholder="Password" 
+                  placeholderTextColor={mutedForeground} 
+                  cursorColor={foreground} 
+                  style={styles.input} 
+                  type={showPassword ? "text" : "password"} 
+                  value={field.value} 
+                  onChangeText={field.onChange} 
+                  returnKeyType="done" 
+                  onSubmitEditing={handleSubmit(onSubmit)} 
+                />
               )}
             />
             <InputSlot className="pr-3" onPress={() => setShowPassword(!showPassword)}>
-              <InputIcon as={showPassword ? EyeOff : Eye}  color={mutedForeground} />
+              <InputIcon as={showPassword ? EyeOff : Eye}  color={foreground} />
             </InputSlot>
           </Input>
           {errors.password && <Text className="text-destructive text-[14px] font-medium">{errors.password.message}</Text>}
@@ -120,7 +144,7 @@ function useLoginFormStyles() {
       input: {
         color: foreground,
         fontSize: 16,
-        fontWeight: '500',
+        fontWeight: '400',
       }
     })
   }

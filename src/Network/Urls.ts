@@ -21,11 +21,43 @@ const urls = {
     RESET_PASSWORD: `/api/_allauth/${clientType}/v1/auth/password/reset`,
     CHANGE_PASSWORD: `/api/_allauth/${clientType}/v1/account/password/change`,
     INVALID_TIMEFRAME: '/api/mark-invalid-timeframe/',
-    MARK_AS_INVALID: '/api/mark-as-invalid/'
+    MARK_AS_INVALID: '/api/mark-as-invalid/',
+    PROFILE: '/api/user-profile/',
+    PROFILE_UPDATE: '/api/update-user-profile/',
+    QUICK_CHECK_LIST: '/api/loved-one/chat-row/',
+    QUICK_CHECK_HISTORY: '/api/loved-one/{loved_one_id}/quickchecks/',
+    LOVED_ONE_CREATE: '/api/loved-one/',
+    QUICK_CHECK_CREATE: '/api/quick-check/',
+    LOVED_ONE_DETAILS: '/api/loved-one/{id}/',
+    LOVED_ONE_UPDATE: '/api/loved-one/{id}/',
+    LOVED_ONE_DELETE: '/api/loved-one/{id}/',
+    DELETE_ACCOUNT: '/api/delete-user-data/',
+    UPLOAD_PROFILE_PIC: '/api/upload-profile-picture/',
+    // Wallet and Payment endpoints
+    CREATE_ORDER: '/api/payments/create-order/',
+    VERIFY_PAYMENT: '/api/payments/verify-payment/',
+    WALLET_BALANCE: '/api/wallet/',
+    QUICK_CHECK_STREAM: '/quickcheck/stream/',
 
+    REMAINING_SCREENS: '/onboarding/remaining-screens/',
+    
+    PRIVACY_POLICY: '/privacy-policy',
+    TERMS_AND_CONDITIONS: '/terms-and-conditions',
+    DATA_SAFETY: '/data-safety',
+
+    IS_SIGNUP_OPEN: '/onboarding/open-for-signup/',
+    ADD_TO_WAITLIST: '/onboarding/add-to-waitlist/',
 }
 
-export function generateUrl(path: keyof typeof urls) {
-    return `${baseUrl}${urls[path]}`;
+export function generateUrl(path: keyof typeof urls, params?: Record<string, string | number>) {
+    let url = `${baseUrl}${urls[path]}`;
+    
+    if (params) {
+        Object.entries(params).forEach(([key, value]) => {
+            url = url.replace(`{${key}}`, String(value));
+        });
+    }
+    
+    return url;
 }
 

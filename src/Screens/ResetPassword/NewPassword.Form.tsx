@@ -7,10 +7,11 @@ import { z } from "zod"
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm, Controller } from 'react-hook-form';
 import { Button, ButtonSpinner, ButtonText } from "@/components/ui/button"
-import { useResetPassword } from "../../Hooks/PasswordReset.hook"
-import { getItem, KEYS } from "@/src/Storage";
+import { useResetPassword } from "../../Hooks/Password.hook"
+import { getItem, KEYS, removeMany } from "@/src/Storage";
 import { useNavigation } from "@react-navigation/native";
 import { NavigationProp } from "../../App.Navigation";
+import NewPasswordRules from "../UserAccount/AccountItems/NewPasswordRules"
 
 const schema = z.object({
     password: z
@@ -56,14 +57,13 @@ export const NewPasswordForm = ({setApiErrorMsg}: {setApiErrorMsg: (msg: string)
     // console.log(errors.password);
 
     const onSubmit = async (data: z.infer<typeof schema>) => {
-        const passwordResetKey = getItem(KEYS.PASSWORD_RESET_KEY);
         resetPassword({
-            key: passwordResetKey || "",
             password: data.password,
         }, {
             onSuccess: () => {
                 console.log("Password reset successful");
                 reset();
+                removeMany([KEYS.PASSWORD_RESET_KEY, KEYS.PASSWORD_RESET_TOKEN]);
                 navigation.navigate('PasswordResetSuccess');
             },
             onError: (error: any) => {
@@ -118,6 +118,8 @@ export const NewPasswordForm = ({setApiErrorMsg}: {setApiErrorMsg: (msg: string)
                 </Input>
                 {errors.confirmPassword && <Text className="text-destructive text-[14px] font-medium">{errors.confirmPassword.message}</Text>}
             </View>
+            
+            <NewPasswordRules />
 
             <View className="flex-row justify-center"> 
                 <Button className="px-6 py-3 w-[75%] h-[50px] items-center justify-center bg-primary" 

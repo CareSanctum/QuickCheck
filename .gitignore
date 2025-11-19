@@ -43,3 +43,5 @@ ios/
 
 #cursor contexts
 cursor.design.json
+
+google-services.json

@@ -6,7 +6,8 @@ import { OtpInput } from "react-native-otp-entry";
 import { useState } from "react";
 import { NavigationProp } from "../App.Navigation";
 import { useNavigation } from "@react-navigation/native";
-import { ErrorBox } from "./ErrorBox";
+import ErrorBox from "./ErrorBox";
+import SuccessBox from "./SuccessBox";
 
 interface OTPProps {
     onSubmit: (code: string) => void;
@@ -15,11 +16,14 @@ interface OTPProps {
     disableReset: boolean;
     verifyCodeStatus: 'idle' | 'pending' | 'success' | 'error';
     apiErrorMsg: string;
+    apiSuccessMsg?: string;
     PageTitle: string;
     PageSubtitle: string;
+    onTryAgainPress: () => void;
+    onTryAgainPressStatus?: 'idle' | 'pending' | 'success' | 'error';
 }
 
-export const OTP = ({onSubmit, code, setCode, disableReset, verifyCodeStatus, apiErrorMsg, PageTitle, PageSubtitle}: OTPProps) => {
+export const OTP = ({onSubmit, code, setCode, disableReset, verifyCodeStatus, apiErrorMsg, apiSuccessMsg, PageTitle, PageSubtitle, onTryAgainPress, onTryAgainPressStatus}: OTPProps) => {
     const foreground = useThemeVariables('--foreground');
     const navigation = useNavigation<NavigationProp>();
     const styles = useOTPStyles();
@@ -73,11 +77,19 @@ export const OTP = ({onSubmit, code, setCode, disableReset, verifyCodeStatus, ap
             <View className="flex-row justify-center mt-4">
                 <Text className="font-medium text-mutedForeground text-[16px] ">Didn't receive the code?</Text>
             </View>
-            <TouchableOpacity className="flex-row justify-center" onPress={() => navigation.navigate('ResetPassword')}>
-                <Text className="font-medium text-secondary text-[16px] ">Try again</Text>
+            <TouchableOpacity className="flex-row justify-center" onPress={onTryAgainPress} disabled={onTryAgainPressStatus && onTryAgainPressStatus === 'pending'}>
+                {
+                    onTryAgainPressStatus ? (onTryAgainPressStatus === 'pending' ? 
+                        <ButtonSpinner className="text-secondary" /> : 
+                        <Text className="font-medium text-secondary text-[16px] ">Try again</Text>
+                    ) : (
+                        <Text className="font-medium text-secondary text-[16px] ">Try again</Text>
+                    )
+                }
             </TouchableOpacity>
-            {apiErrorMsg && <ErrorBox errorMsg={apiErrorMsg} />}
-        </>
+            {apiErrorMsg && <ErrorBox message={apiErrorMsg} />}
+            {apiSuccessMsg && <SuccessBox message={apiSuccessMsg} />}
+        </> 
     );
 }
 

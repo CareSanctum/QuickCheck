@@ -1,13 +1,14 @@
-import { View, Text, TouchableOpacity, ScrollView, KeyboardAvoidingView, Platform } from "react-native";
+import { View, Text, TouchableOpacity, Linking } from "react-native";
+import {KeyboardAwareScrollView} from 'react-native-keyboard-controller';
 import { SafeAreaView } from "react-native-safe-area-context";
-import { ArrowLeft, Eye, EyeOff, Lock, Mail, Phone } from "lucide-react-native";
 import { useThemeVariables } from "../../Components/ThemeVariables";
-import { Input, InputSlot, InputField, InputIcon } from "@/components/ui/input";
 import { useState } from "react";
 import SignupForm from "./Signup.Form";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../App.Navigation";
+import Header from "@/src/Components/Header";
+import { generateUrl } from "@/src/Network/Urls";
 
 const SignUp = () => {
     const foreground = useThemeVariables('--foreground');
@@ -15,21 +16,20 @@ const SignUp = () => {
     const styles = useSignUpStyles();
     const [showPassword, setShowPassword] = useState(false);
     const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+    const handlePrivacyPolicy = () => {
+        Linking.openURL(generateUrl('PRIVACY_POLICY'));
+    }
+    
+    const handleTermsAndConditions = () => {
+        Linking.openURL(generateUrl('TERMS_AND_CONDITIONS'));
+    }
     return (
         <SafeAreaView className="flex-1 bg-background">
-            <KeyboardAvoidingView
-                behavior={Platform.OS === "ios" ? "padding" : "height"}
-                style={{ flex: 1 }}
-            >
-            <ScrollView className="flex-1 p-5" showsVerticalScrollIndicator={false}>
+            <KeyboardAwareScrollView className="flex-1 p-5" showsVerticalScrollIndicator={false} bottomOffset={10} keyboardShouldPersistTaps="handled">
                 <View style={{gap: 15}}>
-                    <View className="flex-row items-center">
-                        <TouchableOpacity onPress={() => navigation.goBack()} >
-                            <ArrowLeft color={foreground} size={26} />
-                        </TouchableOpacity>
-                    </View>
+                    <Header />
 
-                    <View className="my-10 justify-center items-center">
+                    <View className="my-10 justify-center">
                         <Text className="font-semibold text-foreground text-[30px]">Welcome</Text>
                         <Text className="font-medium text-mutedForeground text-[16px] ">Let's get your account set up</Text>
                     </View>
@@ -39,14 +39,19 @@ const SignUp = () => {
                     </View>
 
                     <View className="flex justify-center mt-4 items-center">
-                        <Text className="font-medium text-mutedForeground text-[16px] ">By creating an account, you agree to our</Text>
-                        <TouchableOpacity>
-                            <Text className="font-medium text-secondary text-[16px] ">Terms & Conditions</Text>
-                        </TouchableOpacity>
+                        <Text className="font-base text-foreground text-[16px] ">By creating an account, you agree to our</Text>
+                        <View className="flex-row items-center gap-1">
+                            <TouchableOpacity onPress={handlePrivacyPolicy}>
+                                <Text className="font-medium text-secondary text-[16px] ">Privacy Policy</Text>
+                            </TouchableOpacity>
+                            <Text className="font-base text-foreground text-[16px] ">and</Text>
+                            <TouchableOpacity onPress={handleTermsAndConditions}>
+                                <Text className="font-medium text-secondary text-[16px] ">Terms & Conditions</Text>
+                            </TouchableOpacity>
+                        </View>
                     </View>
                 </View>
-            </ScrollView>
-            </KeyboardAvoidingView>
+            </KeyboardAwareScrollView>
         </SafeAreaView>
     )
 }

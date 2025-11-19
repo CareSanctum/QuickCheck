@@ -11,9 +11,9 @@ module.exports = {
   ],
   presets: [require('nativewind/preset')],
   safelist: [
+    // Ensure dynamic classnames like `bg-${statusBadgeColor}` are kept
     // {
-    //   pattern:
-    //     /(bg|border|text|stroke|fill)-(primary|secondary|tertiary|error|success|warning|info|typography|outline|background|indicator)-(0|50|100|200|300|400|500|600|700|800|900|950|white|gray|black|error|warning|muted|success|info|light|dark|primary)/,
+    //   pattern: /(bg|text|border|stroke|fill)-(statusInProgress|urgencyUrgent|urgencySemiUrgent|urgencyNormal|mutedForeground|gray-500)/,
     // },
   ],
   theme: {
@@ -36,6 +36,8 @@ module.exports = {
           accentForeground: 'var(--accent-foreground)',
           destructive: 'var(--destructive)',
           destructiveForeground: 'var(--destructive-foreground)',
+          success: 'var(--success)',
+          successForeground: 'var(--success-foreground)',
           border: 'var(--border)',
           input: 'var(--input)',
           ring: 'var(--ring)',
@@ -52,7 +54,12 @@ module.exports = {
           sidebarAccentForeground: 'var(--sidebar-accent-foreground)',
           sidebarBorder: 'var(--sidebar-border)',
           sidebarRing: 'var(--sidebar-ring)',
-          
+
+          statusInProgress: 'var(--status-in-progress)',
+          urgencyUrgent: 'var(--urgency-urgent)',
+          urgencySemiUrgent: 'var(--urgency-semi-urgent)',
+          urgencyNormal: 'var(--urgency-normal)',
+
         // },
       },
       fontFamily: {

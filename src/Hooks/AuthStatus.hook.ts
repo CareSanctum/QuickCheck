@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import axiosInstance from "../Network/Axios.config";
 import { generateUrl } from "../Network/Urls";
-import { getItem, KEYS } from "../Storage";
+import { getItem, KEYS, removeItem } from "../Storage";
 
 async function getAuthStatus(token: string){
     try {
@@ -11,13 +11,15 @@ async function getAuthStatus(token: string){
         },
       });
       return response.data;
-    } catch (error) {
-        throw error;
+    } catch (error:any) {
+      if (error.response.status === 401 || error.response.status === 410) {
+        removeItem(KEYS.SESSION_TOKEN);
+      }
+      throw error;
     }
   }
 
 export function useAuthStatus(token?: string| null) {
-
     return useQuery({
         queryKey: ['auth-status', token],
         queryFn: () => getAuthStatus(token!), // will never fire when token is falsy
