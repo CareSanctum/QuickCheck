@@ -18,6 +18,7 @@ export type Transport = (
 
 export enum LogContext {
     Default = 'default',
+    Notifications = 'notifications',
 }
 
 export type Metadata = {
@@ -32,6 +33,7 @@ export type Metadata = {
     | 'transaction'
     | 'ui'
     | 'user'
+
 
     [key: string]: Serializable | Error | unknown
 }

@@ -62,6 +62,9 @@ export default {
       ],
       [
         "expo-notifications",
+        {
+          "icon": "./assets/icons/adaptive-icon.png"
+        }
       ],
       [
         "expo-web-browser",

@@ -19,6 +19,7 @@ import type { AppStateStatus } from 'react-native';
 import { NotificationProvider } from './src/Context/ExpoPushNotifcation';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import Webview from './src/Screens/Webview';
+import { useGetandRegisterPushToken } from './src/lib/notifications/notifications';
 
 const queryClient = new QueryClient();
 
@@ -43,8 +44,15 @@ export default function App() {
     //     </QueryClientProvider>
     //   </KeyboardProvider>
     // </GluestackUIProvider>
-    <Webview />
+    <NotificationProvider>
+        <AppInner />
+    </NotificationProvider>
   );
+}
+
+function AppInner() {
+  useGetandRegisterPushToken();
+  return <Webview />;
 }
 
 const LoadingScreen = () => {

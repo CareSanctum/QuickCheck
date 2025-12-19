@@ -1,21 +1,22 @@
 import { MMKV } from 'react-native-mmkv';
 import { logger } from '../Logger';
+import type { SupportedStorage } from "@supabase/supabase-js";
 
 const storage = new MMKV({id: 'session-storage'});
 
 function setItem(key: string, value: any) {
-    logger.info(`Setting KV pair: ${key}: ${value}`);
+    logger.debug(`Setting KV pair: ${key}: ${value}`);
     storage.set(key, value)
 }
 
 function getItem(key: string) {
-    const value = storage.getString(key);   
-    logger.info(`Getting KV pair: ${key}: ${value}`);
+    const value = storage.getString(key) ?? null;   
+    logger.debug(`Getting KV pair: ${key}: ${value}`);
     return value;
 }
 
 function removeItem(key: string) {
-    logger.info(`Removing KV pair: ${key}`);
+    logger.debug(`Removing KV pair: ${key}`);
     storage.delete(key);
 }
 
@@ -23,6 +24,12 @@ function removeMany(keys: string[]){
     keys.forEach(key => {
         removeItem(key);
     });
+}
+
+export const MMKV_SUPABASE: SupportedStorage = {
+    setItem,
+    getItem,
+    removeItem
 }
 
 const KEYS = {

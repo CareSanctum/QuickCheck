@@ -5,6 +5,7 @@ import {KeyboardAwareScrollView} from 'react-native-keyboard-controller';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useEffect, useRef, useState } from 'react';
 import SendIntentAndroid from "react-native-send-intent";
+import {logger} from '../Logger';
 
 import * as AuthSession from "expo-auth-session";
 import * as WebBrowser from 'expo-web-browser';
@@ -17,7 +18,7 @@ async function loginWithGoogleNative(webViewRef: React.RefObject<WebView | null>
     scheme: "caresanctum",
     path: "auth"
   });
-  console.log("redirectUri", redirectUri);
+  logger.debug("App Redirect URI", { redirectUri });
 
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: "google",
@@ -28,25 +29,25 @@ async function loginWithGoogleNative(webViewRef: React.RefObject<WebView | null>
   });
   
   if (error) {
-    console.log("Supabase OAuth error", error);
+    logger.error("Supabase OAuth error", { error });
     return;
   }
   
   if (!data?.url) {
-    console.log("Supabase OAuth did not return auth url");
+    logger.error("Supabase OAuth did not return auth url");
     return;
   }
   
   const authUrl = data.url;
-  console.log("Opening auth url in browser", authUrl);
+  logger.debug("Opening auth url in browser", { authUrl });
   
   // 1. Open the Supabase auth url in a secure browser
   const result = await WebBrowser.openAuthSessionAsync(authUrl, redirectUri);
-  console.log("openAuthSessionAsync result", result);
+  logger.debug("openAuthSessionAsync result", { result });
   
   // User closed or cancelled
   if (result.type !== "success" || !result.url) {
-    console.log("User did not complete Google login");
+    logger.info("User did not complete Google login");
     return;
   }
   
@@ -63,14 +64,14 @@ async function loginWithGoogleNative(webViewRef: React.RefObject<WebView | null>
     const expiresAtRaw = params.get("expires_at");
     const expiresAt = expiresAtRaw ? Number(expiresAtRaw) : null;
 
-    console.log("Parsed tokens", {
+    logger.debug("Parsed tokens", {
       hasAccessToken: !!accessToken,
       hasRefreshToken: !!refreshToken,
       expiresAt,
     });
 
     if (!accessToken || !refreshToken) {
-      console.log("Missing tokens in callback url");
+      logger.error("Missing tokens in callback url");
       return;
     }
 
@@ -87,7 +88,7 @@ async function loginWithGoogleNative(webViewRef: React.RefObject<WebView | null>
 
     webViewRef.current?.injectJavaScript(js);
   } catch (e) {
-    console.log("Failed to parse callback url", e, result.url);
+    logger.error("Failed to parse callback url", { e, url: result.url });
   }
 }
 
@@ -117,21 +118,46 @@ async function openSETrackerApp() {
   }
 }
 
+function handleSupabaseSession(sessionPayload: any) {
+  if (!sessionPayload){
+    supabase.auth.signOut().catch(() => {});
+    logger.info("No session payload received, signing out");
+    return;
+  }
+  const {accessToken, refreshToken, expiresAt, user} = sessionPayload;
+  supabase.auth.setSession({
+    access_token: accessToken,
+    refresh_token: refreshToken,
+  }).then(() => {
+    logger.info("Supabase session set successfully");
+  }).catch((error) => {
+    logger.error("Failed to set supabase session", { error });
+    supabase.auth.signOut().catch(() => {});
+    logger.info("Failed to set supabase session, signing out");
+  });
+  return;
+}
+
 function handleOauthCallbackFactory(webViewRef: React.RefObject<WebView | null>) {
   return async function handleOauthCallback(event: any) {
     try {
       const data = JSON.parse(event.nativeEvent.data);
       const type = data.type;
-      if (type === "GOOGLE_SIGNIN") {
-        await loginWithGoogleNative(webViewRef);
-        return;
+      switch (type) {
+        case "GOOGLE_SIGNIN":
+          await loginWithGoogleNative(webViewRef);
+          return;
+        case "OPEN_DEVICE_APP":
+          await openSETrackerApp();
+          return;
+        case 'SUPABASE_SESSION':
+          console.log("Supabase session received", data.payload);
+          handleSupabaseSession(data.payload);
+          return;
+        default:
+          console.log("Unknown message type from webview", type);
+          return;
       }
-      if (type === "OPEN_DEVICE_APP" ){
-        await openSETrackerApp();
-        return;
-      }
-      console.log("Unknown message type from webview", type);
-
     } catch (e) {
       console.log("Invalid webview message", e);
     }

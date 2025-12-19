@@ -26,5 +26,4 @@ Log Levels defaults to `info`. This can be changed via `EXPO_PUBLIC_LOG_LEVEL` e
 
 #### TODO
 - [] Since Debug Logs can get noisy and not enabled by default. We need to add another env var to help enable Debug logs based on Context
-- [] Categorize Context for Logs. Every LogContext is default by now
 - [] Add custom transports for analytics and crashlytics platform
