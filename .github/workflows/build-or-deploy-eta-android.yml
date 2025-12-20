@@ -1,0 +1,30 @@
+name: Build App/Deploy OTA for Android
+
+on:
+    push:
+        branches:
+            - main
+    workflow_dispatch:
+        inputs:
+            channel:
+                type: choice
+                description: Build Profile to use
+                options:
+                    - staging
+                    - production
+
+
+
+jobs:
+    test:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Check Fingerprint
+              id: fingerprint
+              uses: CareSanctum/github-actions/expo-fingerprint@main
+              with: 
+                profile: ${{ inputs.channel || 'staging'}}
+            
+            - name: Test Fingerprint Diff
+              if: ${{ steps.fingerprint.outputs.fingerprint-diff != '[]' }}
+              run: echo "Fingerprint diff found"
