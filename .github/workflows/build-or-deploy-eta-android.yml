@@ -28,12 +28,12 @@ jobs:
             - name: Check for EXPO token
               env: 
                 EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
-              run: ./scripts/check-expo-token.sh
+              run: bash ./scripts/check-expo-token.sh
             
             - name: Validate Runtime Version
               env: 
                 RUNTIME_VERSION: ${{ inputs.runtimeVersion }}
-              run: ./scripts/validate-runtime-version.sh
+              run: bash ./scripts/validate-runtime-version.sh
 
             - name: ⬇️ Checkout
               uses: actions/checkout@v4
