@@ -12,25 +12,56 @@ on:
                 options:
                     - staging
                     - production
-
-
+                required: true
+            runtimeVersion:
+                type: string
+                description: Runtime Version in (x.x.x) format of the build you are targeting
+                required: true
 
 jobs:
-    test:
+    deployOTA:
+        if: github.repository == 'CareSanctum/QuickCheck'
+        name: Bundle and Deploy OTA for Android
         runs-on: ubuntu-latest
         steps:
+
+            - name: Check for EXPO token
+              env: 
+                EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+              run: ./scripts/check-expo-token.sh
+            
+            - name: Validate Runtime Version
+              env: 
+                RUNTIME_VERSION: ${{ inputs.runtimeVersion }}
+              run: ./scripts/validate-runtime-version.sh
 
             - name: ⬇️ Checkout
               uses: actions/checkout@v4
               with:
-                fetch-depth: 5
+                fetch-depth: 0
+
+            - name: Setup Node
+              uses: actions/setup-node@v4
+              with: 
+                node-version-file: .nvmrc
+                cache: 'npm'
 
             - name: Check Fingerprint
               id: fingerprint
               uses: CareSanctum/github-actions/expo-fingerprint@main
               with: 
                 profile: ${{ inputs.channel || 'staging'}}
+                previous-commit-tag: ${{ inputs.runtimeVersion }}
             
-            - name: Test Fingerprint Diff
-              if: ${{ steps.fingerprint.outputs.fingerprint-diff != '[]' }}
-              run: echo "Fingerprint diff found"
+            - name: Setup EAS
+              uses: expo/expo-github-action@main
+              if: ${{ steps.fingerprint.outputs.fingerprint-diff == '[]' }}
+              with: 
+                eas-version: latest
+                token: ${{ secrets.EXPO_TOKEN }}
+                packager: 'npm'
+            
+            - name: Test Workflow
+              if: ${{ steps.fingerprint.outputs.fingerprint-diff == '[]' }}
+              run: echo "Workflow is valid"
+
