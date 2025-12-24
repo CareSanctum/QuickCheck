@@ -25,6 +25,11 @@ jobs:
         runs-on: ubuntu-latest
         steps:
 
+            - name: ⬇️ Checkout
+              uses: actions/checkout@v4
+              with:
+                fetch-depth: 0
+
             - name: Check for EXPO token
               env: 
                 EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
@@ -34,11 +39,6 @@ jobs:
               env: 
                 RUNTIME_VERSION: ${{ inputs.runtimeVersion }}
               run: bash scripts/validate-runtime-version.sh
-
-            - name: ⬇️ Checkout
-              uses: actions/checkout@v4
-              with:
-                fetch-depth: 0
 
             - name: Setup Node
               uses: actions/setup-node@v4
