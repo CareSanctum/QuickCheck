@@ -24,8 +24,7 @@ jobs:
         name: Bundle and Deploy OTA for Android
         runs-on: ubuntu-latest
         steps:
-
-            - name: ⬇️ Checkout
+            - name: Checkout
               uses: actions/checkout@v4
               with:
                 fetch-depth: 0
@@ -47,7 +46,7 @@ jobs:
                 node-version-file: .nvmrc
                 cache: 'npm'
 
-            - name: Check Fingerprint
+            - name: Check Fingerprint and install dependencies
               id: fingerprint
               uses: CareSanctum/github-actions/expo-fingerprint@main
               with: 
@@ -62,7 +61,40 @@ jobs:
                 token: ${{ secrets.EXPO_TOKEN }}
                 packager: 'npm'
             
-            - name: Test Workflow
+            - name: Deploy OTA
               if: ${{ steps.fingerprint.outputs.fingerprint-diff == '[]' }}
-              run: echo "Workflow is valid"
+              run:  echo "Deploying OTA for Android"
+              # run: eas update --channel ${{ inputs.channel || 'staging'}} --platform android
+
+    BuildAndroid:
+      runs-on: ubuntu-latest
+      name: Build Android App
+      needs: [deployOTA]
+      if: ${{ inputs.channel != 'production' && needs.deployOTA.outputs.fingerprint-diff != '[]' && github.repository == 'CareSanctum/QuickCheck'}}
+      steps:
+        - name: Checkout 
+          uses: actions/checkout@v4
+          with:
+            fetch-depth: 0
+
+        - name: Setup Node
+          uses: actions/setup-node@v4
+          with: 
+            node-version-file: .nvmrc
+            cache: 'npm'
+          
+        - name: Setup EAS
+          uses: expo/expo-github-action@main
+          with:
+            eas-version: latest
+            token: ${{ secrets.EXPO_TOKEN }}
+            packager: 'npm'
+
+        - name: Install Dependencies
+          run: npm ci
+
+        - name: Build Preview Apk
+          #run: eas build --platform android --profile ${{ inputs.channel || 'staging'}}
+          run: echo "Created Preview Apk"
+          
 
