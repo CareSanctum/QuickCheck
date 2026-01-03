@@ -9,6 +9,13 @@ on:
           - 'todo.md'
 
     workflow_dispatch:
+      inputs:
+        skipOTA:
+          type: boolean
+          description: Skip OTA deployment
+          required: false
+          default: false
+
           
 jobs:
     deployOTA:
@@ -36,28 +43,28 @@ jobs:
 
             - name: Check Fingerprint and install dependencies
               id: fingerprint
+              if: inputs.skipOTA == false
               uses: CareSanctum/github-actions/expo-fingerprint@main
               with: 
                 profile: staging
             
             - name: Setup EAS
               uses: expo/expo-github-action@main
-              if: ${{ steps.fingerprint.outputs.fingerprint-diff == '[]' }}
+              if: ${{ steps.fingerprint.outputs.fingerprint-diff == '[]' && inputs.skipOTA == false }}
               with: 
                 eas-version: latest
                 token: ${{ secrets.EXPO_TOKEN }}
                 packager: 'npm'
             
             - name: Deploy OTA
-              if: ${{ steps.fingerprint.outputs.fingerprint-diff == '[]' }}
-              run:  echo "Deploying OTA for Android"
-              # run: eas update --channel staging --platform android
+              if: ${{ steps.fingerprint.outputs.fingerprint-diff == '[]' && inputs.skipOTA == false }}
+              run: eas update --channel staging --platform android
 
     BuildAndUploadAndroid:
       runs-on: ubuntu-latest
       name: Build Staging Android App
       needs: [deployOTA]
-      if: ${{  needs.deployOTA.outputs.fingerprint-diff != '[]' && github.repository == 'CareSanctum/QuickCheck'}}
+      if: ${{ (needs.deployOTA.outputs.fingerprint- diff != '[]' && github.repository == 'CareSanctum/QuickCheck') || inputs.skipOTA == true }}
       steps:
         - name: Checkout 
           uses: actions/checkout@v4
