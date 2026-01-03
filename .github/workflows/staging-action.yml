@@ -93,6 +93,11 @@ jobs:
         - name: Install Dependencies
           run: npm ci
 
+        - name: Create google-services.json
+          env:
+            ANDROID_GOOGLE_SERVICES_JSON_B64: ${{ secrets.ANDROID_GOOGLE_SERVICES_JSON_B64 }}
+          run: bash scripts/create-google-services-file.sh
+
         - name: Build Preview Apk
           id: build-apk
           env:
