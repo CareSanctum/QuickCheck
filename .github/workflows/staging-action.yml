@@ -93,9 +93,6 @@ jobs:
         - name: Install Dependencies
           run: npm ci
 
-        - name: Generate android folder
-          run: npx expo prebuild --clean
-
         - name: Build Preview Apk
           id: build-apk
           env:
