@@ -13,7 +13,7 @@ PACKAGE_VERSION="$(node -pe "require('${ROOT_DIR}/package.json').version")"
 APK_NAME="${PROFILE}-${PACKAGE_VERSION}.apk"
 
 echo "Building ${PLATFORM} with profile ${PROFILE} (version ${PACKAGE_VERSION})"
-eas build --platform "${PLATFORM}" --profile "${PROFILE}" --output "${PROFILE}-${PACKAGE_VERSION}.apk"
+eas build --platform "${PLATFORM}" --profile "${PROFILE}" --output "${PROFILE}-${PACKAGE_VERSION}.apk" --local
 
 
 if [ -n "${GITHUB_OUTPUT:-}" ]; then
