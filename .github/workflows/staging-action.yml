@@ -64,7 +64,7 @@ jobs:
       runs-on: ubuntu-latest
       name: Build Staging Android App
       needs: [deployOTA]
-      if: ${{ (needs.deployOTA.outputs.fingerprint- diff != '[]' && github.repository == 'CareSanctum/QuickCheck') || inputs.skipOTA == true }}
+      if: ${{ (needs.deployOTA.outputs.fingerprint-diff != '[]' && github.repository == 'CareSanctum/QuickCheck') || inputs.skipOTA == true }}
       steps:
         - name: Checkout 
           uses: actions/checkout@v4
