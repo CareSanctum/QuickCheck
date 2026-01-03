@@ -20,7 +20,7 @@
       }
     },
     "staging": {
-      "autoIncrement": true,
+      "distribution": "internal",
       "channel": "staging",
       "environment": "preview"
     },

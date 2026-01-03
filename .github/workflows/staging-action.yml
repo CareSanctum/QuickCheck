@@ -1,0 +1,130 @@
+name: Build App/Deploy OTA for Staging 
+
+on:
+    push:
+        branches: [main]
+        paths-ignore:
+          - 'docs/**'
+          - 'readme.md'
+          - 'todo.md'
+
+    workflow_dispatch:
+          
+jobs:
+    deployOTA:
+        if: github.repository == 'CareSanctum/QuickCheck'
+        name: Bundle and Deploy OTA for Android
+        runs-on: ubuntu-latest
+        outputs: 
+          fingerprint-diff: ${{ steps.fingerprint.outputs.fingerprint-diff }}
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+              with:
+                fetch-depth: 0
+
+            - name: Check for EXPO token
+              env: 
+                EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+              run: bash scripts/check-expo-token.sh
+
+            - name: Setup Node
+              uses: actions/setup-node@v4
+              with: 
+                node-version-file: .nvmrc
+                cache: 'npm'
+
+            - name: Check Fingerprint and install dependencies
+              id: fingerprint
+              uses: CareSanctum/github-actions/expo-fingerprint@main
+              with: 
+                profile: staging
+            
+            - name: Setup EAS
+              uses: expo/expo-github-action@main
+              if: ${{ steps.fingerprint.outputs.fingerprint-diff == '[]' }}
+              with: 
+                eas-version: latest
+                token: ${{ secrets.EXPO_TOKEN }}
+                packager: 'npm'
+            
+            - name: Deploy OTA
+              if: ${{ steps.fingerprint.outputs.fingerprint-diff == '[]' }}
+              run:  echo "Deploying OTA for Android"
+              # run: eas update --channel staging --platform android
+
+    BuildAndUploadAndroid:
+      runs-on: ubuntu-latest
+      name: Build Staging Android App
+      needs: [deployOTA]
+      if: ${{  needs.deployOTA.outputs.fingerprint-diff != '[]' && github.repository == 'CareSanctum/QuickCheck'}}
+      steps:
+        - name: Checkout 
+          uses: actions/checkout@v4
+          with:
+            fetch-depth: 0
+
+        - name: Setup Node
+          uses: actions/setup-node@v4
+          with: 
+            node-version-file: .nvmrc
+            cache: 'npm'
+          
+        - name: Setup EAS
+          uses: expo/expo-github-action@main
+          with:
+            eas-version: latest
+            token: ${{ secrets.EXPO_TOKEN }}
+            packager: 'npm'
+        
+        - name: Setup Java
+          uses: actions/setup-java@v4
+          with: 
+            distribution: 'temurin'
+            java-version: '17'
+
+        - name: Install Dependencies
+          run: npm ci
+
+        - name: Generate android folder
+          run: npx expo prebuild --clean
+
+        - name: Build Preview Apk
+          id: build-apk
+          env:
+            PLATFORM: android
+            PROFILE: staging
+          run: bash scripts/build-staging-artifact.sh
+
+        - name: Upload Android App artifacts
+          uses: actions/upload-artifact@v4
+          with:
+            retention-days: 3
+            compression-level: 0
+            name: ${{ steps.build-apk.outputs.apk_name }}
+            path: ${{ steps.build-apk.outputs.apk_name }}
+
+        - name: Upload Android App artifacts to Google Drive
+          uses: adityak74/google-drive-upload-git-action@main
+          with:
+            credentials: ${{ secrets.GOOGLE_DRIVE_CREDENTIALS }}
+            folderId: ${{ secrets.GOOGLE_DRIVE_FOLDER_ID }}
+            filename: ${{ steps.build-apk.outputs.apk_name }}
+            overwrite: true
+
+        - name: Send release notification mail
+          uses: dawidd6/action-send-mail@7
+          with:
+            server_address: 'smtp-relay.brevo.com'
+            server_port: 587
+            secure: true
+            username: ${{ secrets.EMAIL_HOST_USER }}
+            password: ${{ secrets.EMAIL_HOST_PASSWORD }}
+            from: no-reply@caresanctum.com
+            to: arvind@caresanctum.com, chandrima@caresanctum.com, chetan@caresanctum.com, sarang@caresanctum.com
+            subject: 'App build ready for testing'
+            body: 'Android Build ready for testing \n Version: ${{ steps.build-apk.outputs.version }}'
+
+
+          
+

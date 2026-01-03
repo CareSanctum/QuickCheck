@@ -1,0 +1,99 @@
+name: Deploy OTA/Build and Submit to stores for production
+
+on:
+    workflow_dispatch:
+        inputs:
+            runtimeVersion:
+                type: string
+                description: Runtime Version in (x.x.x) format of the build you are targeting
+                required: true
+              
+
+jobs:
+    DeployOTA:
+        if: github.repository == 'CareSanctum/QuickCheck'
+        name: Bundle and Deploy OTA for production
+        runs-on: ubuntu-latest
+        outputs:
+          fingerprint-diff: ${{ steps.fingerprint.outputs.fingerprint-diff }}
+        steps:
+          - name: Checkout
+            uses: actions/checkout@v4
+            with:
+              fetch-depth: 0
+
+          - name: Check for EXPO token
+            env: 
+              EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+            run: bash scripts/check-expo-token.sh
+
+          - name: Validate Runtime Version
+            env: 
+              RUNTIME_VERSION: ${{ inputs.runtimeVersion }}
+            run: bash scripts/check-runtime-version.sh
+
+          - name: Setup Node
+            uses: actions/setup-node@v4
+            with: 
+              node-version-file: .nvmrc
+              cache: 'npm'
+
+          - name: Check Fingerprint and install dependencies
+            id: fingerprint
+            uses: CareSanctum/github-actions/expo-fingerprint@main
+            with: 
+              profile: production
+              previous-commit-tag: ${{ inputs.runtimeVersion }}
+          
+          - name: Setup EAS
+            uses: expo/expo-github-action@main
+            if: ${{ steps.fingerprint.outputs.fingerprint-diff == '[]' }}
+            with: 
+              eas-version: latest
+              token: ${{ secrets.EXPO_TOKEN }}
+              packager: 'npm'
+          
+          - name: Deploy OTA
+            if: ${{ steps.fingerprint.outputs.fingerprint-diff == '[]' }}
+            run:  echo "Deploying OTA for Android"
+            # run: eas update --channel production --platform android
+
+
+    BuildAndSubmit:
+        name: Build and Submit to Android Play Store
+        runs-on: ubuntu-latest
+        needs: [DeployOTA]
+        if: ${{  needs.DeployOTA.outputs.fingerprint-diff != '[]' && github.repository == 'CareSanctum/QuickCheck'}}
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+              with:
+                fetch-depth: 0
+            
+            - name: Check for EXPO token
+              env: 
+                EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+              run: bash scripts/check-expo-token.sh
+  
+            - name: Setup Node
+              uses: actions/setup-node@v4
+              with:
+                node-version-file: .nvmrc
+                cache: 'npm'
+
+            - name: Setup EAS
+              uses: expo/expo-github-action@main
+              with:
+                eas-version: latest
+                token: ${{ secrets.EXPO_TOKEN }}
+                packager: 'npm'
+
+            - name: Install Dependencies
+              run: npm ci 
+
+            - name: Build Android App for production
+              run: eas build --platform android --profile production --local
+
+            # - name: Submit to Android Play Store
+            #   #run: eas submit --platform android --profile production
+              
