@@ -113,7 +113,7 @@ jobs:
             overwrite: true
 
         - name: Send release notification mail
-          uses: dawidd6/action-send-mail@7
+          uses: dawidd6/action-send-mail@v7
           with:
             server_address: 'smtp-relay.brevo.com'
             server_port: 587
