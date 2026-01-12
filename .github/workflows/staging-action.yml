@@ -61,7 +61,7 @@ jobs:
               run: eas update --channel staging --platform android
 
     BuildAndUploadAndroid:
-      runs-on: ubuntu-latest
+      runs-on: blacksmith-4vcpu-ubuntu-2404
       name: Build Staging Android App
       needs: [deployOTA]
       if: ${{ (needs.deployOTA.outputs.fingerprint-diff != '[]' && github.repository == 'CareSanctum/QuickCheck') || inputs.skipOTA == true }}
