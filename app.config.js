@@ -1,22 +1,23 @@
-const variant = process.env.APP_VARIANT ?? "production";
-
-const name = {
-  "development": "QC-Dev",
-  "preview": "QC-Preview",
-  "production": "CareSanctum"
-}[variant];
-
-const bundleIdentifier = {
-  "development": "com.lucitang.QuickCheck.dev",
-  "preview": "com.lucitang.QuickCheck.preview",
-  "production": "com.lucitang.QuickCheck"
-}[variant];
-
 const pkg = require('./package.json')
-const VERSION = pkg.version
 
+module.exports = function(_config) {
+  const variant = process.env.APP_VARIANT ?? "production";
 
-export default {
+  const name = {
+    "development": "QC-Dev",
+    "preview": "QC-Preview",
+    "production": "CareSanctum"
+  }[variant];
+
+  const bundleIdentifier = {
+    "development": "com.lucitang.QuickCheck.dev",
+    "preview": "com.lucitang.QuickCheck.preview",
+    "production": "com.lucitang.QuickCheck"
+  }[variant];
+
+  const VERSION = pkg.version
+
+  return {
     "name": name,
     "slug": "caresanctum-qc",
     "version": VERSION,
@@ -60,6 +61,7 @@ export default {
           "imageWidth": 200,
         }
       ],
+      './plugins/withGradleJVMHeapSizeIncrease.js',
       [
         "expo-notifications",
       ],
@@ -82,4 +84,5 @@ export default {
       }
     },
     "owner": "caresanctum"
+  }
 }

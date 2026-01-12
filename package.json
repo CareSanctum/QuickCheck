@@ -9,6 +9,7 @@
     "web": "DARK_MODE=media expo start --web"
   },
   "dependencies": {
+    "@expo/config-plugins": "^54.0.4",
     "@expo/html-elements": "^0.4.2",
     "@gluestack-ui/actionsheet": "^0.2.53",
     "@gluestack-ui/avatar": "^0.1.18",
